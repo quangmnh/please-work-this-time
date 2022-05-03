@@ -14,9 +14,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1024, 600)
-        MainWindow.setMinimumSize(QtCore.QSize(1024, 600))
-        MainWindow.setMaximumSize(QtCore.QSize(1024, 600))
+        # MainWindow.resize(1024, 600)
+        # MainWindow.setMinimumSize(QtCore.QSize(1024, 600))
+        # MainWindow.setMaximumSize(QtCore.QSize(1024, 600))
+        MainWindow.showFullScreen()
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
