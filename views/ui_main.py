@@ -837,7 +837,6 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        self.showMaximized()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -959,8 +958,9 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    MainWindow.showMaximized()
+
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    MainWindow.showMaximized()
     sys.exit(app.exec_())
