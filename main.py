@@ -11,7 +11,7 @@ from views.ui_main import Ui_MainWindow
 from views.ui_main import BluetoothDevice, LibrarySong
 
 # Utils
-from utils.display_list_item import display_list_item
+from utils1.display_list_item import display_list_item
 
 import sys
 import platform
