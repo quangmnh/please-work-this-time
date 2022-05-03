@@ -921,11 +921,14 @@ class LibrarySong(QtWidgets.QWidget):
 
         play_btn = QtWidgets.QPushButton("Play")
         remove_btn = QtWidgets.QPushButton("Remove")
+        add_to_playlist_btn = QtWidgets.QPushButton("Add to playlist")
         play_btn.setStyleSheet("color: white;")
         remove_btn.setStyleSheet("color: white;")
+        add_to_playlist_btn.setStyleSheet("color: white;")
 
         self.row.addWidget(play_btn)
         self.row.addWidget(remove_btn)
+        self.row.addWidget(add_to_playlist_btn)
 
         self.setLayout(self.row)
 

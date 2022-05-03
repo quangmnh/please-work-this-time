@@ -75,6 +75,10 @@ class MainWindow(QMainWindow):
             ))
         ## END EXAMPLE: LIBRARY PAGE WITH SONGS FETCH ##########################
 
+        # EMOTION RECOGNITION PAGE
+        self.ui.Btn_menu_fer.clicked.connect(
+            lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition))
+
         # SETTINGS PAGE
         self.ui.Btn_Settings.clicked.connect(
             lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings))
