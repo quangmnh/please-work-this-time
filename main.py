@@ -123,9 +123,8 @@ class MainWindow(QMainWindow):
         ## Add playlist ####
         self.ui.Btn_Add_Playlist.clicked.connect(
             lambda: (
-                add_playlist_page(
-                    self.ui.Pages_Widget, f"Playlist no {playlist_no}", self.ui.listWidget_playlists),
-                increase_playlist_no()
+                create_playlist_dialog(
+                    self.ui.Pages_Widget, self.ui.Pages_Widget, self.ui.listWidget_playlists)
             )
         )
         ## END : FUNCTIONALITY #################################################

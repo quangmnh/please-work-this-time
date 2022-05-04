@@ -16,6 +16,21 @@ def playlist_play():
 
 def playlist_song_play():
     pass
+# END :EXAMPLE FUNCTION
+
+
+def create_playlist_dialog(parent: QtWidgets.QWidget, page_widget: QtWidgets.QStackedWidget, playlist_list_widget: QtWidgets.QListWidget):
+
+    dialog = QtWidgets.QInputDialog(parent)
+    dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
+    dialog.setWindowTitle("Create Playlist")
+    dialog.setLabelText('Playlist Name:')
+    dialog.setStyleSheet("color: white; background-color: rgb(50,50,50);")
+    ok = dialog.exec_()
+    playlist_name = dialog.textValue()
+
+    if (ok and playlist_name):
+        add_playlist_page(page_widget, playlist_name, playlist_list_widget)
 
 
 def add_playlist_page(page_widget: QtWidgets.QStackedWidget, playlist_name: str, playlist_list_widget: QtWidgets.QListWidget):
