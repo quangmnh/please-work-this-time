@@ -1,14 +1,16 @@
-import numpy as np
-
-
+#import numpy as np
+from pygame import mixer
+import random
 class Track:
     def __init__(
             self,
+            url,
             name: str = "Unknown",
             artist: str = "Unknown",
             duration: int = 0,
             image_url: str = ""
     ) -> None:
+        self.url = url
         self.name = name
         self.artist = artist
         self.duration = duration
@@ -25,20 +27,16 @@ class Track:
 
     def setImageURL(self, URL: str = "") -> None:
         self.image_url = URL
+    
+    def get_URL(self):
+        return self.url
 
 
 class PlayBack:
     def __init__(
-            self,
-            playBackList: "list[Track]",
-            name: str = "Unknown",
-            artist: str = "Unknown",
-            image_url: str = ""
+            self
     ) -> None:
-        self.name = name
-        self.artist = artist
-        self.image_url = image_url
-        self.playBackList = playBackList
+        self.playBackList = []
         self.currTrackIndex = 0
 
     def getTrackAtIndex(self, index: int = 0):
@@ -61,8 +59,7 @@ class MusicPlayer:
             currVolume: int = 0,
             name: str = "Unknown",
             artist: str = "Unknown",
-            playBack: PlayBack = None,
-            position: int = 0
+            position: int = 0,
     ) -> None:
         self.systemVolume = systemVolume
         self.isPlaying = isPlaying
@@ -74,15 +71,12 @@ class MusicPlayer:
         self.name = name
         self.artist = artist
         self.position = position
+        self.playBack = PlayBack()
+        self.player = mixer
 
-        if playBack is None:
-            self.playBack = []
-        else:
-            self.playBack = playBack
 
     def toggleShuffleMode(self) -> None:
         self.isShuffle = not self.isShuffle
-        # TODO: Convert to shuffle mode
 
     def toggleRepeatMode(self) -> None:
         if self.repeatMode == 0:
@@ -123,5 +117,4 @@ class MusicPlayer:
 
 
 if __name__ == '__main__':
-
     mp = MusicPlayer()
