@@ -14,10 +14,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        # MainWindow.resize(1024, 600)
-        # MainWindow.setMinimumSize(QtCore.QSize(1024, 600))
-        # MainWindow.setMaximumSize(QtCore.QSize(1024, 600))
-        MainWindow.showFullScreen()
+        MainWindow.resize(1024, 600)
+        MainWindow.setMinimumSize(QtCore.QSize(1024, 600))
+        MainWindow.setMaximumSize(QtCore.QSize(1024, 600))
+        # MainWindow.showFullScreen()
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -25,7 +25,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.Content = QtWidgets.QFrame(self.centralwidget)
-        self.Content.setStyleSheet("background-color: rgb(45, 45, 45);")
+        self.Content.setStyleSheet("background-color: rgb(15, 15, 15);")
         self.Content.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.Content.setFrameShadow(QtWidgets.QFrame.Raised)
         self.Content.setObjectName("Content")
@@ -37,7 +37,7 @@ class Ui_MainWindow(object):
         self.frame_left_menu.setMinimumSize(QtCore.QSize(180, 0))
         self.frame_left_menu.setMaximumSize(QtCore.QSize(180, 16777215))
         self.frame_left_menu.setStyleSheet(
-            "background-color: rgb(35, 35, 35);")
+            "background-color: rgb(50, 50, 50);")
         self.frame_left_menu.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_left_menu.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_left_menu.setObjectName("frame_left_menu")
@@ -69,7 +69,7 @@ class Ui_MainWindow(object):
         self.Btn_Dashboard.setFont(font)
         self.Btn_Dashboard.setStyleSheet("QPushButton {\n"
                                          "    color: rgb(255,255,255);\n"
-                                         "     background-color: rgb(35,35,35);\n"
+                                         "     background-color: rgb(50,50,50);\n"
                                          "    border: 0px solid;\n"
                                          "}\n"
                                          "QPushButton:hover {\n"
@@ -84,7 +84,7 @@ class Ui_MainWindow(object):
         self.Btn_Library.setFont(font)
         self.Btn_Library.setStyleSheet("QPushButton {\n"
                                        "    color: rgb(255,255,255);\n"
-                                       "     background-color: rgb(35,35,35);\n"
+                                       "     background-color: rgb(50,50,50);\n"
                                        "    border: 0px solid;\n"
                                        "}\n"
                                        "QPushButton:hover {\n"
@@ -99,7 +99,7 @@ class Ui_MainWindow(object):
         self.Btn_Add_Playlist.setFont(font)
         self.Btn_Add_Playlist.setStyleSheet("QPushButton {\n"
                                             "    color: rgb(255,255,255);\n"
-                                            "     background-color: rgb(35,35,35);\n"
+                                            "     background-color: rgb(50,50,50);\n"
                                             "    border: 0px solid;\n"
                                             "}\n"
                                             "QPushButton:hover {\n"
@@ -123,7 +123,7 @@ class Ui_MainWindow(object):
         self.Btn_Settings.setFont(font)
         self.Btn_Settings.setStyleSheet("QPushButton {\n"
                                         "    color: rgb(255,255,255);\n"
-                                        "     background-color: rgb(35,35,35);\n"
+                                        "     background-color: rgb(50,50,50);\n"
                                         "    border: 0px solid;\n"
                                         "}\n"
                                         "QPushButton:hover {\n"
@@ -335,6 +335,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_23.addWidget(self.label_settings_hand_gesture_2)
         self.frame_settings_emotion_playlist_map_content = QtWidgets.QFrame(
             self.frame_settings_emotion_playlist_map)
+        self.frame_settings_emotion_playlist_map_content.setStyleSheet(
+            "background-color: rgb(35,35,35);")
         self.frame_settings_emotion_playlist_map_content.setFrameShape(
             QtWidgets.QFrame.StyledPanel)
         self.frame_settings_emotion_playlist_map_content.setFrameShadow(
@@ -729,7 +731,7 @@ class Ui_MainWindow(object):
         self.Player_field = QtWidgets.QFrame(self.centralwidget)
         self.Player_field.setMinimumSize(QtCore.QSize(0, 100))
         self.Player_field.setMaximumSize(QtCore.QSize(16777215, 120))
-        self.Player_field.setStyleSheet("background-color: rgb(20, 20, 20);")
+        self.Player_field.setStyleSheet("background-color: rgb(60, 60, 60);")
         self.Player_field.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.Player_field.setFrameShadow(QtWidgets.QFrame.Raised)
         self.Player_field.setObjectName("Player_field")
@@ -762,6 +764,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_26.addWidget(self.label_player_artist_name)
         self.horizontalLayout_11.addWidget(self.frame_player_song_info)
         self.frame_player_navigator = QtWidgets.QFrame(self.Player_field)
+        self.frame_player_navigator.setStyleSheet("")
         self.frame_player_navigator.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_player_navigator.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_player_navigator.setObjectName("frame_player_navigator")
@@ -770,6 +773,31 @@ class Ui_MainWindow(object):
         self.verticalLayout_27.setObjectName("verticalLayout_27")
         self.slider_player_navigator_progress_bar = QtWidgets.QSlider(
             self.frame_player_navigator)
+        self.slider_player_navigator_progress_bar.setStyleSheet("QSlider::groove:horizontal { \n"
+                                                                "    background-color: white;\n"
+                                                                "    border: 0px solid #424242; \n"
+                                                                "    height: 5px; \n"
+                                                                "    border-radius: 2px;\n"
+                                                                "}\n"
+                                                                "\n"
+                                                                "QSlider::handle:horizontal { \n"
+                                                                "    background-color: #0d6efd; \n"
+                                                                "    border: 2px solid #0d6efd; \n"
+                                                                "    width: 8px; \n"
+                                                                "    height: 10px; \n"
+                                                                "    line-height: 10px; \n"
+                                                                "    margin-top: -3px; \n"
+                                                                "    margin-bottom: -3px; \n"
+                                                                "    border-radius: 5px; \n"
+                                                                "}\n"
+                                                                "\n"
+                                                                "QSlider::handle:horizontal:hover { \n"
+                                                                "    border-radius: 5px;\n"
+                                                                "}\n"
+                                                                "\n"
+                                                                "QSlider::sub-page:horizontal {\n"
+                                                                "    background-color: #0d6efd;\n"
+                                                                "}")
         self.slider_player_navigator_progress_bar.setOrientation(
             QtCore.Qt.Horizontal)
         self.slider_player_navigator_progress_bar.setObjectName(
@@ -829,6 +857,31 @@ class Ui_MainWindow(object):
             self.frame_player_volume)
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
         self.slider_player_volume = QtWidgets.QSlider(self.frame_player_volume)
+        self.slider_player_volume.setStyleSheet("QSlider::groove:horizontal { \n"
+                                                "    background-color: white;\n"
+                                                "    border: 0px solid #424242; \n"
+                                                "    height: 10px; \n"
+                                                "}\n"
+                                                "\n"
+                                                "QSlider::handle:horizontal { \n"
+                                                "    background-color: #0d6efd; \n"
+                                                "    border: 2px solid #0d6efd; \n"
+                                                "    width: 16px; \n"
+                                                "    height: 20px; \n"
+                                                "    line-height: 20px; \n"
+                                                "    margin-top: -5px; \n"
+                                                "    margin-bottom: -5px; \n"
+                                                "    border-radius: 10px; \n"
+                                                "}\n"
+                                                "\n"
+                                                "QSlider::handle:horizontal:hover { \n"
+                                                "    border-radius: 10px;\n"
+                                                "}\n"
+                                                "\n"
+                                                "QSlider::sub-page:horizontal {\n"
+                                                "    background-color: #0d6efd;\n"
+                                                "    border-radius: 4pxl\n"
+                                                "}")
         self.slider_player_volume.setOrientation(QtCore.Qt.Horizontal)
         self.slider_player_volume.setObjectName("slider_player_volume")
         self.horizontalLayout_10.addWidget(self.slider_player_volume)
@@ -837,6 +890,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
+        self.Pages_Widget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -902,60 +956,6 @@ class Ui_MainWindow(object):
             _translate("MainWindow", "Forward"))
         self.btn_player_navigator_shuffle.setText(
             _translate("MainWindow", "Shuffle"))
-
-
-class LibrarySong(QtWidgets.QWidget):
-    def __init__(self, song_info, parent=None):
-        super(LibrarySong, self).__init__(parent)
-
-        self.row = QtWidgets.QHBoxLayout()
-
-        # Edit these fields to get correct song information
-        song_name = QtWidgets.QLabel(song_info['name'])
-        song_artist = QtWidgets.QLabel(song_info['artist_name'])
-        ###################################################
-        song_name.setStyleSheet("color: white;")
-        song_artist.setStyleSheet("color: white;")
-
-        self.row.addWidget(song_name)
-        self.row.addWidget(song_artist)
-
-        play_btn = QtWidgets.QPushButton("Play")
-        remove_btn = QtWidgets.QPushButton("Remove")
-        add_to_playlist_btn = QtWidgets.QPushButton("Add to playlist")
-        play_btn.setStyleSheet("color: white;")
-        remove_btn.setStyleSheet("color: white;")
-        add_to_playlist_btn.setStyleSheet("color: white;")
-
-        self.row.addWidget(play_btn)
-        self.row.addWidget(remove_btn)
-        self.row.addWidget(add_to_playlist_btn)
-
-        self.setLayout(self.row)
-
-
-class BluetoothDevice(QtWidgets.QWidget):
-    def __init__(self, device_info, parent=None):
-        super(BluetoothDevice, self).__init__(parent)
-
-        self.row = QtWidgets.QHBoxLayout()
-
-        # Edit these fields to get correct device information
-        device_name = QtWidgets.QLabel(device_info['name'])
-        device_mac = QtWidgets.QLabel(device_info['mac'])
-        ###################################################
-        device_name.setStyleSheet("color: white;")
-        device_mac.setStyleSheet("color: white;")
-
-        self.row.addWidget(device_name)
-        self.row.addWidget(device_mac)
-
-        connect_btn = QtWidgets.QPushButton("Connect")
-        connect_btn.setStyleSheet("color: white;")
-
-        self.row.addWidget(connect_btn)
-
-        self.setLayout(self.row)
 
 
 if __name__ == "__main__":

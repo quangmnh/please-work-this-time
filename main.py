@@ -7,17 +7,31 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 # GUI file
 from views.ui_main import Ui_MainWindow
 
-# Custom widgets
-from views.ui_main import BluetoothDevice, LibrarySong
+# Components
+from views.components import BluetoothDevice, LibrarySong
+
+# Pages
+from views.pages import PlaylistPage
 
 # Utils
 from utils1.display_list_item import display_list_item
+
+# Helper
+from helper.playlist_page import *
 
 import sys
 import platform
 
 # EXAMPLE DATA
 ############################################
+playlist_no = 1
+
+
+def increase_playlist_no():
+    global playlist_no
+    playlist_no += 1
+
+
 bluetooth_devices = [
     {
         "name": "Hello",
@@ -45,6 +59,7 @@ library_songs = [
         "name": "Viva La Vida",
         "artist_name": "Coldplay"
     }]
+playlists = []
 # END: EXAMPLE DATA ########################
 
 
@@ -102,6 +117,18 @@ class MainWindow(QMainWindow):
         self.ui.btn_settings_bluetooth_scan_devices.clicked.connect(lambda: display_list_item(
             self.ui.listWidget_settings_bluetooth_devices, [BluetoothDevice(device) for device in bluetooth_devices]))
         ## END: EXAMPLE: BLUETOOTH DEVICE FETCH ################################
+
+        # FUNCTIONALITY:
+        ########################################################################
+        ## Add playlist ####
+        self.ui.Btn_Add_Playlist.clicked.connect(
+            lambda: (
+                add_playlist_page(
+                    self.ui.Pages_Widget, f"Playlist no {playlist_no}", self.ui.listWidget_playlists),
+                increase_playlist_no()
+            )
+        )
+        ## END : FUNCTIONALITY #################################################
 
         # MAIN WINDOW
         ########################################################################
