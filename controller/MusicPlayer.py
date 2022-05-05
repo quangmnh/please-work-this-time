@@ -1,23 +1,29 @@
 # import numpy as np
+import os
+
 from pygame import mixer
 from copy import deepcopy
 import random
 import eyed3
+import json
 
 
 class Track:
     def __init__(
             self,
-            url
+            trackId: int = 0,
+            trackURL: str = "",
+            imageURL: str = ""
     ) -> None:
-        self.url = url
-        audio = eyed3.load(url)
+        self.trackId = trackId
+        self.trackURL = trackURL
+        audio = eyed3.load(trackURL)
         self.name = audio.tag.title
         self.artist = audio.tag.artist
-        self.duration = audio.tag.duration
-        self.image_url = ""
-        # need to test this module for accessing id3 tag, might fail/ wrong usage
+        self.duration = audio.info.time_secs
+        self.imageURL = imageURL
 
+    '''------------ DEFINE GETTER FUNCTIONS ----------'''
     def getTrackName(self) -> str:
         return self.name
 
@@ -25,13 +31,93 @@ class Track:
         return self.artist
 
     def getTrackDuration(self) -> int:
-        return self.duration
+        return int(self.duration)
 
-    def setImageURL(self, URL: str = "") -> None:
-        self.image_url = URL
+    def getTrackURL(self) -> str:
+        return self.trackURL
 
-    def getURL(self):
-        return self.url
+    '''------------- DEFINE SETTER FUNCTIONS ----------'''
+    def setImageURL(self, imageURL: str = "") -> None:
+        self.imageURL = imageURL
+
+
+class TrackDatabase:
+    def __init__(
+            self,
+            trackList: "list[Track]" = []
+    ) -> None:
+        self.trackList = trackList
+        self.numOfTracks = 0
+
+    def addTrack(
+            self,
+            newTrack: Track
+    ) -> None:
+        self.trackList.append(newTrack)
+        self.numOfTracks += 1
+
+    def getTrackAtIndex(
+            self,
+            index: int = 0
+    ) -> "any":
+        if len(self.trackList) == 0:
+            return None
+        else:
+            return self.trackList[index]
+
+    def displayTrackDBInfo(self) -> None:
+        for i in range(len(self.trackList)):
+            print(
+                f'Duration: {self.trackList[i].getTrackDuration()},\n'
+                f'Artist: {self.trackList[i].getArtistName()},\n'
+                f'Track name: {self.trackList[i].getTrackName()},\n'
+                f'Track URL: {self.trackList[i].getTrackURL()},\n'
+                f'-----------------------------------\n')
+
+
+class PlayList:
+    def __init__(
+            self,
+            _trackDB: TrackDatabase,
+            id_list: "list[int]",
+            name: str = "Unknown",
+    ) -> None:
+        self.playListName = name
+        self.numOfTracks = len(id_list)
+        self.trackList = []
+
+        for idx in id_list:
+            self.trackList.append(_trackDB.getTrackAtIndex(idx))
+
+    def addTrack(
+            self,
+            newTrack: Track
+    ) -> None:
+        self.trackList.append(newTrack)
+        self.numOfTracks += 1
+
+    def getTrackAtIndex(
+            self,
+            index: int = 0
+    ) -> "any":
+        if len(self.trackList) == 0:
+            return None
+        else:
+            return self.trackList[index]
+
+    def printPlaylistInfo(self) -> None:
+        print(
+            f'Playlist name: {self.playListName},\n'
+            f'Number of Tracks: {self.numOfTracks},\n'
+            f'-----------------------------------\n')
+
+        for i in range(len(self.trackList)):
+            print(
+                f'Duration: {self.trackList[i].getTrackDuration()},\n'
+                f'Artist: {self.trackList[i].getArtistName()},\n'
+                f'Track name: {self.trackList[i].getTrackName()},\n'
+                f'Track URL: {self.trackList[i].getTrackURL()},\n'
+                f'-----------------------------------\n')
 
 
 class MusicPlayer:
@@ -120,5 +206,62 @@ class MusicPlayer:
         self.playSongAt(self.curr_playing)
 
 
+def getDBFromJSON(json_dir: str) -> TrackDatabase:
+    with open(json_dir) as f:
+        data = json.load(f)
+
+        trackDB = TrackDatabase()
+        for track_info in data['songdb']:
+            track = Track(
+                track_info.get("id"),
+                track_info.get("url")
+            )
+            if track is not None:
+                trackDB.addTrack(track)
+
+    return trackDB
+
+
+def getPlaylistList(
+        json_dir: str,
+        trackDB: TrackDatabase
+) -> "list[PlayList]":
+
+    playlistList = []
+
+    with open(json_dir) as f:
+        data = json.load(f)
+
+        for playlist_info in data['play_list']:
+            playlist = PlayList(
+                _trackDB=trackDB,
+                name=playlist_info.get("name"),
+                id_list=playlist_info.get("songlist")
+            )
+            playlist.printPlaylistInfo()
+
+            if playlist is not None:
+                playlistList.append(playlist)
+
+    return playlistList
+
+
 if __name__ == '__main__':
-    mp = MusicPlayer()
+    '''
+        Sửa lại chỗ này thành os.path.join(os.getcwd() + './../sample.json') khi chạy ở main.py (nếu có)
+        Code ở dưới chỉ dùng để test trong file MusicPlayer.py
+    '''
+    json_dir = os.path.join('./../sample.json')
+    trackDB = getDBFromJSON(json_dir)
+    playlistList = getPlaylistList(
+        json_dir,
+        trackDB
+    )
+
+    trackDB.displayTrackDBInfo()
+
+    for playlist in playlistList:
+        playlist.printPlaylistInfo()
+
+
+

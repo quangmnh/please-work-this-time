@@ -1,0 +1,35 @@
+{
+    "profile": "username",
+    "songdb": 
+    [
+        {
+            "id": 0,
+            "name": "An Gi Anh Moi",
+            "artist": "Queendom",
+            "duration": 300,
+            "image_url": "https://sakjdlsadjsa.com",
+            "url": "C:\\Users\\Victus\\Downloads\\angianhmoi.mp3"
+        },
+        {
+            "id": 1,
+            "name": "An Gi Anh Moi 2",
+            "artist": "Queendom",
+            "duration": 300,
+            "image_url": "https://sakjdlsadjsa.com",
+            "url": "C:\\Users\\Victus\\Downloads\\angianhmoi.mp3"
+        }
+    ],
+    "play_list": 
+    [
+        {
+            "name": "Sad",
+            "count": 2,
+            "songlist":[0,1]
+        },
+        {
+            "name": "Happy",
+            "count": 1,
+            "songlist":[0]
+        }
+    ]
+}
