@@ -1,20 +1,22 @@
-#import numpy as np
+# import numpy as np
 from pygame import mixer
+from copy import deepcopy
 import random
+import eyed3
+
+
 class Track:
     def __init__(
             self,
-            url,
-            name: str = "Unknown",
-            artist: str = "Unknown",
-            duration: int = 0,
-            image_url: str = ""
+            url
     ) -> None:
         self.url = url
-        self.name = name
-        self.artist = artist
-        self.duration = duration
-        self.image_url = image_url
+        audio = eyed3.load(url)
+        self.name = audio.tag.title
+        self.artist = audio.tag.artist
+        self.duration = audio.tag.duration
+        self.image_url = ""
+        # need to test this module for accessing id3 tag, might fail/ wrong usage
 
     def getTrackName(self) -> str:
         return self.name
@@ -27,24 +29,9 @@ class Track:
 
     def setImageURL(self, URL: str = "") -> None:
         self.image_url = URL
-    
-    def get_URL(self):
+
+    def getURL(self):
         return self.url
-
-
-class PlayBack:
-    def __init__(
-            self
-    ) -> None:
-        self.playBackList = []
-        self.currTrackIndex = 0
-
-    def getTrackAtIndex(self, index: int = 0):
-        self.currTrackIndex = index
-        return self.playBackList[index]
-
-    def addTrack(self, newTrack: Track) -> None:
-        self.playBackList.append(newTrack)
 
 
 class MusicPlayer:
@@ -71,49 +58,66 @@ class MusicPlayer:
         self.name = name
         self.artist = artist
         self.position = position
-        self.playBack = PlayBack()
+        self.playBack = []
+        self.playback_count = 0
+        self.curr_playing = 0
+        self.shuffle_pb = deepcopy(self.playBack)
         self.player = mixer
-
 
     def toggleShuffleMode(self) -> None:
         self.isShuffle = not self.isShuffle
 
+    def addSong(self, track: Track):
+        self.playBack.append(track)
+
     def toggleRepeatMode(self) -> None:
-        if self.repeatMode == 0:
-            self.isRepeat = True
-            self.repeatMode += 1
-            # TODO: Repeat mode for all track in playlist
+        self.isRepeat = not self.isRepeat
 
-        elif self.repeatMode == 1:
-            self.repeatMode += 1
-            # TODO: Repeat mode for only current track
-
-        else:
-            self.isRepeat = False
-            self.repeatMode = 0
-            # TODO: Don't repeat track when the playback is done
+    def playSongAt(self, index):
+        self.player.music.load(self.playBack[index].getURL())
+        self.player.music.play()
+        # To Do: change the player's ui
 
     def toggleMuteMode(self) -> None:
-        if not self.isMute:
-            self.systemVolume = 0
-            self.isMute = True
-            # TODO: Set the system volume by alssaudio
-        else:
-            self.isMute = False
-            self.systemVolume = self.currVolume
-            # TODO: Set the system volume by alssaudio
+        self.isMute = not self.isMute
 
     def togglePlayPause(self) -> None:
-        if not self.isPlaying:
-            self.isPlaying = True
-            # TODO: Play music
+        if self.isCurrPlaying():
+            self.player.music.pause()
         else:
-            self.isPlaying = False
-            # TODO: Pause music
+            self.player.music.unpause()
 
     def setCurrVolume(self, currVolume: int) -> None:
         self.currVolume = currVolume
-        # TODO: Using alssaudio to set system volume
+        self.player.set_volume(currVolume)
+
+    def getCurrPos(self):
+        return self.player.get_pos()
+
+    def setCurrVolume(self, currVolume: int) -> None:
+        # self.currVolume = currVolume
+        return self.player.get_volume(currVolume)
+
+    def isCurrPlaying(self):
+        return self.player.get_busy()
+
+    def next(self):
+        if self.isShuffle:
+            self.curr_playing = random.randint(0, self.playback_count - 1)
+        else:
+            self.curr_playing = (self.curr_playing + 1) % self.playback_count
+        self.playSongAt(self.curr_playing)
+        # timer in the main decide when to next
+
+    def prev(self):
+        if self.isShuffle:
+            self.curr_playing = random.randint(0, self.playback_count - 1)
+        else:
+            if self.curr_playing > 0:
+                self.curr_playing = (self.curr_playing - 1)
+            else:
+                self.curr_playing = self.playback_count - 1
+        self.playSongAt(self.curr_playing)
 
 
 if __name__ == '__main__':
