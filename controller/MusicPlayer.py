@@ -6,6 +6,7 @@ from copy import deepcopy
 import random
 import eyed3
 import json
+import pandas as pd
 
 
 class Track:
@@ -248,7 +249,7 @@ def getPlaylistList(
 
 if __name__ == '__main__':
     '''
-        Sửa lại chỗ này thành os.path.join(os.getcwd() + './../sample.json') khi chạy ở main.py (nếu có)
+        Sửa lại chỗ này thành os.path.join(os.getcwd() + '/sample.json') khi chạy ở main.py (nếu có)
         Code ở dưới chỉ dùng để test trong file MusicPlayer.py
     '''
     json_dir = os.path.join('./../sample.json')
