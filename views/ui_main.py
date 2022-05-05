@@ -593,9 +593,9 @@ class Ui_MainWindow(object):
             QtWidgets.QFrame.Raised)
         self.frame_settings_bluetooth_content.setObjectName(
             "frame_settings_bluetooth_content")
-        self.verticalLayout_28 = QtWidgets.QVBoxLayout(
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(
             self.frame_settings_bluetooth_content)
-        self.verticalLayout_28.setObjectName("verticalLayout_28")
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.btn_settings_bluetooth_scan_devices = QtWidgets.QPushButton(
             self.frame_settings_bluetooth_content)
         self.btn_settings_bluetooth_scan_devices.setMinimumSize(
@@ -612,9 +612,28 @@ class Ui_MainWindow(object):
                                                                "}")
         self.btn_settings_bluetooth_scan_devices.setObjectName(
             "btn_settings_bluetooth_scan_devices")
-        self.verticalLayout_28.addWidget(
+        self.horizontalLayout_5.addWidget(
             self.btn_settings_bluetooth_scan_devices)
-        self.verticalLayout_18.addWidget(self.frame_settings_bluetooth_content)
+        self.btn_settings_bluetooth_disconnect = QtWidgets.QPushButton(
+            self.frame_settings_bluetooth_content)
+        self.btn_settings_bluetooth_disconnect.setMinimumSize(
+            QtCore.QSize(100, 50))
+        self.btn_settings_bluetooth_disconnect.setMaximumSize(
+            QtCore.QSize(100, 16777215))
+        self.btn_settings_bluetooth_disconnect.setStyleSheet("QPushButton {\n"
+                                                             "    color: rgb(255,255,255);\n"
+                                                             "     background-color: rgb(35,35,35);\n"
+                                                             "    border: 0px solid;\n"
+                                                             "}\n"
+                                                             "QPushButton:hover {\n"
+                                                             "    background-color: rgb(85, 170, 255);\n"
+                                                             "}")
+        self.btn_settings_bluetooth_disconnect.setObjectName(
+            "btn_settings_bluetooth_disconnect")
+        self.horizontalLayout_5.addWidget(
+            self.btn_settings_bluetooth_disconnect)
+        self.verticalLayout_18.addWidget(
+            self.frame_settings_bluetooth_content, 0, QtCore.Qt.AlignLeft)
         self.listWidget_settings_bluetooth_devices = QtWidgets.QListWidget(
             self.frame_settings_bluetooth)
         font = QtGui.QFont()
@@ -936,6 +955,8 @@ class Ui_MainWindow(object):
             _translate("MainWindow", "Bluetooth setup"))
         self.btn_settings_bluetooth_scan_devices.setText(
             _translate("MainWindow", "Scan devices"))
+        self.btn_settings_bluetooth_disconnect.setText(
+            _translate("MainWindow", "Disconnect"))
         self.label_library.setText(_translate("MainWindow", "Library"))
         self.label_playlist_name.setText(
             _translate("MainWindow", "Playlist 1"))

@@ -45,7 +45,7 @@
     <item>
      <widget class="QFrame" name="Content">
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(45, 45, 45);</string>
+       <string notr="true">background-color: rgb(15, 15, 15);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -84,7 +84,7 @@
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(35, 35, 35);</string>
+          <string notr="true">background-color: rgb(50, 50, 50);</string>
          </property>
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
@@ -173,7 +173,7 @@
                <property name="styleSheet">
                 <string notr="true">QPushButton {
 	color: rgb(255,255,255);
- 	background-color: rgb(35,35,35);
+ 	background-color: rgb(50,50,50);
 	border: 0px solid;
 }
 QPushButton:hover {
@@ -201,7 +201,7 @@ QPushButton:hover {
                <property name="styleSheet">
                 <string notr="true">QPushButton {
 	color: rgb(255,255,255);
- 	background-color: rgb(35,35,35);
+ 	background-color: rgb(50,50,50);
 	border: 0px solid;
 }
 QPushButton:hover {
@@ -229,7 +229,7 @@ QPushButton:hover {
                <property name="styleSheet">
                 <string notr="true">QPushButton {
 	color: rgb(255,255,255);
- 	background-color: rgb(35,35,35);
+ 	background-color: rgb(50,50,50);
 	border: 0px solid;
 }
 QPushButton:hover {
@@ -281,7 +281,7 @@ QPushButton:hover {
                <property name="styleSheet">
                 <string notr="true">QPushButton {
 	color: rgb(255,255,255);
- 	background-color: rgb(35,35,35);
+ 	background-color: rgb(50,50,50);
 	border: 0px solid;
 }
 QPushButton:hover {
@@ -310,6 +310,9 @@ QPushButton:hover {
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
            <widget class="QStackedWidget" name="Pages_Widget">
+            <property name="currentIndex">
+             <number>5</number>
+            </property>
             <widget class="QWidget" name="page_dashboard">
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
@@ -614,6 +617,9 @@ QPushButton:hover {
                  </item>
                  <item>
                   <widget class="QFrame" name="frame_settings_emotion_playlist_map_content">
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(35,35,35);</string>
+                   </property>
                    <property name="frameShape">
                     <enum>QFrame::StyledPanel</enum>
                    </property>
@@ -893,7 +899,7 @@ QPushButton:hover {
                    </property>
                   </widget>
                  </item>
-                 <item>
+                 <item alignment="Qt::AlignLeft">
                   <widget class="QFrame" name="frame_settings_bluetooth_content">
                    <property name="minimumSize">
                     <size>
@@ -907,7 +913,7 @@ QPushButton:hover {
                    <property name="frameShadow">
                     <enum>QFrame::Raised</enum>
                    </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_28">
+                   <layout class="QHBoxLayout" name="horizontalLayout_5">
                     <item>
                      <widget class="QPushButton" name="btn_settings_bluetooth_scan_devices">
                       <property name="minimumSize">
@@ -934,6 +940,35 @@ QPushButton:hover {
                       </property>
                       <property name="text">
                        <string>Scan devices</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="btn_settings_bluetooth_disconnect">
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>50</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QPushButton {
+	color: rgb(255,255,255);
+ 	background-color: rgb(35,35,35);
+	border: 0px solid;
+}
+QPushButton:hover {
+	background-color: rgb(85, 170, 255);
+}</string>
+                      </property>
+                      <property name="text">
+                       <string>Disconnect</string>
                       </property>
                      </widget>
                     </item>
@@ -1169,7 +1204,7 @@ QPushButton:hover {
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(20, 20, 20);</string>
+       <string notr="true">background-color: rgb(60, 60, 60);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -1234,6 +1269,9 @@ QPushButton:hover {
        </item>
        <item>
         <widget class="QFrame" name="frame_player_navigator">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
          </property>
@@ -1243,6 +1281,33 @@ QPushButton:hover {
          <layout class="QVBoxLayout" name="verticalLayout_27">
           <item>
            <widget class="QSlider" name="slider_player_navigator_progress_bar">
+            <property name="styleSheet">
+             <string notr="true">QSlider::groove:horizontal { 
+	background-color: white;
+	border: 0px solid #424242; 
+	height: 5px; 
+	border-radius: 2px;
+}
+
+QSlider::handle:horizontal { 
+	background-color: #0d6efd; 
+	border: 2px solid #0d6efd; 
+	width: 8px; 
+	height: 10px; 
+	line-height: 10px; 
+	margin-top: -3px; 
+	margin-bottom: -3px; 
+	border-radius: 5px; 
+}
+
+QSlider::handle:horizontal:hover { 
+	border-radius: 5px;
+}
+
+QSlider::sub-page:horizontal {
+	background-color: #0d6efd;
+}</string>
+            </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -1336,6 +1401,33 @@ QPushButton:hover {
          <layout class="QHBoxLayout" name="horizontalLayout_10">
           <item>
            <widget class="QSlider" name="slider_player_volume">
+            <property name="styleSheet">
+             <string notr="true">QSlider::groove:horizontal { 
+	background-color: white;
+	border: 0px solid #424242; 
+	height: 10px; 
+}
+
+QSlider::handle:horizontal { 
+	background-color: #0d6efd; 
+	border: 2px solid #0d6efd; 
+	width: 16px; 
+	height: 20px; 
+	line-height: 20px; 
+	margin-top: -5px; 
+	margin-bottom: -5px; 
+	border-radius: 10px; 
+}
+
+QSlider::handle:horizontal:hover { 
+	border-radius: 10px;
+}
+
+QSlider::sub-page:horizontal {
+	background-color: #0d6efd;
+	border-radius: 4pxl
+}</string>
+            </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
