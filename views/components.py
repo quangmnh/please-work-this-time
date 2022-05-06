@@ -9,7 +9,7 @@ class LibrarySong(QtWidgets.QWidget):
 
         self.row = QtWidgets.QHBoxLayout()
 
-        self.setStyleSheet("background-color: rgb(35,35,35);")
+        # self.setStyleSheet("background-color: rgb(35,35,35);")
 
         # Edit these fields to get correct song information
         self.song_name = QtWidgets.QLabel(song_info['name'])
@@ -22,15 +22,62 @@ class LibrarySong(QtWidgets.QWidget):
         self.row.addWidget(self.song_artist)
 
         self.play_btn = QtWidgets.QPushButton("Play")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/icons/icons/play.svg"),
+                       QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.play_btn.setMinimumSize(QtCore.QSize(40, 40))
+        self.play_btn.setMaximumSize(QtCore.QSize(40, 40))
+        self.play_btn.setIcon(icon)
+        self.play_btn.setStyleSheet("QPushButton {\n"
+                                    "    color: rgb(255,255,255);\n"
+                                    "    border: 0px solid;\n"
+                                    "    border-radius: 20px;\n"
+                                    "}\n"
+                                    "QPushButton:hover {\n"
+                                    "    background-color: rgb(85, 170, 255);\n"
+                                    "}")
+        self.play_btn.setText("")
+
         self.remove_btn = QtWidgets.QPushButton("Remove")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/icons/icons/x-circle.svg"),
+                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.remove_btn.setMinimumSize(QtCore.QSize(40, 40))
+        self.remove_btn.setMaximumSize(QtCore.QSize(40, 40))
+        self.remove_btn.setIcon(icon2)
+        self.remove_btn.setStyleSheet("QPushButton {\n"
+                                      "    color: rgb(255,255,255);\n"
+                                      "    border: 0px solid;\n"
+                                      "    border-radius: 20px;\n"
+                                      "}\n"
+                                      "QPushButton:hover {\n"
+                                      "    background-color: rgb(85, 170, 255);\n"
+                                      "}")
+        self.remove_btn.setText("")
+
         self.add_to_playlist_btn = QtWidgets.QPushButton("Add to playlist")
-        self.play_btn.setStyleSheet("color: white;")
-        self.remove_btn.setStyleSheet("color: white;")
-        self.add_to_playlist_btn.setStyleSheet("color: white;")
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(":/icons/icons/folder-plus.svg"),
+                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.add_to_playlist_btn.setMinimumSize(QtCore.QSize(40, 40))
+        self.add_to_playlist_btn.setMaximumSize(QtCore.QSize(40, 40))
+        self.add_to_playlist_btn.setIcon(icon3)
+        self.add_to_playlist_btn.setStyleSheet("QPushButton {\n"
+                                               "    color: rgb(255,255,255);\n"
+                                               "    border: 0px solid;\n"
+                                               "    border-radius: 20px;\n"
+                                               "}\n"
+                                               "QPushButton:hover {\n"
+                                               "    background-color: rgb(85, 170, 255);\n"
+                                               "}")
+        self.add_to_playlist_btn.setText("")
+        # self.play_btn.setStyleSheet("color: white;")
+        # self.remove_btn.setStyleSheet("color: white;")
+        # self.add_to_playlist_btn.setStyleSheet("color: white;")
 
         self.row.addWidget(self.play_btn)
-        self.row.addWidget(self.remove_btn)
         self.row.addWidget(self.add_to_playlist_btn)
+        self.row.addWidget(self.remove_btn)
 
         self.setLayout(self.row)
 

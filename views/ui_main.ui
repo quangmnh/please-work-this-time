@@ -183,6 +183,10 @@ QPushButton:hover {
                <property name="text">
                 <string>Dashboard</string>
                </property>
+               <property name="icon">
+                <iconset resource="icons.qrc">
+                 <normaloff>:/icons/icons/home.svg</normaloff>:/icons/icons/home.svg</iconset>
+               </property>
               </widget>
              </item>
              <item>
@@ -211,6 +215,10 @@ QPushButton:hover {
                <property name="text">
                 <string>Library</string>
                </property>
+               <property name="icon">
+                <iconset resource="icons.qrc">
+                 <normaloff>:/icons/icons/list.svg</normaloff>:/icons/icons/list.svg</iconset>
+               </property>
               </widget>
              </item>
              <item>
@@ -238,6 +246,10 @@ QPushButton:hover {
                </property>
                <property name="text">
                 <string>Add Playlist</string>
+               </property>
+               <property name="icon">
+                <iconset resource="icons.qrc">
+                 <normaloff>:/icons/icons/plus-square.svg</normaloff>:/icons/icons/plus-square.svg</iconset>
                </property>
               </widget>
              </item>
@@ -291,6 +303,10 @@ QPushButton:hover {
                <property name="text">
                 <string>Settings</string>
                </property>
+               <property name="icon">
+                <iconset resource="icons.qrc">
+                 <normaloff>:/icons/icons/settings.svg</normaloff>:/icons/icons/settings.svg</iconset>
+               </property>
               </widget>
              </item>
             </layout>
@@ -311,7 +327,7 @@ QPushButton:hover {
           <item>
            <widget class="QStackedWidget" name="Pages_Widget">
             <property name="currentIndex">
-             <number>5</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="page_dashboard">
              <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -1278,11 +1294,161 @@ QPushButton:hover {
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_27">
+         <layout class="QHBoxLayout" name="horizontalLayout_12">
           <item>
-           <widget class="QSlider" name="slider_player_navigator_progress_bar">
-            <property name="styleSheet">
-             <string notr="true">QSlider::groove:horizontal { 
+           <widget class="QFrame" name="frame_player_navigator_buttons">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_9">
+             <item>
+              <widget class="QPushButton" name="btn_player_navigator_repeat">
+               <property name="minimumSize">
+                <size>
+                 <width>30</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+	color: rgb(255,255,255);
+	border: 0px solid;
+	border-radius: 15px;
+}
+QPushButton:hover {
+	background-color: rgb(85, 170, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="icons.qrc">
+                 <normaloff>:/icons/icons/repeat.svg</normaloff>:/icons/icons/repeat.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_player_navigator_previous">
+               <property name="minimumSize">
+                <size>
+                 <width>30</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+	color: rgb(255,255,255);
+	border: 0px solid;
+	border-radius: 15px;
+}
+QPushButton:hover {
+	background-color: rgb(85, 170, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="icons.qrc">
+                 <normaloff>:/icons/icons/skip-back.svg</normaloff>:/icons/icons/skip-back.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_player_navigator_playPause">
+               <property name="minimumSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+	color: rgb(255,255,255);
+	border: 0px solid;
+	border-radius: 18px;
+}
+QPushButton:hover {
+	background-color: rgb(85, 170, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="icons.qrc">
+                 <normaloff>:/icons/icons/play.svg</normaloff>:/icons/icons/play.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_player_navigator_forward">
+               <property name="minimumSize">
+                <size>
+                 <width>30</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+	color: rgb(255,255,255);
+	border: 0px solid;
+	border-radius: 15px;
+}
+QPushButton:hover {
+	background-color: rgb(85, 170, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="icons.qrc">
+                 <normaloff>:/icons/icons/skip-forward.svg</normaloff>:/icons/icons/skip-forward.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_player_navigator_shuffle">
+               <property name="minimumSize">
+                <size>
+                 <width>30</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+	color: rgb(255,255,255);
+	border: 0px solid;
+	border-radius: 15px;
+}
+QPushButton:hover {
+	background-color: rgb(85, 170, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="icons.qrc">
+                 <normaloff>:/icons/icons/shuffle.svg</normaloff>:/icons/icons/shuffle.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSlider" name="slider_player_navigator_progress_bar">
+               <property name="styleSheet">
+                <string notr="true">QSlider::groove:horizontal { 
 	background-color: white;
 	border: 0px solid #424242; 
 	height: 5px; 
@@ -1307,68 +1473,9 @@ QSlider::handle:horizontal:hover {
 QSlider::sub-page:horizontal {
 	background-color: #0d6efd;
 }</string>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="frame_player_navigator_buttons">
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_9">
-             <item>
-              <widget class="QPushButton" name="btn_player_navigator_repeat">
-               <property name="styleSheet">
-                <string notr="true">color: #FFF;</string>
                </property>
-               <property name="text">
-                <string>Repeat</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_player_navigator_previous">
-               <property name="styleSheet">
-                <string notr="true">color: #FFF;</string>
-               </property>
-               <property name="text">
-                <string>Previous</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_player_navigator_playPause">
-               <property name="styleSheet">
-                <string notr="true">color: #FFF;</string>
-               </property>
-               <property name="text">
-                <string>Play/Pause</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_player_navigator_forward">
-               <property name="styleSheet">
-                <string notr="true">color: #FFF;</string>
-               </property>
-               <property name="text">
-                <string>Forward</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_player_navigator_shuffle">
-               <property name="styleSheet">
-                <string notr="true">color: #FFF;</string>
-               </property>
-               <property name="text">
-                <string>Shuffle</string>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
                </property>
               </widget>
              </item>
@@ -1442,6 +1549,8 @@ QSlider::sub-page:horizontal {
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

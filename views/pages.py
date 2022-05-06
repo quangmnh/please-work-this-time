@@ -41,8 +41,6 @@ class PlaylistPage(QtWidgets.QWidget):
         self.btn_playlist_play = QtWidgets.QPushButton(
             self.frame_playlist_buttons)
         self.btn_playlist_play.setText("Play")
-        self.btn_playlist_play.setMinimumSize(QtCore.QSize(100, 50))
-        self.btn_playlist_play.setMaximumSize(QtCore.QSize(100, 16777215))
         self.btn_playlist_play.setStyleSheet("QPushButton {\n"
                                              "    color: rgb(255,255,255);\n"
                                              "     background-color: rgb(35,35,35);\n"
@@ -51,6 +49,22 @@ class PlaylistPage(QtWidgets.QWidget):
                                              "QPushButton:hover {\n"
                                              "    background-color: rgb(85, 170, 255);\n"
                                              "}")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/icons/icons/play-circle.svg"),
+                       QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_playlist_play.setMinimumSize(QtCore.QSize(50, 50))
+        self.btn_playlist_play.setMaximumSize(QtCore.QSize(50, 50))
+        self.btn_playlist_play.setIcon(icon)
+        self.btn_playlist_play.setIconSize(QtCore.QSize(25, 25))
+        self.btn_playlist_play.setStyleSheet("QPushButton {\n"
+                                             "    color: rgb(255,255,255);\n"
+                                             "    border: 0px solid;\n"
+                                             "    border-radius: 25px;\n"
+                                             "}\n"
+                                             "QPushButton:hover {\n"
+                                             "    background-color: rgb(85, 170, 255);\n"
+                                             "}")
+        self.btn_playlist_play.setText("")
         self.btn_playlist_play.setObjectName(
             "btn_playlist_play_" + playlist_name)
         self.horizontalLayout_2.addWidget(self.btn_playlist_play)
@@ -67,6 +81,22 @@ class PlaylistPage(QtWidgets.QWidget):
                                                "QPushButton:hover {\n"
                                                "    background-color: rgb(85, 170, 255);\n"
                                                "}")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/icons/icons/folder-minus.svg"),
+                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_playlist_remove.setMinimumSize(QtCore.QSize(50, 50))
+        self.btn_playlist_remove.setMaximumSize(QtCore.QSize(50, 50))
+        self.btn_playlist_remove.setIcon(icon1)
+        self.btn_playlist_remove.setIconSize(QtCore.QSize(25, 25))
+        self.btn_playlist_remove.setStyleSheet("QPushButton {\n"
+                                               "    color: rgb(255,255,255);\n"
+                                               "    border: 0px solid;\n"
+                                               "    border-radius: 25px;\n"
+                                               "}\n"
+                                               "QPushButton:hover {\n"
+                                               "    background-color: rgb(85, 170, 255);\n"
+                                               "}")
+        self.btn_playlist_remove.setText("")
         self.btn_playlist_remove.setObjectName(
             "btn_playlist_remove_" + playlist_name)
         self.horizontalLayout_2.addWidget(self.btn_playlist_remove)

@@ -77,8 +77,7 @@ class MainWindow(QMainWindow):
             lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_dashboard))
 
         # LIBRARY PAGE
-        self.ui.Btn_Library.clicked.connect(
-            lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_library))
+        self.ui.Btn_Library.clicked.connect(self.on_library_open)
 
         # EMOTION RECOGNITION PAGE
         self.ui.Btn_menu_fer.clicked.connect(self.on_emotion_recognition)
@@ -198,6 +197,12 @@ class MainWindow(QMainWindow):
     # END: Emotion recognition
 
     # Library
+    def on_library_open(self):
+        # TODO: Display all the songs once the library is opened
+        self.ui.Pages_Widget.setCurrentWidget(self.ui.page_library)
+        display_list_item(self.ui.listWidget_library_songs, [LibrarySong(
+            song, self.on_play_song, self.on_remove_song, self.on_add_to_playlist) for song in library_songs])
+
     def on_play_song(self):
         # TODO: Play song selected from library
         pass
