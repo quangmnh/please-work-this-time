@@ -124,6 +124,7 @@ class PlayList:
 class MusicPlayer:
     def __init__(
             self,
+            playBack: "list[Track]" = [],
             systemVolume: int = 0,
             isPlaying: bool = False,
             isShuffle: bool = False,
@@ -145,7 +146,7 @@ class MusicPlayer:
         self.name = name
         self.artist = artist
         self.position = position
-        self.playBack = []
+        self.playBack = playBack
         self.playback_count = 0
         self.curr_playing = 0
         self.shuffle_pb = deepcopy(self.playBack)
@@ -161,7 +162,7 @@ class MusicPlayer:
         self.isRepeat = not self.isRepeat
 
     def playSongAt(self, index):
-        self.player.music.load(self.playBack[index].getURL())
+        self.player.music.load(self.playBack[index].getTrackURL())
         self.player.music.play()
         # To Do: change the player's ui
 
@@ -208,7 +209,7 @@ class MusicPlayer:
 
 
 def getDBFromJSON(json_dir: str) -> TrackDatabase:
-    with open(json_dir) as f:
+    with open(json_dir, encoding='utf-8') as f:
         data = json.load(f)
 
         trackDB = TrackDatabase()
@@ -230,7 +231,7 @@ def getPlaylistList(
 
     playlistList = []
 
-    with open(json_dir) as f:
+    with open(json_dir, encoding='utf-8') as f:
         data = json.load(f)
 
         for playlist_info in data['play_list']:
