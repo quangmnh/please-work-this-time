@@ -135,3 +135,94 @@ class PlaylistLabel(QtWidgets.QWidget):
 
         # CONNECTIONS
         self.open_btn.clicked.connect(on_open_playlist)
+
+
+class PlaylistSong(QtWidgets.QWidget):
+    def __init__(self, song_info, on_play, on_remove, parent=None):
+        super(PlaylistSong, self).__init__(parent)
+
+        self.row = QtWidgets.QHBoxLayout()
+
+        # self.setStyleSheet("background-color: rgb(35,35,35);")
+
+        # Edit these fields to get correct song information
+        self.song_name = QtWidgets.QLabel(song_info['name'])
+        self.song_artist = QtWidgets.QLabel(song_info['artist_name'])
+        ###################################################
+        self.song_name.setStyleSheet("color: white;")
+        self.song_artist.setStyleSheet("color: white;")
+
+        self.row.addWidget(self.song_name)
+        self.row.addWidget(self.song_artist)
+
+        self.play_btn = QtWidgets.QPushButton("Play")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/icons/icons/play.svg"),
+                       QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.play_btn.setMinimumSize(QtCore.QSize(40, 40))
+        self.play_btn.setMaximumSize(QtCore.QSize(40, 40))
+        self.play_btn.setIcon(icon)
+        self.play_btn.setStyleSheet("QPushButton {\n"
+                                    "    color: rgb(255,255,255);\n"
+                                    "    border: 0px solid;\n"
+                                    "    border-radius: 20px;\n"
+                                    "}\n"
+                                    "QPushButton:hover {\n"
+                                    "    background-color: rgb(85, 170, 255);\n"
+                                    "}")
+        self.play_btn.setText("")
+
+        self.remove_btn = QtWidgets.QPushButton("Remove")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/icons/icons/x-circle.svg"),
+                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.remove_btn.setMinimumSize(QtCore.QSize(40, 40))
+        self.remove_btn.setMaximumSize(QtCore.QSize(40, 40))
+        self.remove_btn.setIcon(icon2)
+        self.remove_btn.setStyleSheet("QPushButton {\n"
+                                      "    color: rgb(255,255,255);\n"
+                                      "    border: 0px solid;\n"
+                                      "    border-radius: 20px;\n"
+                                      "}\n"
+                                      "QPushButton:hover {\n"
+                                      "    background-color: rgb(85, 170, 255);\n"
+                                      "}")
+        self.remove_btn.setText("")
+
+        self.row.addWidget(self.play_btn)
+        self.row.addWidget(self.remove_btn)
+
+        self.setLayout(self.row)
+
+        # CONNECTIONS
+        self.play_btn.clicked.connect(on_play)
+        self.remove_btn.clicked.connect(on_remove)
+
+
+class Slider(QtWidgets.QSlider):
+    def mousePressEvent(self, event):
+        super(Slider, self).mousePressEvent(event)
+        if event.button() == QtCore.Qt.LeftButton:
+            val = self.pixelPosToRangeValue(event.pos())
+            self.setValue(val)
+
+    def pixelPosToRangeValue(self, pos):
+        opt = QtWidgets.QStyleOptionSlider()
+        self.initStyleOption(opt)
+        gr = self.style().subControlRect(QtWidgets.QStyle.CC_Slider,
+                                         opt, QtWidgets.QStyle.SC_SliderGroove, self)
+        sr = self.style().subControlRect(QtWidgets.QStyle.CC_Slider,
+                                         opt, QtWidgets.QStyle.SC_SliderHandle, self)
+
+        if self.orientation() == QtCore.Qt.Horizontal:
+            sliderLength = sr.width()
+            sliderMin = gr.x()
+            sliderMax = gr.right() - sliderLength + 1
+        else:
+            sliderLength = sr.height()
+            sliderMin = gr.y()
+            sliderMax = gr.bottom() - sliderLength + 1
+        pr = pos - sr.center() + sr.topLeft()
+        p = pr.x() if self.orientation() == QtCore.Qt.Horizontal else pr.y()
+        return QtWidgets.QStyle.sliderValueFromPosition(self.minimum(), self.maximum(), p - sliderMin,
+                                                        sliderMax - sliderMin, opt.upsideDown)

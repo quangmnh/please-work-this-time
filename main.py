@@ -137,6 +137,14 @@ class MainWindow(QMainWindow):
             self.on_shuffle_mode)
         ## END : FUNCTIONALITY #################################################
 
+        # PLAYER
+        # Track slider
+        self.ui.slider_player_navigator_progress_bar.valueChanged.connect(
+            self.on_set_position)
+        # Volume slider
+        self.ui.slider_player_volume.valueChanged.connect(self.on_set_volume)
+        # END : PLAYER
+
         # MAIN WINDOW
         ########################################################################
         self.show()
@@ -225,6 +233,26 @@ class MainWindow(QMainWindow):
     ### End : Playlist
 
     # Player
+    # Progress bar
+    def on_position_changed(self, position):
+        # Connect this to the media player for changing progress bar position
+        self.ui.slider_player_navigator_progress_bar.setValue(position)
+
+    def on_duration_changed(self, duration):
+        # Connect this to the media player for changing progress bar duration
+        self.ui.slider_player_navigator_progress_bar.setRange(0, duration)
+
+    def on_set_position(self, position):
+        # TODO: Connect this to the media player for setting music position when user click on progress bar
+        pass
+
+    def on_set_volume(self, volume):
+        # TODO: Connect this to the media player for setting music volume when user click on volume slider
+        # For testing purpose: print(volume)
+        pass
+
+    # Navigator
+
     def on_play_pause(self):
         # TODO: Play/Pause
         pass

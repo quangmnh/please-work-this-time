@@ -9,6 +9,7 @@
 
 
 import views.icons_rc
+from views.components import Slider
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -915,7 +916,7 @@ class Ui_MainWindow(object):
         self.btn_player_navigator_shuffle.setObjectName(
             "btn_player_navigator_shuffle")
         self.horizontalLayout_9.addWidget(self.btn_player_navigator_shuffle)
-        self.slider_player_navigator_progress_bar = QtWidgets.QSlider(
+        self.slider_player_navigator_progress_bar = Slider(
             self.frame_player_navigator_buttons)
         self.slider_player_navigator_progress_bar.setStyleSheet("QSlider::groove:horizontal { \n"
                                                                 "    background-color: white;\n"
@@ -959,10 +960,12 @@ class Ui_MainWindow(object):
         self.horizontalLayout_10 = QtWidgets.QHBoxLayout(
             self.frame_player_volume)
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
-        self.slider_player_volume = QtWidgets.QSlider(self.frame_player_volume)
+        self.slider_player_volume = Slider(self.frame_player_volume)
+        self.slider_player_volume.setRange(0, 100)
         self.slider_player_volume.setStyleSheet("QSlider::groove:horizontal { \n"
                                                 "    background-color: white;\n"
                                                 "    border: 0px solid #424242; \n"
+                                                "    border-radius: 5px;        \n"
                                                 "    height: 10px; \n"
                                                 "}\n"
                                                 "\n"
@@ -983,7 +986,7 @@ class Ui_MainWindow(object):
                                                 "\n"
                                                 "QSlider::sub-page:horizontal {\n"
                                                 "    background-color: #0d6efd;\n"
-                                                "    border-radius: 4pxl\n"
+                                                "    border-radius: 5px;\n"
                                                 "}")
         self.slider_player_volume.setOrientation(QtCore.Qt.Horizontal)
         self.slider_player_volume.setObjectName("slider_player_volume")
