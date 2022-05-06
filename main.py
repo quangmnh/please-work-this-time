@@ -81,8 +81,7 @@ class MainWindow(QMainWindow):
             lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_library))
 
         # EMOTION RECOGNITION PAGE
-        self.ui.Btn_menu_fer.clicked.connect(
-            lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition))
+        self.ui.Btn_menu_fer.clicked.connect(self.on_emotion_recognition)
 
         # SETTINGS PAGE
         self.ui.Btn_Settings.clicked.connect(
@@ -191,6 +190,12 @@ class MainWindow(QMainWindow):
         else:
             print("Hand gesture disabled")
     # END: Hand gesture
+
+    # Emotion recognition
+    def on_emotion_recognition(self):
+        # TODO: Enable the script and fetch the result
+        self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition)
+    # END: Emotion recognition
 
     # Library
     def on_play_song(self):
