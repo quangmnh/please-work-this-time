@@ -149,7 +149,8 @@ class MainWindow(QMainWindow):
 
         # PLAYER
         # Track slider
-        self.ui.slider_player_navigator_progress_bar.valueChanged.connect(
+        # Considering event for this
+        self.ui.slider_player_navigator_progress_bar.sliderPressed.connect(
             self.on_set_position)
         # Volume slider
         self.ui.slider_player_volume.valueChanged.connect(self.on_set_volume)
@@ -333,8 +334,9 @@ class MainWindow(QMainWindow):
     def on_duration_changed(self, duration):
         self.ui.slider_player_navigator_progress_bar.setRange(0, duration)
 
-    def on_set_position(self, position):
-        self.media_player.player.setPosition(position)
+    def on_set_position(self):
+        current_val = self.ui.slider_player_navigator_progress_bar.value()
+        self.media_player.player.setPosition(current_val)
 
     def on_set_volume(self, volume):
         self.media_player.player.setVolume(volume)
