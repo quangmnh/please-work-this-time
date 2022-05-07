@@ -226,3 +226,17 @@ class Slider(QtWidgets.QSlider):
         p = pr.x() if self.orientation() == QtCore.Qt.Horizontal else pr.y()
         return QtWidgets.QStyle.sliderValueFromPosition(self.minimum(), self.maximum(), p - sliderMin,
                                                         sliderMax - sliderMin, opt.upsideDown)
+
+
+class PlayIcon():
+    def __init__(self, parent=None):
+        self.icon = QtGui.QIcon()
+        self.icon.addPixmap(QtGui.QPixmap(":/icons/icons/play.svg"),
+                            QtGui.QIcon.Normal, QtGui.QIcon.Off)
+
+
+class PauseIcon():
+    def __init__(self, parent=None):
+        self.icon = QtGui.QIcon()
+        self.icon.addPixmap(QtGui.QPixmap(":/icons/icons/pause.svg"),
+                            QtGui.QIcon.Normal, QtGui.QIcon.Off)

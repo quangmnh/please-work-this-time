@@ -1,7 +1,9 @@
 # import numpy as np
 import os
 
-from pygame import mixer
+# from pygame import mixer
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from PyQt5.QtCore import QUrl
 from copy import deepcopy
 import random
 import eyed3
@@ -25,6 +27,7 @@ class Track:
         self.imageURL = imageURL
 
     '''------------ DEFINE GETTER FUNCTIONS ----------'''
+
     def getTrackName(self) -> str:
         return self.name
 
@@ -38,6 +41,7 @@ class Track:
         return self.trackURL
 
     '''------------- DEFINE SETTER FUNCTIONS ----------'''
+
     def setImageURL(self, imageURL: str = "") -> None:
         self.imageURL = imageURL
 
@@ -150,7 +154,8 @@ class MusicPlayer:
         self.playback_count = 0
         self.curr_playing = 0
         self.shuffle_pb = deepcopy(self.playBack)
-        self.player = mixer
+        # self.player = mixer
+        self.player = QMediaPlayer()
 
     def toggleShuffleMode(self) -> None:
         self.isShuffle = not self.isShuffle
@@ -162,8 +167,10 @@ class MusicPlayer:
         self.isRepeat = not self.isRepeat
 
     def playSongAt(self, index):
-        self.player.music.load(self.playBack[index].getTrackURL())
-        self.player.music.play()
+        # self.player.music.load(self.playBack[index].getTrackURL())
+        # self.player.music.play()
+        media_content = QMediaContent(QUrl(self.playBack[index].getTrackURL()))
+        self.player.setMedia(media_content)
         # To Do: change the player's ui
 
     def toggleMuteMode(self) -> None:
@@ -171,23 +178,29 @@ class MusicPlayer:
 
     def togglePlayPause(self) -> None:
         if self.isCurrPlaying():
-            self.player.music.pause()
+            # self.player.music.pause()
+            self.player.pause()
         else:
-            self.player.music.unpause()
+            # self.player.music.unpause()
+            self.player.play()
 
     def setCurrVolume(self, currVolume: int) -> None:
         self.currVolume = currVolume
-        self.player.set_volume(currVolume)
+        # self.player.set_volume(currVolume)
+        self.player.setVolume(currVolume)
 
     def getCurrPos(self):
-        return self.player.get_pos()
+        # return self.player.get_pos()
+        return self.player.position()
 
     def setCurrVolume(self, currVolume: int) -> None:
         # self.currVolume = currVolume
-        return self.player.get_volume(currVolume)
+        # return self.player.get_volume(currVolume)
+        return self.player.volume()
 
     def isCurrPlaying(self):
-        return self.player.get_busy()
+        # return self.player.get_busy()
+        return (self.player.state() == QMediaPlayer.PlayingState)
 
     def next(self):
         if self.isShuffle:
@@ -264,6 +277,3 @@ if __name__ == '__main__':
 
     for playlist in playlistList:
         playlist.printPlaylistInfo()
-
-
-

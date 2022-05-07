@@ -8,16 +8,20 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from views.ui_main import Ui_MainWindow
 
 # Components
-from views.components import BluetoothDevice, LibrarySong
+from views.components import BluetoothDevice, LibrarySong, PlayIcon, PauseIcon, PlaylistLabel
 
 # Pages
 from views.pages import PlaylistPage
 
 # Utils
 from utils1.display_list_item import display_list_item
+from utils1.snake_case import snake_case
 
 # Helper
-from helper.playlist_page import *
+# from helper.playlist_page import *
+
+# Controllers
+from controller.MusicPlayer import *
 
 import sys
 import platform
@@ -68,6 +72,12 @@ class MainWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        # Icons
+        self.play_icon = PlayIcon()
+        self.pause_icon = PauseIcon()
+        # End : Icons
+        self.media_player = MusicPlayer()
 
         # PAGES
         ########################################################################
@@ -144,6 +154,19 @@ class MainWindow(QMainWindow):
         # Volume slider
         self.ui.slider_player_volume.valueChanged.connect(self.on_set_volume)
         # END : PLAYER
+
+        # PLAYER OBJECT
+        # the callback will be called when the player emits the signal
+        # Changing current postion of the progress bar
+        self.media_player.player.positionChanged.connect(
+            self.on_position_changed)
+        # Changing the total duration of the progress bar
+        self.media_player.player.durationChanged.connect(
+            self.on_duration_changed)
+        # Changing the button icon on state changes
+        self.media_player.player.stateChanged.connect(
+            self.on_mediastate_changed)
+        # END : PLAYER OBJECT
 
         # MAIN WINDOW
         ########################################################################
@@ -225,31 +248,96 @@ class MainWindow(QMainWindow):
     ### End : Library
 
     # Playlist
-    # You can go to helper/playlist_page.py to see the declaration of the functions
-    # like playing playlist or remove playlist page
     def on_create_playlist(self):
-        create_playlist_dialog(
+        self.create_playlist_dialog(
             self.ui.Pages_Widget, self.ui.Pages_Widget, self.ui.listWidget_playlists)
+
+    def on_playlist_song_play(self):
+        # TODO : Play the song of the playlist
+        pass
+
+    def on_playlist_play(self):
+        # TODO : Play the playlist
+        pass
+
+    def create_playlist_dialog(self, parent: QtWidgets.QWidget, page_widget: QtWidgets.QStackedWidget, playlist_list_widget: QtWidgets.QListWidget):
+        dialog = QtWidgets.QInputDialog(parent)
+        dialog.setInputMode(QtWidgets.QInputDialog.TextInput)
+        dialog.setWindowTitle("Create Playlist")
+        dialog.setLabelText('Playlist Name:')
+        dialog.setStyleSheet("color: white; background-color: rgb(50,50,50);")
+        ok = dialog.exec_()
+        playlist_name = dialog.textValue()
+
+        if (ok and playlist_name):
+            self.add_playlist_page(
+                page_widget, playlist_name, playlist_list_widget)
+
+    def add_playlist_page(self, page_widget: QtWidgets.QStackedWidget, playlist_name: str, playlist_list_widget: QtWidgets.QListWidget):
+        """Add playlist page to page stack widget
+
+        Args:
+            page_widget (QtWidgets.QStackedWidget): Stack widget to add page to.
+            playlist_name (str): Name of playlist to add.
+            playlist_list_widget (QtWidgets.QListWidget): List widget to display all playlists.
+        """
+        playlist_label = PlaylistLabel(
+            playlist_name, lambda: self.change_playlist_page(page_widget, playlist_name))
+
+        # Add label to list widget
+        entry = QtWidgets.QListWidgetItem(playlist_list_widget)
+        playlist_list_widget.addItem(entry)
+        entry.setSizeHint(playlist_label.minimumSizeHint())
+        playlist_list_widget.setItemWidget(entry, playlist_label)
+
+        playlist_page = PlaylistPage(playlist_name, self.on_playlist_play, self.on_playlist_song_play,
+                                     lambda: self.remove_playlist_page(page_widget, playlist_name, playlist_list_widget, entry), self.on_library_open)
+        # Add page to page stack
+        page_widget.addWidget(playlist_page)
+
+    def change_playlist_page(self, page_widget: QtWidgets.QStackedWidget, playlist_name: str):
+        # TODO: Display the playlist songs here also
+        num_page = page_widget.count()
+        for i in range(num_page):
+            w = page_widget.widget(i)
+            if (hasattr(w, "playlist_name") and w.playlist_name == snake_case(playlist_name)):
+                page_widget.setCurrentIndex(i)
+                break
+
+    def remove_playlist_page(self, page_widget: QtWidgets.QStackedWidget, playlist_name: str, playlist_list_widget: QtWidgets.QListWidget, playlist_label: QtWidgets.QListWidgetItem):
+        num_page = page_widget.count()
+        for i in range(num_page):
+            w = page_widget.widget(i)
+            if (hasattr(w, "playlist_name") and w.playlist_name == snake_case(playlist_name)):
+                page_widget.removeWidget(w)
+                page_widget.setCurrentIndex(0)
+                break
+
+        # Remove label from list widget
+        playlist_list_widget.takeItem(playlist_list_widget.row(playlist_label))
     ### End : Playlist
 
     # Player
+    # Play/Pause button
+    def on_mediastate_changed(self, state):
+        if self.media_player.player.state() == QMediaPlayer.PlayingState:
+            self.ui.btn_player_navigator_playPause.setIcon(
+                self.pause_icon.icon)
+        else:
+            self.ui.btn_player_navigator_playPause.setIcon(self.play_icon.icon)
     # Progress bar
+
     def on_position_changed(self, position):
-        # Connect this to the media player for changing progress bar position
         self.ui.slider_player_navigator_progress_bar.setValue(position)
 
     def on_duration_changed(self, duration):
-        # Connect this to the media player for changing progress bar duration
         self.ui.slider_player_navigator_progress_bar.setRange(0, duration)
 
     def on_set_position(self, position):
-        # TODO: Connect this to the media player for setting music position when user click on progress bar
-        pass
+        self.media_player.player.setPosition(position)
 
     def on_set_volume(self, volume):
-        # TODO: Connect this to the media player for setting music volume when user click on volume slider
-        # For testing purpose: print(volume)
-        pass
+        self.media_player.player.setVolume(volume)
 
     # Navigator
 

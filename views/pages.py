@@ -3,7 +3,7 @@ from utils1.snake_case import snake_case
 
 
 class PlaylistPage(QtWidgets.QWidget):
-    def __init__(self, playlist_name, play_list_method, play_song_method, remove_method, parent=None):
+    def __init__(self, playlist_name, play_list_method, play_song_method, remove_method, go_to_lib_method, parent=None):
         # Method is for when a song in the playlist is clicked
         super(PlaylistPage, self).__init__(parent)
         playlist_name = snake_case(playlist_name)
@@ -100,6 +100,39 @@ class PlaylistPage(QtWidgets.QWidget):
         self.btn_playlist_remove.setObjectName(
             "btn_playlist_remove_" + playlist_name)
         self.horizontalLayout_2.addWidget(self.btn_playlist_remove)
+        self.btn_go_to_lib = QtWidgets.QPushButton(
+            self.frame_playlist_buttons)
+        self.btn_go_to_lib.setText("Go to library")
+        self.btn_go_to_lib.setMinimumSize(QtCore.QSize(100, 50))
+        self.btn_go_to_lib.setMaximumSize(QtCore.QSize(100, 16777215))
+        self.btn_go_to_lib.setStyleSheet("QPushButton {\n"
+                                         "    color: rgb(255,255,255);\n"
+                                         "     background-color: rgb(35,35,35);\n"
+                                         "    border: 0px solid;\n"
+                                         "}\n"
+                                         "QPushButton:hover {\n"
+                                         "    background-color: rgb(85, 170, 255);\n"
+                                         "}")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/icons/icons/list.svg"),
+                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_go_to_lib.setMinimumSize(QtCore.QSize(50, 50))
+        self.btn_go_to_lib.setMaximumSize(QtCore.QSize(50, 50))
+        self.btn_go_to_lib.setIcon(icon2)
+        self.btn_go_to_lib.setIconSize(QtCore.QSize(25, 25))
+        self.btn_go_to_lib.setStyleSheet("QPushButton {\n"
+                                         "    color: rgb(255,255,255);\n"
+                                         "    border: 0px solid;\n"
+                                         "    border-radius: 25px;\n"
+                                         "}\n"
+                                         "QPushButton:hover {\n"
+                                         "    background-color: rgb(85, 170, 255);\n"
+                                         "}")
+        self.btn_go_to_lib.setText("")
+        self.btn_go_to_lib.setObjectName(
+            "btn_go_to_lib_" + playlist_name)
+
+        self.horizontalLayout_2.addWidget(self.btn_go_to_lib)
         self.verticalLayout_11.addWidget(
             self.frame_playlist_buttons, 0, QtCore.Qt.AlignLeft)
         self.listWidget_playlist_songs = QtWidgets.QListWidget(
@@ -117,6 +150,7 @@ class PlaylistPage(QtWidgets.QWidget):
         self.listWidget_playlist_songs.clicked.connect(play_song_method)
         self.btn_playlist_play.clicked.connect(play_list_method)
         self.btn_playlist_remove.clicked.connect(remove_method)
+        self.btn_go_to_lib.clicked.connect(go_to_lib_method)
 
         self.setLayout(self.verticalLayout_13)
 
