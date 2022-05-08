@@ -164,6 +164,7 @@ class MusicPlayer:
         self.playback_count = len(self.playBack)
         self.curr_playing = 0
         self.shuffle_pb = deepcopy(self.playBack)
+        self.trackDB = playBack
 
         self.playlistList = playlistList
 

@@ -352,8 +352,14 @@ class MainWindow(QMainWindow):
             w = page_widget.widget(i)
             if hasattr(w, "playlist_name") and w.playlist_name == snake_case(playlist_name):
                 page_widget.setCurrentIndex(i)
-                display_list_item(self.ui.listWidget_playlist_songs, [PlaylistSong(
-                    song, self.on_play_song, self.on_remove_song) for song in track_list])
+                display_list_item(
+                    self.ui.listWidget_playlist_songs,
+                    [PlaylistSong(
+                        song,
+                        self.on_play_song(),
+                        self.on_remove_song
+                    ) for song in track_list]
+                )
                 break
 
     def on_play_playlist_song(self):
