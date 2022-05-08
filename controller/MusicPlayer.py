@@ -102,6 +102,10 @@ class PlayList:
         self.trackList.append(newTrack)
         self.numOfTracks += 1
 
+    def deleteTrack(self, index: int):
+        del self.trackList[index]
+        self.numOfTracks -= 1
+
     def getTrackAtIndex(
             self,
             index: int = 0
@@ -110,6 +114,12 @@ class PlayList:
             return None
         else:
             return self.trackList[index]
+
+    def getTrackList(self) -> "list[Track]":
+        return self.trackList
+
+    def getPlaylistName(self) -> str:
+        return self.playListName
 
     def printPlaylistInfo(self) -> None:
         print(
@@ -261,7 +271,6 @@ def getPlaylistList(
                 name=playlist_info.get("name"),
                 id_list=playlist_info.get("songlist")
             )
-            playlist.printPlaylistInfo()
 
             if playlist is not None:
                 playlistList.append(playlist)

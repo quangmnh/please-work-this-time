@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from views.ui_main import Ui_MainWindow
 
 # Components
-from views.components import (BluetoothDevice, LibrarySong, PlaylistLabel,
+from views.components import (BluetoothDevice, LibrarySong, PlaylistLabel, PlaylistSong,
                               PlayIcon, PauseIcon, RepeatEnabledIcon,
                               RepeatIcon, RepeatOneIcon, ShuffleEnabledIcon, ShuffleIcon)
 
@@ -57,7 +57,6 @@ bluetooth_devices = [
         "mac": "DD:DD:DD:DD:DD"
     }]
 
-playlists = []
 # END: EXAMPLE DATA ########################
 
 
@@ -80,8 +79,20 @@ class MainWindow(QMainWindow):
         # End : Icons
 
         self.media_player = MusicPlayer(
-            playBack=trackDB.getTrackList()
+            playBack=trackDB.getTrackList(),
+            playlistList=playlistList
         )
+
+        for playlistPage in self.media_player.playlistList:
+            self.add_playlist_page(
+                self.ui.Pages_Widget,
+                playlistPage.getPlaylistName(),
+                self.ui.listWidget_playlists,
+                playlistPage.getTrackList()
+            )
+
+            for track in playlistPage.getTrackList():
+                self.on_add_to_playlist()
 
         # PAGES
         ########################################################################
@@ -250,7 +261,8 @@ class MainWindow(QMainWindow):
     def on_remove_song(self, index: int):
         self.media_player.deleteSong(index)
         new_playback = convert_from_track_list_to_list_dict(
-            self.media_player.getPlaybackList())
+            self.media_player.getPlaybackList()
+        )
         display_list_item(self.ui.listWidget_library_songs, [LibrarySong(
             song, self.on_play_song, self.on_remove_song, self.on_add_to_playlist, song.get('id')) for song in new_playback])
 
@@ -283,18 +295,37 @@ class MainWindow(QMainWindow):
 
         if ok and playlist_name:
             self.add_playlist_page(
-                page_widget, playlist_name, playlist_list_widget)
+                page_widget,
+                playlist_name,
+                playlist_list_widget,
+                trackList=[]
+            )
 
-    def add_playlist_page(self, page_widget: QtWidgets.QStackedWidget, playlist_name: str, playlist_list_widget: QtWidgets.QListWidget):
+    def add_playlist_page(
+            self,
+            page_widget: QtWidgets.QStackedWidget,
+            playlist_name: str,
+            playlist_list_widget: QtWidgets.QListWidget,
+            trackList: "list[Track]",
+
+    ):
         """Add playlist page to page stack widget
 
         Args:
+            trackList (list[Track]): List contains track(s)
             page_widget (QtWidgets.QStackedWidget): Stack widget to add page to.
             playlist_name (str): Name of playlist to add.
             playlist_list_widget (QtWidgets.QListWidget): List widget to display all playlists.
         """
+        track_list_dict = convert_from_track_list_to_list_dict(trackList)
         playlist_label = PlaylistLabel(
-            playlist_name, lambda: self.change_playlist_page(page_widget, playlist_name))
+            playlist_name,
+            lambda: self.change_playlist_page(
+                page_widget,
+                playlist_name,
+                track_list_dict
+            )
+        )
 
         # Add label to list widget
         entry = QtWidgets.QListWidgetItem(playlist_list_widget)
@@ -302,18 +333,30 @@ class MainWindow(QMainWindow):
         entry.setSizeHint(playlist_label.minimumSizeHint())
         playlist_list_widget.setItemWidget(entry, playlist_label)
 
-        playlist_page = PlaylistPage(playlist_name, self.on_playlist_play, self.on_playlist_song_play,
-                                     lambda: self.remove_playlist_page(page_widget, playlist_name, playlist_list_widget, entry), self.on_library_open)
+        playlist_page = PlaylistPage(
+            playlist_name,
+            self.on_playlist_play,
+            self.on_playlist_song_play,
+            lambda: self.remove_playlist_page(page_widget, playlist_name, playlist_list_widget, entry),
+            self.on_library_open
+        )
         # Add page to page stack
         page_widget.addWidget(playlist_page)
 
-    def change_playlist_page(self, page_widget: QtWidgets.QStackedWidget, playlist_name: str):
+    def change_playlist_page(
+            self,
+            page_widget: QtWidgets.QStackedWidget,
+            playlist_name: str,
+            track_list: "list[dict]"
+    ):
         # TODO: Display the playlist songs here also
         num_page = page_widget.count()
         for i in range(num_page):
             w = page_widget.widget(i)
             if hasattr(w, "playlist_name") and w.playlist_name == snake_case(playlist_name):
                 page_widget.setCurrentIndex(i)
+                display_list_item(self.ui.listWidget_playlist_songs, [PlaylistSong(
+                    song, self.on_play_song, self.on_remove_song) for song in track_list])
                 break
 
     def remove_playlist_page(self, page_widget: QtWidgets.QStackedWidget, playlist_name: str, playlist_list_widget: QtWidgets.QListWidget, playlist_label: QtWidgets.QListWidgetItem):
@@ -338,7 +381,7 @@ class MainWindow(QMainWindow):
         else:
             self.ui.btn_player_navigator_playPause.setIcon(self.play_icon.icon)
 
-        if self.media_player.getCurrPos() >= self.media_player.playBack[self.media_player.curr_playing].getTrackDuration():
+        if self.media_player.getCurrPos()/1000 >= self.media_player.playBack[self.media_player.curr_playing].getTrackDuration():
             # Turn off repeat mode
             if self.media_player.repeatMode == 0:
                 if self.media_player.curr_playing == len(self.media_player.playBack):
@@ -351,10 +394,6 @@ class MainWindow(QMainWindow):
             # Repeat only one track
             else:
                 self.on_play_song(self.media_player.curr_playing)
-
-        if self.media_player.isShuffle:
-            # TODO: change the Shuffle icon
-            pass
 
     # Progress bar
 
@@ -385,7 +424,7 @@ class MainWindow(QMainWindow):
 
     def on_repeat_mode(self):
         self.media_player.changeRepeatMode()
-        print(self.media_player.repeatMode)
+
         # Change icons
         if self.media_player.repeatMode == 1:
             self.ui.btn_player_navigator_repeat.setIcon(
@@ -415,7 +454,7 @@ if __name__ == "__main__":
 
     trackDB = getDBFromJSON('sample.json')
     library_songs = convert_from_songDB_to_list_dict(trackDB)
-    playlist_song = getPlaylistList('sample.json', trackDB)
+    playlistList = getPlaylistList('sample.json', trackDB)
 
     window = MainWindow()
     sys.exit(app.exec_())
