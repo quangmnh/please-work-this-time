@@ -91,9 +91,6 @@ class MainWindow(QMainWindow):
                 playlistPage.getTrackList()
             )
 
-            for track in playlistPage.getTrackList():
-                self.on_add_to_playlist()
-
         # PAGES
         ########################################################################
 
@@ -358,6 +355,12 @@ class MainWindow(QMainWindow):
                 display_list_item(self.ui.listWidget_playlist_songs, [PlaylistSong(
                     song, self.on_play_song, self.on_remove_song) for song in track_list])
                 break
+
+    def on_play_playlist_song(self):
+        pass
+
+    def on_remove_playlist_song(self):
+        pass
 
     def remove_playlist_page(self, page_widget: QtWidgets.QStackedWidget, playlist_name: str, playlist_list_widget: QtWidgets.QListWidget, playlist_label: QtWidgets.QListWidgetItem):
         num_page = page_widget.count()
