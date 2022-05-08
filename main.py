@@ -384,7 +384,8 @@ class MainWindow(QMainWindow):
         self.on_play_song(index)
 
     def on_repeat_mode(self):
-        self.media_player.toggleRepeatMode()
+        self.media_player.changeRepeatMode()
+        print(self.media_player.repeatMode)
         # Change icons
         if self.media_player.repeatMode == 1:
             self.ui.btn_player_navigator_repeat.setIcon(
@@ -394,8 +395,6 @@ class MainWindow(QMainWindow):
                 self.repeat_one_icon.icon)
         else:
             self.ui.btn_player_navigator_repeat.setIcon(self.repeat_icon.icon)
-        self.media_player.changeRepeatMode()
-        print(self.media_player.repeatMode)
 
     def on_shuffle_mode(self):
         self.media_player.toggleShuffleMode()
