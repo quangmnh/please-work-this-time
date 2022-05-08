@@ -24,7 +24,7 @@ from utils1.snake_case import snake_case
 # from helper.playlist_page import *
 
 # Controllers
-from controller.MusicPlayer import MusicPlayer, getDBFromJSON
+from controller.MusicPlayer import MusicPlayer, getDBFromJSON, getPlaylistList
 from utils1.utils import *
 
 import sys
@@ -310,7 +310,7 @@ class MainWindow(QMainWindow):
         num_page = page_widget.count()
         for i in range(num_page):
             w = page_widget.widget(i)
-            if (hasattr(w, "playlist_name") and w.playlist_name == snake_case(playlist_name)):
+            if hasattr(w, "playlist_name") and w.playlist_name == snake_case(playlist_name):
                 page_widget.removeWidget(w)
                 page_widget.setCurrentIndex(0)
                 break
@@ -328,12 +328,22 @@ class MainWindow(QMainWindow):
         else:
             self.ui.btn_player_navigator_playPause.setIcon(self.play_icon.icon)
 
+        if self.media_player.getCurrPos() >= self.media_player.playBack[self.media_player.curr_playing].getTrackDuration():
+            # Turn off repeat mode
+            if self.media_player.repeatMode == 0:
+                if self.media_player.curr_playing == len(self.media_player.playBack):
+                    pass
+                else:
+                    self.on_next_song()
+            # Repeat all tracks
+            elif self.media_player.repeatMode == 1:
+                self.on_next_song()
+            # Repeat only one track
+            else:
+                self.on_play_song(self.media_player.curr_playing)
+
         if self.media_player.isShuffle:
             # TODO: change the Shuffle icon
-            pass
-
-        if self.media_player.isRepeat:
-            # TODO: change the repeat icon
             pass
 
     # Progress bar
@@ -364,7 +374,8 @@ class MainWindow(QMainWindow):
         self.on_play_song(index)
 
     def on_repeat_mode(self):
-        self.media_player.toggleRepeatMode()
+        self.media_player.changeRepeatMode()
+        print(self.media_player.repeatMode)
 
     def on_shuffle_mode(self):
         self.media_player.toggleShuffleMode()
@@ -378,7 +389,7 @@ if __name__ == "__main__":
 
     trackDB = getDBFromJSON('sample.json')
     library_songs = convert_from_songDB_to_list_dict(trackDB)
-
+    playlist_song = getPlaylistList('sample.json', trackDB)
 
     window = MainWindow()
     sys.exit(app.exec_())

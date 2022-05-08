@@ -130,10 +130,10 @@ class MusicPlayer:
     def __init__(
             self,
             playBack: "list[Track]" = [],
+            playlistList: "list[PlayList]" = [],
             systemVolume: int = 0,
             isPlaying: bool = False,
             isShuffle: bool = False,
-            isRepeat: bool = False,
             repeatMode: int = 0,
             isMute: bool = False,
             currVolume: int = 0,
@@ -144,7 +144,6 @@ class MusicPlayer:
         self.systemVolume = systemVolume
         self.isPlaying = isPlaying
         self.isShuffle = isShuffle
-        self.isRepeat = isRepeat
         self.repeatMode = repeatMode
         self.isMute = isMute
         self.currVolume = currVolume
@@ -155,6 +154,8 @@ class MusicPlayer:
         self.playback_count = len(self.playBack)
         self.curr_playing = 0
         self.shuffle_pb = deepcopy(self.playBack)
+
+        self.playlistList = playlistList
 
         # Media Player
         self.player = QMediaPlayer()
@@ -174,8 +175,8 @@ class MusicPlayer:
             del self.playBack[index]
             self.playback_count -= 1
 
-    def toggleRepeatMode(self) -> None:
-        self.isRepeat = not self.isRepeat
+    def changeRepeatMode(self) -> None:
+        self.repeatMode = (self.repeatMode + 1) % 3
 
     def playSongAt(self, index):
         print(self.playBack[index].getTrackURL())
@@ -199,7 +200,6 @@ class MusicPlayer:
         self.player.setVolume(currVolume)
 
     def getCurrPos(self):
-        # return self.player.get_pos()
         return self.player.position()
 
     def setCurrVolume(self, currVolume: int) -> None:
