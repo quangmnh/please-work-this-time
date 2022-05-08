@@ -19,6 +19,22 @@ def convert_from_songDB_to_list_dict(trackDB: TrackDatabase) -> "list[dict]":
     return track_list
 
 
+def convert_from_songDB_to_playlist_dict(json_dir: str) -> "list[dict]":
+    track_list = []
+    index = 0
+    for track in trackDB.getTrackList():
+        track_data = {
+            "id": index,
+            "name": track.getTrackName(),
+            "artist_name": track.getArtistName(),
+            "track_url": track.getTrackURL()
+        }
+        track_list.append(track_data)
+        index += 1
+
+    return track_list
+
+
 def convert_from_track_list_to_list_dict(track_lists: "list[Track]") -> "list[dict]":
     index = 0
     track_list = []
