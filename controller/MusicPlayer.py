@@ -175,12 +175,14 @@ class MusicPlayer:
             self.playback_count -= 1
 
     def toggleRepeatMode(self) -> None:
-        self.isRepeat = not self.isRepeat
+        self.repeatMode = (self.repeatMode + 1) % 3
+        self.isRepeat = True if self.repeatMode > 0 else False
 
     def playSongAt(self, index):
         print(self.playBack[index].getTrackURL())
         self.curr_playing = index
-        media_content = QMediaContent(QUrl.fromLocalFile(self.playBack[index].getTrackURL()))
+        media_content = QMediaContent(
+            QUrl.fromLocalFile(self.playBack[index].getTrackURL()))
         self.player.setMedia(media_content)
         self.player.play()
 

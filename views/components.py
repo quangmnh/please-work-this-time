@@ -3,6 +3,15 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from utils1.snake_case import snake_case
 
 
+def QIcon_from_svg(svg_filepath, color='black'):
+    img = QtGui.QPixmap(svg_filepath)
+    qp = QtGui.QPainter(img)
+    qp.setCompositionMode(QtGui.QPainter.CompositionMode_SourceIn)
+    qp.fillRect(img.rect(), QtGui.QColor(color))
+    qp.end()
+    return QtGui.QIcon(img)
+
+
 class LibrarySong(QtWidgets.QWidget):
     def __init__(self, song_info, on_play, on_remove, on_add_to_playlist, index, parent=None):
         super(LibrarySong, self).__init__(parent)
@@ -80,7 +89,6 @@ class LibrarySong(QtWidgets.QWidget):
         self.row.addWidget(self.remove_btn)
 
         self.setLayout(self.row)
-
 
         # CONNECTIONS
         self.play_btn.clicked.connect(lambda: on_play(int(index)))
@@ -241,3 +249,30 @@ class PauseIcon():
         self.icon = QtGui.QIcon()
         self.icon.addPixmap(QtGui.QPixmap(":/icons/icons/pause.svg"),
                             QtGui.QIcon.Normal, QtGui.QIcon.Off)
+
+
+class RepeatIcon():
+    def __init__(self, parent=None):
+        self.icon = QIcon_from_svg(":/icons/icons/repeat.svg", color='white')
+
+
+class RepeatEnabledIcon():
+    def __init__(self, parent=None):
+        self.icon = QIcon_from_svg(":/icons/icons/repeat.svg", color='#0d6efd')
+
+
+class RepeatOneIcon():
+    def __init__(self, parent=None):
+        self.icon = QIcon_from_svg(
+            ":/icons/icons/repeat-1.svg", color='#0d6efd')
+
+
+class ShuffleEnabledIcon():
+    def __init__(self, parent=None):
+        self.icon = QIcon_from_svg(
+            ":/icons/icons/shuffle.svg", color='#0d6efd')
+
+
+class ShuffleIcon():
+    def __init__(self, parent=None):
+        self.icon = QIcon_from_svg(":/icons/icons/shuffle.svg", color='white')

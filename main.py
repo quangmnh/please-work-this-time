@@ -11,7 +11,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from views.ui_main import Ui_MainWindow
 
 # Components
-from views.components import BluetoothDevice, LibrarySong, PlayIcon, PauseIcon, PlaylistLabel
+from views.components import (BluetoothDevice, LibrarySong, PlaylistLabel,
+                              PlayIcon, PauseIcon, RepeatEnabledIcon,
+                              RepeatIcon, RepeatOneIcon, ShuffleEnabledIcon, ShuffleIcon)
 
 # Pages
 from views.pages import PlaylistPage
@@ -68,6 +70,13 @@ class MainWindow(QMainWindow):
         # Icons
         self.play_icon = PlayIcon()
         self.pause_icon = PauseIcon()
+        self.repeat_icon = RepeatIcon()
+        # Set first for white color
+        self.ui.btn_player_navigator_repeat.setIcon(self.repeat_icon.icon)
+        self.repeat_one_icon = RepeatOneIcon()
+        self.repeat_enabled = RepeatEnabledIcon()
+        self.shuffle_icon = ShuffleIcon()
+        self.shuffle_enabled = ShuffleEnabledIcon()
         # End : Icons
 
         self.media_player = MusicPlayer(
@@ -240,7 +249,8 @@ class MainWindow(QMainWindow):
 
     def on_remove_song(self, index: int):
         self.media_player.deleteSong(index)
-        new_playback = convert_from_track_list_to_list_dict(self.media_player.getPlaybackList())
+        new_playback = convert_from_track_list_to_list_dict(
+            self.media_player.getPlaybackList())
         display_list_item(self.ui.listWidget_library_songs, [LibrarySong(
             song, self.on_play_song, self.on_remove_song, self.on_add_to_playlist, song.get('id')) for song in new_playback])
 
@@ -328,6 +338,8 @@ class MainWindow(QMainWindow):
         else:
             self.ui.btn_player_navigator_playPause.setIcon(self.play_icon.icon)
 
+        # Chỗ này tui nghĩ không nên để ở đây tại cái này chỉ gọi khi thay đổi trạng thái của self.media_player.player
+        # chứ hông có dính dáng gì tới mí cái của self.media_player mình hiện thực í
         if self.media_player.isShuffle:
             # TODO: change the Shuffle icon
             pass
@@ -365,9 +377,25 @@ class MainWindow(QMainWindow):
 
     def on_repeat_mode(self):
         self.media_player.toggleRepeatMode()
+        # Change icons
+        if self.media_player.repeatMode == 1:
+            self.ui.btn_player_navigator_repeat.setIcon(
+                self.repeat_enabled.icon)
+        elif self.media_player.repeatMode == 2:
+            self.ui.btn_player_navigator_repeat.setIcon(
+                self.repeat_one_icon.icon)
+        else:
+            self.ui.btn_player_navigator_repeat.setIcon(self.repeat_icon.icon)
 
     def on_shuffle_mode(self):
         self.media_player.toggleShuffleMode()
+        # Change icons
+        if self.media_player.isShuffle:
+            self.ui.btn_player_navigator_shuffle.setIcon(
+                self.shuffle_enabled.icon)
+        else:
+            self.ui.btn_player_navigator_shuffle.setIcon(
+                self.shuffle_icon.icon)
     ### End : Player
 
     # END : HANDLERS #######################################################
@@ -378,7 +406,6 @@ if __name__ == "__main__":
 
     trackDB = getDBFromJSON('sample.json')
     library_songs = convert_from_songDB_to_list_dict(trackDB)
-
 
     window = MainWindow()
     sys.exit(app.exec_())
