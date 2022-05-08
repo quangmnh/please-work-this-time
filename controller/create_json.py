@@ -1,14 +1,16 @@
+# -*- coding: utf-8 -*-
+
 import json
 import eyed3
 import os
 
 
 def createJsonData(
-        track_folder: str = "",
+        track_folder: str,
         # Adding parameter for playlist, if any
         numOfPlaylists: int = 2,
-        json_save_dir: str = ".\\",
-        json_file_name: str = "test_sample.json"
+        json_save_dir: str = os.path.join(os.getcwd()),
+        json_file_name: str = "sample.json"
 ):
     track_dir = os.path.join(track_folder)
 
@@ -16,7 +18,7 @@ def createJsonData(
     songdb = []
     idx = 0
     for file in os.listdir(track_dir):
-        trackURL = f"{track_dir}\\{file}"
+        trackURL = os.path.join(track_dir, file)
         audio = eyed3.load(trackURL)
         print(f'{audio.tag.title}\n'
               f'{audio.tag.artist}\n'
@@ -31,6 +33,7 @@ def createJsonData(
             "url": trackURL
         }
         songdb.append(track_data)
+        idx += 1
 
     # Create playlist list
     playlist = []
@@ -60,5 +63,6 @@ if __name__ == '__main__':
     direct = 'C:\\Users\\Victus\\Downloads\\Music'
 
     createJsonData(
-        track_folder=direct
+        track_folder=direct,
+        json_save_dir='./../'
     )

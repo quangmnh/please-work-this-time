@@ -1,14 +1,12 @@
 # import numpy as np
 import os
 
-# from pygame import mixer
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 from PyQt5.QtCore import QUrl
 from copy import deepcopy
 import random
 import eyed3
 import json
-import pandas as pd
 
 
 class Track:
@@ -69,6 +67,9 @@ class TrackDatabase:
             return None
         else:
             return self.trackList[index]
+
+    def getTrackList(self) -> "list[Track]":
+        return self.trackList
 
     def displayTrackDBInfo(self) -> None:
         for i in range(len(self.trackList)):
@@ -151,37 +152,45 @@ class MusicPlayer:
         self.artist = artist
         self.position = position
         self.playBack = playBack
-        self.playback_count = 0
+        self.playback_count = len(self.playBack)
         self.curr_playing = 0
         self.shuffle_pb = deepcopy(self.playBack)
-        # self.player = mixer
+
+        # Media Player
         self.player = QMediaPlayer()
+
+    def getPlaybackList(self) -> "list[Track]":
+        return self.playBack
 
     def toggleShuffleMode(self) -> None:
         self.isShuffle = not self.isShuffle
 
     def addSong(self, track: Track):
         self.playBack.append(track)
+        self.playback_count += 1
+
+    def deleteSong(self, index):
+        if self.playback_count > 0:
+            del self.playBack[index]
+            self.playback_count -= 1
 
     def toggleRepeatMode(self) -> None:
         self.isRepeat = not self.isRepeat
 
     def playSongAt(self, index):
-        # self.player.music.load(self.playBack[index].getTrackURL())
-        # self.player.music.play()
-        media_content = QMediaContent(QUrl(self.playBack[index].getTrackURL()))
+        print(self.playBack[index].getTrackURL())
+        self.curr_playing = index
+        media_content = QMediaContent(QUrl.fromLocalFile(self.playBack[index].getTrackURL()))
         self.player.setMedia(media_content)
-        # To Do: change the player's ui
+        self.player.play()
 
     def toggleMuteMode(self) -> None:
         self.isMute = not self.isMute
 
     def togglePlayPause(self) -> None:
         if self.isCurrPlaying():
-            # self.player.music.pause()
             self.player.pause()
         else:
-            # self.player.music.unpause()
             self.player.play()
 
     def setCurrVolume(self, currVolume: int) -> None:
@@ -199,16 +208,14 @@ class MusicPlayer:
         return self.player.volume()
 
     def isCurrPlaying(self):
-        # return self.player.get_busy()
-        return (self.player.state() == QMediaPlayer.PlayingState)
+        return self.player.state() == QMediaPlayer.PlayingState
 
     def next(self):
         if self.isShuffle:
             self.curr_playing = random.randint(0, self.playback_count - 1)
         else:
             self.curr_playing = (self.curr_playing + 1) % self.playback_count
-        self.playSongAt(self.curr_playing)
-        # timer in the main decide when to next
+        return self.curr_playing
 
     def prev(self):
         if self.isShuffle:
@@ -218,7 +225,7 @@ class MusicPlayer:
                 self.curr_playing = (self.curr_playing - 1)
             else:
                 self.curr_playing = self.playback_count - 1
-        self.playSongAt(self.curr_playing)
+        return self.curr_playing
 
 
 def getDBFromJSON(json_dir: str) -> TrackDatabase:
@@ -262,18 +269,4 @@ def getPlaylistList(
 
 
 if __name__ == '__main__':
-    '''
-        Sửa lại chỗ này thành os.path.join(os.getcwd() + '/sample.json') khi chạy ở main.py (nếu có)
-        Code ở dưới chỉ dùng để test trong file MusicPlayer.py
-    '''
-    json_dir = os.path.join('./../sample.json')
-    trackDB = getDBFromJSON(json_dir)
-    playlistList = getPlaylistList(
-        json_dir,
-        trackDB
-    )
-
-    trackDB.displayTrackDBInfo()
-
-    for playlist in playlistList:
-        playlist.printPlaylistInfo()
+    pass

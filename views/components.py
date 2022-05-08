@@ -4,7 +4,7 @@ from utils1.snake_case import snake_case
 
 
 class LibrarySong(QtWidgets.QWidget):
-    def __init__(self, song_info, on_play, on_remove, on_add_to_playlist, parent=None):
+    def __init__(self, song_info, on_play, on_remove, on_add_to_playlist, index, parent=None):
         super(LibrarySong, self).__init__(parent)
 
         self.row = QtWidgets.QHBoxLayout()
@@ -81,9 +81,10 @@ class LibrarySong(QtWidgets.QWidget):
 
         self.setLayout(self.row)
 
+
         # CONNECTIONS
-        self.play_btn.clicked.connect(on_play)
-        self.remove_btn.clicked.connect(on_remove)
+        self.play_btn.clicked.connect(lambda: on_play(int(index)))
+        self.remove_btn.clicked.connect(lambda: on_remove(int(index)))
         self.add_to_playlist_btn.clicked.connect(on_add_to_playlist)
 
 

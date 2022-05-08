@@ -1055,6 +1055,19 @@ class Ui_MainWindow(object):
         self.label_player_artist_name.setText(
             _translate("MainWindow", "Artist name"))
 
+    def change_label_player_track_in_navigator(
+            self,
+            MainWindow,
+            trackName: str = "Song name",
+            artistName: str = "Artist name"
+    ):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.label_player_song_name.setText(
+            _translate("MainWindow", trackName))
+        self.label_player_artist_name.setText(
+            _translate("MainWindow", artistName))
+
 
 if __name__ == "__main__":
     import sys

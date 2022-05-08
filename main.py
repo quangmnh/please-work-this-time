@@ -1,3 +1,6 @@
+import os
+
+from PyQt5.QtMultimedia import QMediaPlayer
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont, QFontDatabase,
                          QIcon, QKeySequence, QLinearGradient, QPalette, QPainter, QPixmap, QRadialGradient)
@@ -21,10 +24,12 @@ from utils1.snake_case import snake_case
 # from helper.playlist_page import *
 
 # Controllers
-from controller.MusicPlayer import *
+from controller.MusicPlayer import MusicPlayer, getDBFromJSON
+from utils1.utils import *
 
 import sys
 import platform
+import random
 
 # EXAMPLE DATA
 ############################################
@@ -50,19 +55,6 @@ bluetooth_devices = [
         "mac": "DD:DD:DD:DD:DD"
     }]
 
-library_songs = [
-    {
-        "name": "Hello",
-        "artist_name": "Adele"
-    },
-    {
-        "name": "September",
-        "artist_name": "Earth, Wind & Fire"
-    },
-    {
-        "name": "Viva La Vida",
-        "artist_name": "Coldplay"
-    }]
 playlists = []
 # END: EXAMPLE DATA ########################
 
@@ -77,7 +69,10 @@ class MainWindow(QMainWindow):
         self.play_icon = PlayIcon()
         self.pause_icon = PauseIcon()
         # End : Icons
-        self.media_player = MusicPlayer()
+
+        self.media_player = MusicPlayer(
+            playBack=trackDB.getTrackList()
+        )
 
         # PAGES
         ########################################################################
@@ -233,15 +228,21 @@ class MainWindow(QMainWindow):
         # TODO: Display all the songs once the library is opened
         self.ui.Pages_Widget.setCurrentWidget(self.ui.page_library)
         display_list_item(self.ui.listWidget_library_songs, [LibrarySong(
-            song, self.on_play_song, self.on_remove_song, self.on_add_to_playlist) for song in library_songs])
+            song, self.on_play_song, self.on_remove_song, self.on_add_to_playlist, song.get('id')) for song in library_songs])
 
-    def on_play_song(self):
-        # TODO: Play song selected from library
-        pass
+    def on_play_song(self, index: int):
+        self.media_player.playSongAt(index)
+        self.ui.change_label_player_track_in_navigator(
+            self,
+            trackName=self.media_player.playBack[index].getTrackName(),
+            artistName=self.media_player.playBack[index].getArtistName()
+        )
 
-    def on_remove_song(self):
-        # TODO: Remove song from library
-        pass
+    def on_remove_song(self, index: int):
+        self.media_player.deleteSong(index)
+        new_playback = convert_from_track_list_to_list_dict(self.media_player.getPlaybackList())
+        display_list_item(self.ui.listWidget_library_songs, [LibrarySong(
+            song, self.on_play_song, self.on_remove_song, self.on_add_to_playlist, song.get('id')) for song in new_playback])
 
     def on_add_to_playlist(self):
         # TODO: Add song to playlist
@@ -270,7 +271,7 @@ class MainWindow(QMainWindow):
         ok = dialog.exec_()
         playlist_name = dialog.textValue()
 
-        if (ok and playlist_name):
+        if ok and playlist_name:
             self.add_playlist_page(
                 page_widget, playlist_name, playlist_list_widget)
 
@@ -301,7 +302,7 @@ class MainWindow(QMainWindow):
         num_page = page_widget.count()
         for i in range(num_page):
             w = page_widget.widget(i)
-            if (hasattr(w, "playlist_name") and w.playlist_name == snake_case(playlist_name)):
+            if hasattr(w, "playlist_name") and w.playlist_name == snake_case(playlist_name):
                 page_widget.setCurrentIndex(i)
                 break
 
@@ -326,6 +327,15 @@ class MainWindow(QMainWindow):
                 self.pause_icon.icon)
         else:
             self.ui.btn_player_navigator_playPause.setIcon(self.play_icon.icon)
+
+        if self.media_player.isShuffle:
+            # TODO: change the Shuffle icon
+            pass
+
+        if self.media_player.isRepeat:
+            # TODO: change the repeat icon
+            pass
+
     # Progress bar
 
     def on_position_changed(self, position):
@@ -342,26 +352,22 @@ class MainWindow(QMainWindow):
         self.media_player.player.setVolume(volume)
 
     # Navigator
-
     def on_play_pause(self):
-        # TODO: Play/Pause
-        pass
+        self.media_player.togglePlayPause()
 
     def on_next_song(self):
-        # TODO: Next song
-        pass
+        index = self.media_player.next()
+        self.on_play_song(index)
 
     def on_previous_song(self):
-        # TODO: Previous song
-        pass
+        index = self.media_player.prev()
+        self.on_play_song(index)
 
     def on_repeat_mode(self):
-        # TODO: Change repeat mode
-        pass
+        self.media_player.toggleRepeatMode()
 
     def on_shuffle_mode(self):
-        # TODO: Change shuffle mode
-        pass
+        self.media_player.toggleShuffleMode()
     ### End : Player
 
     # END : HANDLERS #######################################################
@@ -369,5 +375,10 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+
+    trackDB = getDBFromJSON('sample.json')
+    library_songs = convert_from_songDB_to_list_dict(trackDB)
+
+
     window = MainWindow()
     sys.exit(app.exec_())
