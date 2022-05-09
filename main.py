@@ -350,11 +350,12 @@ class MainWindow(QMainWindow):
 
     def on_playlist_song_play(self):
         # TODO : Play the song of the playlist
+        # Đã implement, không cần xài hàm này nữa
         pass
 
-    def on_playlist_play(self):
+    def on_playlist_play(self, trackList: "list[Track]" = []):
         # TODO : Play the playlist
-        pass
+        self.on_play_song(0, trackList)
 
     def create_playlist_dialog(self, parent: QtWidgets.QWidget, page_widget: QtWidgets.QStackedWidget, playlist_list_widget: QtWidgets.QListWidget):
         dialog = QtWidgets.QInputDialog(parent)
@@ -411,7 +412,8 @@ class MainWindow(QMainWindow):
             self.on_playlist_play,
             self.on_playlist_song_play,
             lambda: self.remove_playlist_page(page_widget, playlist_name, playlist_list_widget, entry),
-            self.on_library_open
+            self.on_library_open,
+            trackList
         )
         # Add page to page stack
         page_widget.addWidget(playlist_page)
