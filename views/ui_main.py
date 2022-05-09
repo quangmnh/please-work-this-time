@@ -529,6 +529,26 @@ class Ui_MainWindow(object):
         self.verticalLayout_25.addWidget(
             self.frame_settings_emotion_playlist_map)
         self.Pages_Widget.addWidget(self.page_settings_emotion_playlist_map)
+        self.comboBox_settings_emotion_playlist_map_happy.setStyleSheet(
+            "color: #FFF;\n"
+            "QComboBox QListView { color: #FFF; }"
+        )
+        self.comboBox_settings_emotion_playlist_map_angry.setStyleSheet(
+            "color: #FFF;\n"
+            "QComboBox QListView { color: #FFF; }"
+        )
+        self.comboBox_settings_emotion_playlist_map_sad.setStyleSheet(
+            "color: #FFF;\n"
+            "QComboBox QListView { color: #FFF; }"
+        )
+        self.comboBox_settings_emotion_playlist_map_surprise.setStyleSheet(
+            "color: #FFF;\n"
+            "QComboBox QListView { color: #FFF; }"
+        )
+        self.comboBox_settings_emotion_playlist_map_neutral.setStyleSheet(
+            "color: #FFF;\n"
+            "QComboBox QListView { color: #FFF; }"
+        )
         self.page_settings_hand_gesture = QtWidgets.QWidget()
         self.page_settings_hand_gesture.setObjectName(
             "page_settings_hand_gesture")
