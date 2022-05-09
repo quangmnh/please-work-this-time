@@ -92,6 +92,12 @@ class MainWindow(QMainWindow):
                 playlistPage.getTrackList()
             )
 
+            self.ui.comboBox_settings_emotion_playlist_map_happy.addItem(playlistPage.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_sad.addItem(playlistPage.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_neutral.addItem(playlistPage.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_surprise.addItem(playlistPage.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_angry.addItem(playlistPage.getPlaylistName())
+
         # PAGES
         ########################################################################
 
@@ -138,15 +144,15 @@ class MainWindow(QMainWindow):
             self.on_hand_gesture)
         ## Emotion map settings   ####
         self.ui.comboBox_settings_emotion_playlist_map_happy.activated[str].connect(
-            lambda: self.on_emotion_map_happy())
+            lambda: self.on_emotion_map_happy(self.ui.comboBox_settings_emotion_playlist_map_happy.currentIndex()))
         self.ui.comboBox_settings_emotion_playlist_map_sad.activated[str].connect(
-            self.on_emotion_map_sad)
+            lambda: self.on_emotion_map_sad(self.ui.comboBox_settings_emotion_playlist_map_sad.currentIndex()))
         self.ui.comboBox_settings_emotion_playlist_map_angry.activated[str].connect(
-            self.on_emotion_map_angry)
+            lambda: self.on_emotion_map_angry(self.ui.comboBox_settings_emotion_playlist_map_angry.currentIndex()))
         self.ui.comboBox_settings_emotion_playlist_map_surprise.activated[str].connect(
-            self.on_emotion_map_surprise)
+            lambda: self.on_emotion_map_surprise(self.ui.comboBox_settings_emotion_playlist_map_surprise.currentIndex()))
         self.ui.comboBox_settings_emotion_playlist_map_neutral.activated[str].connect(
-            self.on_emotion_map_neutral)
+            lambda: self.on_emotion_map_neutral(self.ui.comboBox_settings_emotion_playlist_map_neutral.currentIndex()))
         ## Player                 ####
         self.ui.btn_player_navigator_playPause.clicked.connect(
             self.on_play_pause)
@@ -205,27 +211,25 @@ class MainWindow(QMainWindow):
     ### END: Bluetooth
 
     # Emotion Map
-    def on_emotion_map_happy(self):
+    def on_emotion_map_happy(self, playlistIndex: int):
         # TODO: Assign playlist to happy emotion according to user's input
-        for play_list in self.media_player.playlistList:
-            print(play_list.getPlaylistName())
-            self.ui.comboBox_settings_emotion_playlist_map_happy.addItem(play_list.getPlaylistName())
+        self.media_player.happy_list = self.media_player.playlistList[playlistIndex]
 
-    def on_emotion_map_sad(self):
+    def on_emotion_map_sad(self, playlistIndex: int):
         # TODO: Assign playlist to sad emotion according to user's input
-        pass
+        self.media_player.sad_list = self.media_player.playlistList[playlistIndex]
 
-    def on_emotion_map_angry(self):
+    def on_emotion_map_angry(self, playlistIndex: int):
         # TODO: Assign playlist to angry emotion according to user's input
-        pass
+        self.media_player.angry_list = self.media_player.playlistList[playlistIndex]
 
-    def on_emotion_map_surprise(self):
+    def on_emotion_map_surprise(self, playlistIndex: int):
         # TODO: Assign playlist to surprise emotion according to user's input
-        pass
+        self.media_player.surprise_list = self.media_player.playlistList[playlistIndex]
 
-    def on_emotion_map_neutral(self):
+    def on_emotion_map_neutral(self, playlistIndex: int):
         # TODO: Assign playlist to neutral emotion according to user's input
-        pass
+        self.media_player.neutral_list = self.media_player.playlistList[playlistIndex]
     # END : Emotion Map
 
     # Hand gesture

@@ -169,6 +169,14 @@ class MusicPlayer:
         self.shuffle_pb = deepcopy(self.playBack)
         self.trackDB = playBack
 
+        # Mapping emotion playlist
+        self.happy_list: "list[Track]" = []
+        self.angry_list: "list[Track]" = []
+        self.neutral_list: "list[Track]" = []
+        self.sad_list: "list[Track]" = []
+        self.surprise_list: "list[Track]" = []
+
+        # List of playlists
         self.playlistList = playlistList
 
         # Media Player
