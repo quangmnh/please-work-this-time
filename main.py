@@ -538,7 +538,13 @@ class MainWindow(QMainWindow):
                 )
                 break
 
-    def remove_playlist_page(self, page_widget: QtWidgets.QStackedWidget, playlist_name: str, playlist_list_widget: QtWidgets.QListWidget, playlist_label: QtWidgets.QListWidgetItem):
+    def remove_playlist_page(
+            self,
+            page_widget: QtWidgets.QStackedWidget,
+            playlist_name: str,
+            playlist_list_widget: QtWidgets.QListWidget,
+            playlist_label: QtWidgets.QListWidgetItem
+    ):
         num_page = page_widget.count()
         for i in range(num_page):
             w = page_widget.widget(i)
@@ -546,6 +552,22 @@ class MainWindow(QMainWindow):
                 page_widget.removeWidget(w)
                 page_widget.setCurrentIndex(0)
                 break
+
+        with open(json_dir, encoding='utf-8') as f:
+            data = json.load(f)
+
+            play_list = data['play_list']
+            idx = 0
+            for playlist in play_list:
+                if playlist['name'] == playlist_name:
+                    break
+                idx += 1
+            del play_list[idx]
+
+            data['play_list'] = play_list
+
+        with open(json_dir, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4)
 
         # Remove label from list widget
         playlist_list_widget.takeItem(playlist_list_widget.row(playlist_label))
@@ -628,6 +650,32 @@ class MainWindow(QMainWindow):
     ### End : Player
 
     # END : HANDLERS #######################################################
+
+    def updateState(self):
+        curr_trackDB = self.media_player.trackDB
+        self.media_player = MusicPlayer(
+            playBack=curr_trackDB,
+            playlistList=playlistList
+        )
+
+        for playlistPage in self.media_player.playlistList:
+            self.add_playlist_page(
+                self.ui.Pages_Widget,
+                playlistPage.getPlaylistName(),
+                self.ui.listWidget_playlists,
+                playlistPage.getTrackList()
+            )
+
+            self.ui.comboBox_settings_emotion_playlist_map_happy.addItem(
+                playlistPage.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_sad.addItem(
+                playlistPage.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_neutral.addItem(
+                playlistPage.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_surprise.addItem(
+                playlistPage.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_angry.addItem(
+                playlistPage.getPlaylistName())
 
 
 if __name__ == "__main__":
