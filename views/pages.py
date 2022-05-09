@@ -11,7 +11,6 @@ class PlaylistPage(QtWidgets.QWidget):
             play_song_method,
             remove_method,
             go_to_lib_method,
-            trackList: "list[Track]",
             parent=None
     ):
         # Method is for when a song in the playlist is clicked
@@ -158,7 +157,7 @@ class PlaylistPage(QtWidgets.QWidget):
 
         # Connections
         self.listWidget_playlist_songs.clicked.connect(play_song_method)
-        self.btn_playlist_play.clicked.connect(lambda: play_list_method(trackList))
+        self.btn_playlist_play.clicked.connect(play_list_method)
         self.btn_playlist_remove.clicked.connect(remove_method)
         self.btn_go_to_lib.clicked.connect(go_to_lib_method)
 

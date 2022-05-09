@@ -138,7 +138,7 @@ class MainWindow(QMainWindow):
             self.on_hand_gesture)
         ## Emotion map settings   ####
         self.ui.comboBox_settings_emotion_playlist_map_happy.activated[str].connect(
-            self.on_emotion_map_happy)
+            lambda: self.on_emotion_map_happy())
         self.ui.comboBox_settings_emotion_playlist_map_sad.activated[str].connect(
             self.on_emotion_map_sad)
         self.ui.comboBox_settings_emotion_playlist_map_angry.activated[str].connect(
@@ -207,7 +207,9 @@ class MainWindow(QMainWindow):
     # Emotion Map
     def on_emotion_map_happy(self):
         # TODO: Assign playlist to happy emotion according to user's input
-        pass
+        for play_list in self.media_player.playlistList:
+            print(play_list.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_happy.addItem(play_list.getPlaylistName())
 
     def on_emotion_map_sad(self):
         # TODO: Assign playlist to sad emotion according to user's input
@@ -374,6 +376,23 @@ class MainWindow(QMainWindow):
                 trackList=[]
             )
 
+            with open(json_dir, encoding='utf-8') as f:
+                data = json.load(f)
+
+                play_list = data.get('play_list')
+
+                new_data = {
+                    "name": playlist_name,
+                    "count": 0,
+                    "songlist": []
+                }
+                play_list.append(new_data)
+
+                data['play_list'] = play_list
+
+            with open(json_dir, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=4)
+
     def add_playlist_page(
             self,
             page_widget: QtWidgets.QStackedWidget,
@@ -409,11 +428,10 @@ class MainWindow(QMainWindow):
 
         playlist_page = PlaylistPage(
             playlist_name,
-            self.on_playlist_play,
+            lambda: self.on_playlist_play(trackList),
             self.on_playlist_song_play,
             lambda: self.remove_playlist_page(page_widget, playlist_name, playlist_list_widget, entry),
             self.on_library_open,
-            trackList
         )
         # Add page to page stack
         page_widget.addWidget(playlist_page)
@@ -455,6 +473,8 @@ class MainWindow(QMainWindow):
 
         # Remove label from list widget
         playlist_list_widget.takeItem(playlist_list_widget.row(playlist_label))
+
+
     ### End : Playlist
 
     # Player

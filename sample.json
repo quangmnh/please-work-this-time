@@ -45,11 +45,9 @@
     "play_list": [
         {
             "name": "sad",
-            "count": 3,
+            "count": 1,
             "songlist": [
-                0,
-                1,
-                2
+                0
             ]
         },
         {
@@ -59,6 +57,11 @@
                 2,
                 3
             ]
+        },
+        {
+            "name": "asd",
+            "count": 0,
+            "songlist": []
         }
     ]
 }
