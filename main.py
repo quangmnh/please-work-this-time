@@ -282,10 +282,22 @@ class MainWindow(QMainWindow):
                 self.media_player.playBack = self.media_player.trackDB
 
             trackDB.deleteTrackAtIndex(index)
-            new_playback = convert_from_track_list_to_list_dict(
-                self.media_player.getPlaybackList()
-            )
-            library_songs = new_playback
+
+            with open(json_dir, encoding='utf-8') as f:
+                data = json.load(f)
+
+                songdb = data.get('songdb')
+                del songdb[index]
+
+                idx = 0
+                for song in songdb:
+                    song['id'] = idx
+                    idx += 1
+
+            with open(json_dir, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=4)
+
+            library_songs = convert_from_track_list_to_list_dict(self.media_player.getPlaybackList())
 
             display_list_item(
                 self.ui.listWidget_library_songs,
@@ -295,14 +307,29 @@ class MainWindow(QMainWindow):
                     self.on_remove_song,
                     self.on_add_to_playlist,
                     song.get('id'),
-                    trackDB
-                ) for song in new_playback]
+                    self.media_player.getPlaybackList()
+                ) for song in library_songs]
             )
+
         else:
+            # Assign to playlist
             self.media_player.deleteSong(index)
+
             new_playback = convert_from_track_list_to_list_dict(
                 self.media_player.getPlaybackList()
             )
+
+            with open(json_dir, encoding='utf-8') as f:
+                data = json.load(f)
+
+                play_list = data['play_list']
+                for playlist in play_list:
+                    if playlist['name'] == playlistName:
+                        del playlist['songlist'][index]
+                        playlist['count'] = playlist['count'] - 1
+
+            with open(json_dir, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=4)
 
             self.change_playlist_page(
                 self.ui.Pages_Widget,
@@ -478,7 +505,6 @@ class MainWindow(QMainWindow):
         # Remove label from list widget
         playlist_list_widget.takeItem(playlist_list_widget.row(playlist_label))
 
-
     ### End : Playlist
 
     # Player
@@ -564,7 +590,7 @@ if __name__ == "__main__":
     json_dir = os.path.join('sample.json')
 
     trackDB = getDBFromJSON(json_dir)
-    library_songs = convert_from_songDB_to_list_dict(trackDB)
+    library_songs = convert_from_track_list_to_list_dict(trackDB.getTrackList())
     playlistList = getPlaylistList(json_dir, trackDB)
 
     window = MainWindow()

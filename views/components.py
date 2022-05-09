@@ -21,7 +21,7 @@ class LibrarySong(QtWidgets.QWidget):
             on_remove,
             on_add_to_playlist,
             index,
-            trackDB: TrackDatabase,
+            track_list: "list[Track]",
             parent=None):
         super(LibrarySong, self).__init__(parent)
 
@@ -100,7 +100,7 @@ class LibrarySong(QtWidgets.QWidget):
         self.setLayout(self.row)
 
         # CONNECTIONS
-        self.play_btn.clicked.connect(lambda: on_play(int(index), trackDB.getTrackList()))
+        self.play_btn.clicked.connect(lambda: on_play(int(index), track_list))
         self.remove_btn.clicked.connect(lambda: on_remove(int(index), "library_songs"))
         self.add_to_playlist_btn.clicked.connect(lambda: on_add_to_playlist(0, int(index)))
 
