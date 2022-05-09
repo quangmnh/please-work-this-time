@@ -100,9 +100,14 @@ class LibrarySong(QtWidgets.QWidget):
         self.setLayout(self.row)
 
         # CONNECTIONS
-        self.play_btn.clicked.connect(lambda: on_play(int(index), track_list))
-        self.remove_btn.clicked.connect(lambda: on_remove(int(index), "library_songs"))
-        self.add_to_playlist_btn.clicked.connect(lambda: on_add_to_playlist(0, int(index)))
+        self.play_btn.clicked.connect(
+            lambda: on_play(int(index), track_list))
+        self.remove_btn.clicked.connect(
+            lambda: on_remove(int(index), "library_songs"))
+        # self.add_to_playlist_btn.clicked.connect(lambda: on_add_to_playlist(0, int(index)))
+        self.add_to_playlist_btn.clicked.connect(
+            lambda: on_add_to_playlist(int(index)))
+
 
 
 class BluetoothDevice(QtWidgets.QWidget):
@@ -223,7 +228,8 @@ class PlaylistSong(QtWidgets.QWidget):
 
         # CONNECTIONS
         self.play_btn.clicked.connect(lambda: on_play(int(index), trackList))
-        self.remove_btn.clicked.connect(lambda: on_remove(int(index), playlistName=playlistName))
+        self.remove_btn.clicked.connect(lambda: on_remove(
+            int(index), playlistName=playlistName))
 
 
 class Slider(QtWidgets.QSlider):

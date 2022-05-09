@@ -47,21 +47,17 @@
             "name": "sad",
             "count": 1,
             "songlist": [
-                0
+                1
             ]
         },
         {
             "name": "happy",
-            "count": 2,
+            "count": 3,
             "songlist": [
-                2,
-                3
+                0,
+                1,
+                4
             ]
-        },
-        {
-            "name": "asd",
-            "count": 0,
-            "songlist": []
         }
     ]
 }

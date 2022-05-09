@@ -92,11 +92,16 @@ class MainWindow(QMainWindow):
                 playlistPage.getTrackList()
             )
 
-            self.ui.comboBox_settings_emotion_playlist_map_happy.addItem(playlistPage.getPlaylistName())
-            self.ui.comboBox_settings_emotion_playlist_map_sad.addItem(playlistPage.getPlaylistName())
-            self.ui.comboBox_settings_emotion_playlist_map_neutral.addItem(playlistPage.getPlaylistName())
-            self.ui.comboBox_settings_emotion_playlist_map_surprise.addItem(playlistPage.getPlaylistName())
-            self.ui.comboBox_settings_emotion_playlist_map_angry.addItem(playlistPage.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_happy.addItem(
+                playlistPage.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_sad.addItem(
+                playlistPage.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_neutral.addItem(
+                playlistPage.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_surprise.addItem(
+                playlistPage.getPlaylistName())
+            self.ui.comboBox_settings_emotion_playlist_map_angry.addItem(
+                playlistPage.getPlaylistName())
 
         # PAGES
         ########################################################################
@@ -257,9 +262,10 @@ class MainWindow(QMainWindow):
                 song,
                 self.on_play_song,
                 self.on_remove_song,
-                self.on_add_to_playlist,
+                self.add_to_playlist_dialog,
+                # self.on_add_to_playlist,
                 song.get('id'),
-                trackDB
+                self.media_player.trackDB
             ) for song in library_songs]
         )
 
@@ -305,7 +311,7 @@ class MainWindow(QMainWindow):
                     song,
                     self.on_play_song,
                     self.on_remove_song,
-                    self.on_add_to_playlist,
+                    self.add_to_playlist_dialog,
                     song.get('id'),
                     self.media_player.getPlaybackList()
                 ) for song in library_songs]
@@ -337,6 +343,30 @@ class MainWindow(QMainWindow):
                 new_playback,
                 self.media_player.getPlaybackList()
             )
+
+    def add_to_playlist_dialog(self, trackIndex):
+        print("Current trackIndex: ", trackIndex)
+        Dialog = QtWidgets.QDialog(None)
+        Dialog.setWindowTitle("Select playlist to add:")
+        Dialog.resize(200, 100)
+        buttonBox = QDialogButtonBox(Dialog)
+
+        buttonBox.setGeometry(QtCore.QRect(15, 60, 170, 32))
+        buttonBox.setOrientation(QtCore.Qt.Horizontal)
+        buttonBox.setStandardButtons(
+            QDialogButtonBox.Cancel | QDialogButtonBox.Ok)
+        comboBox = QtWidgets.QComboBox(Dialog)
+        comboBox.setGeometry(QtCore.QRect(20, 20, 150, 22))
+        for i, playlist in enumerate(self.media_player.playlistList):
+            comboBox.addItem(playlist.getPlaylistName(), i)
+        buttonBox.clicked.connect(Dialog.accept)
+        buttonBox.rejected.connect(Dialog.reject)
+
+        buttonBox.accepted.connect(lambda: self.on_add_to_playlist(
+            playlistIndex=comboBox.currentData(), trackIndex=trackIndex))
+
+        Dialog.exec_()
+        # Get playlist index and add song to playlist
 
     def on_add_to_playlist(
             self,
@@ -370,7 +400,8 @@ class MainWindow(QMainWindow):
         self.change_playlist_page(
             self.ui.Pages_Widget,
             playlistPage.getPlaylistName(),
-            track_list=convert_from_track_list_to_list_dict(playlistPage.getTrackList()),
+            track_list=convert_from_track_list_to_list_dict(
+                playlistPage.getTrackList()),
             trackList=playlistPage.getTrackList()
         )
 
@@ -400,6 +431,19 @@ class MainWindow(QMainWindow):
         playlist_name = dialog.textValue()
 
         if ok and playlist_name:
+            # Check for duplicate playlist name
+            for playlist in self.media_player.playlistList:
+                if playlist.playListName == playlist_name:
+                    msg = QMessageBox()
+                    msg.setWindowTitle("Warning")
+                    msg.setText(
+                        "Playlist name already exists, please try again!")
+                    msg.setIcon(QMessageBox.Information)
+
+                    x = msg.exec_()
+
+                    return
+
             self.add_playlist_page(
                 page_widget,
                 playlist_name,
@@ -461,7 +505,8 @@ class MainWindow(QMainWindow):
             playlist_name,
             lambda: self.on_playlist_play(trackList),
             self.on_playlist_song_play,
-            lambda: self.remove_playlist_page(page_widget, playlist_name, playlist_list_widget, entry),
+            lambda: self.remove_playlist_page(
+                page_widget, playlist_name, playlist_list_widget, entry),
             self.on_library_open,
         )
         # Add page to page stack
@@ -509,6 +554,7 @@ class MainWindow(QMainWindow):
 
     # Player
     # Play/Pause button
+
     def on_mediastate_changed(self, state):
         if self.media_player.player.state() == QMediaPlayer.PlayingState:
             self.ui.btn_player_navigator_playPause.setIcon(
