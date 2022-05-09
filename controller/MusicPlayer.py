@@ -71,6 +71,9 @@ class TrackDatabase:
     def getTrackList(self) -> "list[Track]":
         return self.trackList
 
+    def deleteTrackAtIndex(self, index: int) -> None:
+        del self.trackList[index]
+
     def displayTrackDBInfo(self) -> None:
         for i in range(len(self.trackList)):
             print(

@@ -1,3 +1,4 @@
+import json
 import os
 
 from PyQt5.QtMultimedia import QMediaPlayer
@@ -244,10 +245,22 @@ class MainWindow(QMainWindow):
     def on_library_open(self):
         # TODO: Display all the songs once the library is opened
         self.ui.Pages_Widget.setCurrentWidget(self.ui.page_library)
-        display_list_item(self.ui.listWidget_library_songs, [LibrarySong(
-            song, self.on_play_song, self.on_remove_song, self.on_add_to_playlist, song.get('id')) for song in library_songs])
+        display_list_item(
+            self.ui.listWidget_library_songs,
+            [LibrarySong(
+                song,
+                self.on_play_song,
+                self.on_remove_song,
+                self.on_add_to_playlist,
+                song.get('id'),
+                trackDB
+            ) for song in library_songs]
+        )
 
-    def on_play_song(self, index: int):
+    def on_play_song(self, index: int, playback: "list[Track]" = []):
+        self.media_player.playBack = playback
+        self.media_player.playback_count = len(self.media_player.playBack)
+
         self.media_player.playSongAt(index)
         self.ui.change_label_player_track_in_navigator(
             self,
@@ -255,17 +268,79 @@ class MainWindow(QMainWindow):
             artistName=self.media_player.playBack[index].getArtistName()
         )
 
-    def on_remove_song(self, index: int):
-        self.media_player.deleteSong(index)
-        new_playback = convert_from_track_list_to_list_dict(
-            self.media_player.getPlaybackList()
-        )
-        display_list_item(self.ui.listWidget_library_songs, [LibrarySong(
-            song, self.on_play_song, self.on_remove_song, self.on_add_to_playlist, song.get('id')) for song in new_playback])
+    def on_remove_song(self, index: int, _type: str = "", playlistName: str = ""):
+        global library_songs
 
-    def on_add_to_playlist(self):
+        if _type == "library_songs":
+            if self.media_player.playBack != self.media_player.trackDB:
+                self.media_player.playBack = self.media_player.trackDB
+
+            trackDB.deleteTrackAtIndex(index)
+            new_playback = convert_from_track_list_to_list_dict(
+                self.media_player.getPlaybackList()
+            )
+            library_songs = new_playback
+
+            display_list_item(
+                self.ui.listWidget_library_songs,
+                [LibrarySong(
+                    song,
+                    self.on_play_song,
+                    self.on_remove_song,
+                    self.on_add_to_playlist,
+                    song.get('id'),
+                    trackDB
+                ) for song in new_playback]
+            )
+        else:
+            self.media_player.deleteSong(index)
+            new_playback = convert_from_track_list_to_list_dict(
+                self.media_player.getPlaybackList()
+            )
+
+            self.change_playlist_page(
+                self.ui.Pages_Widget,
+                playlistName,
+                new_playback,
+                self.media_player.getPlaybackList()
+            )
+
+    def on_add_to_playlist(
+            self,
+            playlistIndex: int = 0,
+            trackIndex: int = 0,
+    ):
         # TODO: Add song to playlist
-        pass
+        with open(json_dir, encoding='utf-8') as f:
+            data = json.load(f)
+
+            playlist_info = data['play_list'][playlistIndex]
+            song_list = playlist_info.get('songlist')
+            if trackIndex in song_list:
+                pass
+            else:
+                song_list.append(trackIndex)
+
+            data['play_list'][playlistIndex]['songlist'] = song_list
+            data['play_list'][playlistIndex]['count'] = len(song_list)
+
+        with open(json_dir, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4)
+
+        new_trackDB = getDBFromJSON(json_dir)
+        self.media_player = MusicPlayer(
+            playBack=new_trackDB.getTrackList(),
+            playlistList=getPlaylistList(json_dir, new_trackDB)
+        )
+
+        playlistPage = self.media_player.playlistList[playlistIndex]
+        self.change_playlist_page(
+            self.ui.Pages_Widget,
+            playlistPage.getPlaylistName(),
+            track_list=convert_from_track_list_to_list_dict(playlistPage.getTrackList()),
+            trackList=playlistPage.getTrackList()
+        )
+
     ### End : Library
 
     # Playlist
@@ -320,7 +395,8 @@ class MainWindow(QMainWindow):
             lambda: self.change_playlist_page(
                 page_widget,
                 playlist_name,
-                track_list_dict
+                track_list_dict,
+                trackList
             )
         )
 
@@ -344,7 +420,8 @@ class MainWindow(QMainWindow):
             self,
             page_widget: QtWidgets.QStackedWidget,
             playlist_name: str,
-            track_list: "list[dict]"
+            track_list: "list[dict]",
+            trackList: "list[Track]"
     ):
         # TODO: Display the playlist songs here also
         num_page = page_widget.count()
@@ -353,20 +430,17 @@ class MainWindow(QMainWindow):
             if hasattr(w, "playlist_name") and w.playlist_name == snake_case(playlist_name):
                 page_widget.setCurrentIndex(i)
                 display_list_item(
-                    self.ui.listWidget_playlist_songs,
+                    w.listWidget_playlist_songs,
                     [PlaylistSong(
                         song,
-                        self.on_play_song(),
-                        self.on_remove_song
+                        self.on_play_song,
+                        self.on_remove_song,
+                        song.get('id'),
+                        trackList,
+                        playlist_name
                     ) for song in track_list]
                 )
                 break
-
-    def on_play_playlist_song(self):
-        pass
-
-    def on_remove_playlist_song(self):
-        pass
 
     def remove_playlist_page(self, page_widget: QtWidgets.QStackedWidget, playlist_name: str, playlist_list_widget: QtWidgets.QListWidget, playlist_label: QtWidgets.QListWidgetItem):
         num_page = page_widget.count()
@@ -425,11 +499,11 @@ class MainWindow(QMainWindow):
 
     def on_next_song(self):
         index = self.media_player.next()
-        self.on_play_song(index)
+        self.on_play_song(index, self.media_player.playBack)
 
     def on_previous_song(self):
         index = self.media_player.prev()
-        self.on_play_song(index)
+        self.on_play_song(index, self.media_player.playBack)
 
     def on_repeat_mode(self):
         self.media_player.changeRepeatMode()
@@ -461,9 +535,11 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    trackDB = getDBFromJSON('sample.json')
+    json_dir = os.path.join('sample.json')
+
+    trackDB = getDBFromJSON(json_dir)
     library_songs = convert_from_songDB_to_list_dict(trackDB)
-    playlistList = getPlaylistList('sample.json', trackDB)
+    playlistList = getPlaylistList(json_dir, trackDB)
 
     window = MainWindow()
     sys.exit(app.exec_())

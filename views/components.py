@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from utils1.snake_case import snake_case
+from controller.MusicPlayer import TrackDatabase, Track
 
 
 def QIcon_from_svg(svg_filepath, color='black'):
@@ -13,7 +14,15 @@ def QIcon_from_svg(svg_filepath, color='black'):
 
 
 class LibrarySong(QtWidgets.QWidget):
-    def __init__(self, song_info, on_play, on_remove, on_add_to_playlist, index, parent=None):
+    def __init__(
+            self,
+            song_info,
+            on_play,
+            on_remove,
+            on_add_to_playlist,
+            index,
+            trackDB: TrackDatabase,
+            parent=None):
         super(LibrarySong, self).__init__(parent)
 
         self.row = QtWidgets.QHBoxLayout()
@@ -91,9 +100,9 @@ class LibrarySong(QtWidgets.QWidget):
         self.setLayout(self.row)
 
         # CONNECTIONS
-        self.play_btn.clicked.connect(lambda: on_play(int(index)))
-        self.remove_btn.clicked.connect(lambda: on_remove(int(index)))
-        self.add_to_playlist_btn.clicked.connect(on_add_to_playlist)
+        self.play_btn.clicked.connect(lambda: on_play(int(index), trackDB.getTrackList()))
+        self.remove_btn.clicked.connect(lambda: on_remove(int(index), "library_songs"))
+        self.add_to_playlist_btn.clicked.connect(lambda: on_add_to_playlist(0, int(index)))
 
 
 class BluetoothDevice(QtWidgets.QWidget):
@@ -147,7 +156,16 @@ class PlaylistLabel(QtWidgets.QWidget):
 
 
 class PlaylistSong(QtWidgets.QWidget):
-    def __init__(self, song_info, on_play, on_remove, parent=None):
+    def __init__(
+            self,
+            song_info,
+            on_play,
+            on_remove,
+            index,
+            trackList: "list[Track]" = [],
+            playlistName: str = "",
+            parent=None
+    ):
         super(PlaylistSong, self).__init__(parent)
 
         self.row = QtWidgets.QHBoxLayout()
@@ -204,8 +222,8 @@ class PlaylistSong(QtWidgets.QWidget):
         self.setLayout(self.row)
 
         # CONNECTIONS
-        self.play_btn.clicked.connect(on_play)
-        self.remove_btn.clicked.connect(on_remove)
+        self.play_btn.clicked.connect(lambda: on_play(int(index), trackList))
+        self.remove_btn.clicked.connect(lambda: on_remove(int(index), playlistName=playlistName))
 
 
 class Slider(QtWidgets.QSlider):
