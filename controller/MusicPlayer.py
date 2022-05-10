@@ -87,16 +87,12 @@ class TrackDatabase:
 class PlayList:
     def __init__(
             self,
-            _trackDB: TrackDatabase,
-            id_list: "list[int]",
+            trackList: "list[Track]" = [],
             name: str = "Unknown",
     ) -> None:
         self.playListName = name
-        self.numOfTracks = len(id_list)
-        self.trackList = []
-
-        for idx in id_list:
-            self.trackList.append(_trackDB.getTrackAtIndex(idx))
+        self.numOfTracks = len(trackList)
+        self.trackList = trackList
 
     def addTrack(
             self,
@@ -142,6 +138,7 @@ class PlayList:
 class MusicPlayer:
     def __init__(
             self,
+            trackDB: TrackDatabase,
             playBack: "list[Track]" = [],
             playlistList: "list[PlayList]" = [],
             systemVolume: int = 0,
@@ -167,14 +164,15 @@ class MusicPlayer:
         self.playback_count = len(self.playBack)
         self.curr_playing = 0
         self.shuffle_pb = deepcopy(self.playBack)
-        self.trackDB = playBack
+        self.trackDB = trackDB
 
         # Mapping emotion playlist
-        self.happy_list: "list[Track]" = []
-        self.angry_list: "list[Track]" = []
-        self.neutral_list: "list[Track]" = []
-        self.sad_list: "list[Track]" = []
-        self.surprise_list: "list[Track]" = []
+        self.happy_list = PlayList()
+        self.angry_list = PlayList()
+        self.neutral_list = PlayList()
+        self.sad_list = PlayList()
+        self.surprise_list = PlayList()
+        self.curr_emotion_playlist = PlayList()
 
         # List of playlists
         self.playlistList = playlistList
@@ -278,10 +276,15 @@ def getPlaylistList(
         data = json.load(f)
 
         for playlist_info in data['play_list']:
+
+            id_list = playlist_info.get("songlist")
+            trackList: "list[Track]" = []
+            for idx in id_list:
+                trackList.append(trackDB.getTrackAtIndex(idx))
+
             playlist = PlayList(
-                _trackDB=trackDB,
+                trackList=trackList,
                 name=playlist_info.get("name"),
-                id_list=playlist_info.get("songlist")
             )
 
             if playlist is not None:

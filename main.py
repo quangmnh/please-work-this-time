@@ -91,7 +91,8 @@ class MainWindow(QMainWindow):
 
         self.media_player = MusicPlayer(
             playBack=trackDB.getTrackList(),
-            playlistList=playlistList
+            playlistList=playlistList,
+            trackDB=trackDB
         )
 
         for playlistPage in self.media_player.playlistList:
@@ -102,16 +103,8 @@ class MainWindow(QMainWindow):
                 playlistPage.getTrackList()
             )
 
-            self.ui.comboBox_settings_emotion_playlist_map_happy.addItem(
-                playlistPage.getPlaylistName())
-            self.ui.comboBox_settings_emotion_playlist_map_sad.addItem(
-                playlistPage.getPlaylistName())
-            self.ui.comboBox_settings_emotion_playlist_map_neutral.addItem(
-                playlistPage.getPlaylistName())
-            self.ui.comboBox_settings_emotion_playlist_map_surprise.addItem(
-                playlistPage.getPlaylistName())
-            self.ui.comboBox_settings_emotion_playlist_map_angry.addItem(
-                playlistPage.getPlaylistName())
+            self.clearAllComboBox()
+            self.updateAllComboBox()
 
         # PAGES
         ########################################################################
@@ -291,8 +284,27 @@ class MainWindow(QMainWindow):
                     continue
                 else:
                     label = self.emotion_recognition.predict(roi)
-                    temp[label]+=1
+                    temp[label] += 1
         true_label = max(temp, key=temp.get)
+
+        if true_label == 'Angry':
+            self.media_player.curr_emotion_playlist = self.media_player.angry_list
+        elif true_label == 'Happy':
+            self.media_player.curr_emotion_playlist = self.media_player.happy_list
+        elif true_label == 'Neutral':
+            self.media_player.curr_emotion_playlist = self.media_player.neutral_list
+        elif true_label == 'Sad':
+            self.media_player.curr_emotion_playlist = self.media_player.sad_list
+        else:
+            self.media_player.curr_emotion_playlist = self.media_player.surprise_list
+
+        self.media_player.playBack = self.media_player.curr_emotion_playlist.getTrackList()
+        self.change_playlist_page(
+            self.ui.Pages_Widget,
+            self.media_player.curr_emotion_playlist.getPlaylistName(),
+        )
+
+        self.on_playlist_play(self.media_player.playBack)
 
     # END: Emotion recognition
 
@@ -309,7 +321,7 @@ class MainWindow(QMainWindow):
                 self.add_to_playlist_dialog,
                 # self.on_add_to_playlist,
                 song.get('id'),
-                self.media_player.trackDB
+                self.media_player.trackDB.getTrackList()
             ) for song in library_songs]
         )
 
@@ -383,9 +395,9 @@ class MainWindow(QMainWindow):
 
             self.change_playlist_page(
                 self.ui.Pages_Widget,
-                playlistName,
-                new_playback,
-                self.media_player.getPlaybackList()
+                playlistName
+                # new_playback,
+                # self.media_player.getPlaybackList()
             )
 
     def add_to_playlist_dialog(self, trackIndex):
@@ -435,18 +447,18 @@ class MainWindow(QMainWindow):
             json.dump(data, f, indent=4)
 
         new_trackDB = getDBFromJSON(json_dir)
+        global trackDB
+        trackDB = new_trackDB
         self.media_player = MusicPlayer(
             playBack=new_trackDB.getTrackList(),
-            playlistList=getPlaylistList(json_dir, new_trackDB)
+            playlistList=getPlaylistList(json_dir, new_trackDB),
+            trackDB=new_trackDB
         )
 
         playlistPage = self.media_player.playlistList[playlistIndex]
         self.change_playlist_page(
             self.ui.Pages_Widget,
-            playlistPage.getPlaylistName(),
-            track_list=convert_from_track_list_to_list_dict(
-                playlistPage.getTrackList()),
-            trackList=playlistPage.getTrackList()
+            playlistPage.getPlaylistName()
         )
 
     ### End : Library
@@ -528,14 +540,11 @@ class MainWindow(QMainWindow):
             playlist_name (str): Name of playlist to add.
             playlist_list_widget (QtWidgets.QListWidget): List widget to display all playlists.
         """
-        track_list_dict = convert_from_track_list_to_list_dict(trackList)
         playlist_label = PlaylistLabel(
             playlist_name,
             lambda: self.change_playlist_page(
                 page_widget,
-                playlist_name,
-                track_list_dict,
-                trackList
+                playlist_name
             )
         )
 
@@ -560,8 +569,8 @@ class MainWindow(QMainWindow):
             self,
             page_widget: QtWidgets.QStackedWidget,
             playlist_name: str,
-            track_list: "list[dict]",
-            trackList: "list[Track]"
+            # track_list: "list[dict]",
+            # trackList: "list[Track]"
     ):
         # TODO: Display the playlist songs here also
         num_page = page_widget.count()
@@ -569,6 +578,23 @@ class MainWindow(QMainWindow):
             w = page_widget.widget(i)
             if hasattr(w, "playlist_name") and w.playlist_name == snake_case(playlist_name):
                 page_widget.setCurrentIndex(i)
+
+                with open(json_dir, encoding='utf-8') as f:
+                    data = json.load(f)
+
+                    play_list = data['play_list']
+                    for playlist in play_list:
+                        if playlist['name'] == playlist_name:
+                            break
+
+                    trackList = []
+
+                    print(playlist['songlist'])
+                    for idx in playlist['songlist']:
+                        trackList.append(self.media_player.trackDB.getTrackAtIndex(idx))
+
+                track_list = convert_from_track_list_to_list_dict(trackList)
+
                 display_list_item(
                     w.listWidget_playlist_songs,
                     [PlaylistSong(
@@ -695,21 +721,8 @@ class MainWindow(QMainWindow):
 
     # END : HANDLERS #######################################################
 
-    def updateState(self):
-        curr_trackDB = self.media_player.trackDB
-        self.media_player = MusicPlayer(
-            playBack=curr_trackDB,
-            playlistList=playlistList
-        )
-
+    def updateAllComboBox(self):
         for playlistPage in self.media_player.playlistList:
-            self.add_playlist_page(
-                self.ui.Pages_Widget,
-                playlistPage.getPlaylistName(),
-                self.ui.listWidget_playlists,
-                playlistPage.getTrackList()
-            )
-
             self.ui.comboBox_settings_emotion_playlist_map_happy.addItem(
                 playlistPage.getPlaylistName())
             self.ui.comboBox_settings_emotion_playlist_map_sad.addItem(
@@ -720,6 +733,13 @@ class MainWindow(QMainWindow):
                 playlistPage.getPlaylistName())
             self.ui.comboBox_settings_emotion_playlist_map_angry.addItem(
                 playlistPage.getPlaylistName())
+
+    def clearAllComboBox(self):
+        self.ui.comboBox_settings_emotion_playlist_map_happy.clear()
+        self.ui.comboBox_settings_emotion_playlist_map_sad.clear()
+        self.ui.comboBox_settings_emotion_playlist_map_neutral.clear()
+        self.ui.comboBox_settings_emotion_playlist_map_surprise.clear()
+        self.ui.comboBox_settings_emotion_playlist_map_angry.clear()
 
 
 if __name__ == "__main__":
