@@ -292,7 +292,7 @@ class MainWindow(QMainWindow):
                         label = self.emotion_recognition.predict(roi)
                         temp[label] += 1
         true_label = max(temp, key=temp.get)
-
+        print(true_label)
         if true_label == 'Angry':
             self.media_player.curr_emotion_playlist = self.media_player.angry_list
         elif true_label == 'Happy':

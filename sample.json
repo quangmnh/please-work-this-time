@@ -35,5 +35,32 @@
                 1
             ]
         }
+        ,
+        {
+            "name": "neutral",
+            "count": 2,
+            "songlist": [
+                0,
+                1
+            ]
+        }
+        ,
+        {
+            "name": "angry",
+            "count": 2,
+            "songlist": [
+                0,
+                1
+            ]
+        }
+        ,
+        {
+            "name": "surprise",
+            "count": 2,
+            "songlist": [
+                0,
+                1
+            ]
+        }
     ]
 }
