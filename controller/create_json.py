@@ -59,8 +59,42 @@ def createJsonData(
         json.dump(json_data, f, indent=4)
 
 
+def updateTrackDatabaseFromFolderToJsonFile(
+        track_folder: str,
+        json_dir: str
+):
+    track_dir = os.path.join(track_folder)
+    songdb = []
+    idx = 0
+    for file in os.listdir(track_dir):
+        trackURL = os.path.join(track_dir, file)
+        audio = eyed3.load(trackURL)
+        print(f'{audio.tag.title}\n'
+              f'{audio.tag.artist}\n'
+              f'{audio.info.time_secs}'
+              f'--------------------\n')
+        track_data = {
+            "id": idx,
+            "name": audio.tag.title,
+            "artist": audio.tag.artist,
+            "duration": int(audio.info.time_secs),
+            "image_url": "https://sakjdlsadjsa.com",
+            "url": trackURL
+        }
+        songdb.append(track_data)
+        idx += 1
+
+    with open(json_dir, encoding='utf-8') as f:
+        data = json.load(f)
+
+        data['songdb'] = songdb
+
+    with open(json_dir, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=4)
+
+
 if __name__ == '__main__':
-    direct = 'C:\\Users\\Victus\\Downloads\\Music'
+    direct = os.path.join('C:/', 'Users', 'Victus', 'Downloads', 'Music')
 
     createJsonData(
         track_folder=direct,

@@ -28,6 +28,8 @@ from utils1.snake_case import snake_case
 
 # Controllers
 from controller.MusicPlayer import MusicPlayer, getDBFromJSON, getPlaylistList, PlayList
+from controller.scan_usb import auto_detect_music_in_usb
+from controller.create_json import updateTrackDatabaseFromFolderToJsonFile
 from utils1.utils import *
 
 import sys
@@ -139,6 +141,11 @@ class MainWindow(QMainWindow):
 
         # FUNCTIONALITY:
         ########################################################################
+        ## Add song               ####
+        self.ui.Btn_menu_add_songs.clicked.connect(
+            lambda: self.on_add_songs_from_usb()
+        )
+
         ## Add playlist           ####
         self.ui.Btn_Add_Playlist.clicked.connect(
             self.on_create_playlist)
@@ -203,6 +210,20 @@ class MainWindow(QMainWindow):
 
     # HANDLERS
     ########################################################################
+    # Scan USB
+    def on_add_songs_from_usb(self):
+        auto_detect_music_in_usb()
+        updateTrackDatabaseFromFolderToJsonFile(
+            track_folder=os.path.join('C:/', 'Users', 'Victus', 'Downloads', 'Music'),
+            json_dir=json_dir
+        )
+
+        global trackDB, library_songs
+        trackDB = getDBFromJSON(json_dir)
+        library_songs = convert_from_track_list_to_list_dict(trackDB.getTrackList())
+        self.media_player.trackDB = trackDB
+        self.on_library_open()
+
     # Bluetooth
     def on_scan_bluetooth_devices(self):
         # TODO: Scan bluetooth devices
