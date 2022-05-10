@@ -273,15 +273,15 @@ class MainWindow(QMainWindow):
         while time() - start<8:
             frame = self.camera.get_frame()
             if frame is None:
-                print("frame is none")
+                # print("frame is none")
                 continue
             else:
                 box = self.face_recognition.predict(self.camera.get_blob(frame))
                 if box is None:
                     continue
                 else:
-                    print(box)
-                    print(frame.shape)
+                    # print(box)
+                    # print(frame.shape)
                     (height, width) = frame.shape[:2]
                     box = box * np.array([width, height, width, height])
                     # (x, y, w, h) = box.astype('int')
