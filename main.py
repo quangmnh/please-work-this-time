@@ -73,8 +73,8 @@ class MainWindow(QMainWindow):
 
         #comment this section for windows testing and set these to None, fuk u all windows users 
         self.camera = CameraManagement()
-        self.face_recognition = ONNXClassifierWrapper("controller/new_model.trt", [1, 5], target_dtype = np.float32)
-        self.emotion_recognition = ONNXClassifierWrapper2("controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype = np.float32)
+        self.face_recognition = ONNXClassifierWrapper2("controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype = np.float32)
+        self.emotion_recognition = ONNXClassifierWrapper("controller/new_model.trt", [1, 5], target_dtype = np.float32)
         self.bluetooth = BluetoothController(10)
 
         # Icons
