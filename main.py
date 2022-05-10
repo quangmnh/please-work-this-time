@@ -33,6 +33,10 @@ from utils1.utils import *
 import sys
 import platform
 import random
+from time import time
+
+from controller.model_manager import *
+from controller.blutooth_controller import *
 
 # EXAMPLE DATA
 ############################################
@@ -66,6 +70,12 @@ class MainWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        #comment this section for windows testing and set these to None, fuk u all windows users 
+        self.camera = CameraManagement()
+        self.face_recognition = ONNXClassifierWrapper("controller/new_model.trt", [1, 5], target_dtype = np.float32)
+        self.emotion_recognition = ONNXClassifierWrapper2("controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype = np.float32)
+        self.bluetooth = BluetoothController(10)
 
         # Icons
         self.play_icon = PlayIcon()
@@ -203,16 +213,25 @@ class MainWindow(QMainWindow):
     # Bluetooth
     def on_scan_bluetooth_devices(self):
         # TODO: Scan bluetooth devices
+        if self.bluetooth.get_paired_device() is None:
+            bluetooth_devices = self.bluetooth.bluetooth_scan()
+        else:
+            bluetooth_devices = self.bluetooth.get_paired_device()
         display_list_item(self.ui.listWidget_settings_bluetooth_devices, [BluetoothDevice(
             device, on_connect_device=self.on_connect_device) for device in bluetooth_devices])
 
     def on_connect_device(self, device_info):
         # TODO: Connect to device
-        print("Connecting to device: " + device_info['mac'])
+        self.bluetooth.connect_device(device_info["name"], device_info["mac"])
+        self.on_scan_bluetooth_devices()
 
     def on_disconnect_device(self):
-        # TODO: Disconnect from bluetooth devices
-        pass
+        device = self.bluetooth.get_paired_device()
+        if device is None:
+            return None
+        else:
+            self.bluetooth.disconnect_device(device["mac"])
+            return 0
     ### END: Bluetooth
 
     # Emotion Map
@@ -248,8 +267,33 @@ class MainWindow(QMainWindow):
 
     # Emotion recognition
     def on_emotion_recognition(self):
-        # TODO: Enable the script and fetch the result
+        # TODO: PLease use the true label var for choosing and playing the right playlist
         self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition)
+        temp = {
+            "Angry" : 0,
+            "Happy" : 0,
+            "Neutral" : 0,
+            "Sad" : 0,
+            "Suprise" : 0,
+        }
+        start = time()
+        while time() - start<8000:
+            frame = self.camera.get_frame()
+            box = self.face_recognition.predict(self.camera.get_blob(frame))
+            if box is None:
+                continue
+            else:
+                (height, width) = frame.shape[:2]
+                box = box * np.array([width, height, width, height])
+                # (x, y, w, h) = box.astype('int')
+                roi = self.camera.get_roi(box, frame)
+                if roi is None:
+                    continue
+                else:
+                    label = self.emotion_recognition.predict(roi)
+                    temp[label]+=1
+        true_label = max(temp, key=temp.get)
+
     # END: Emotion recognition
 
     # Library
