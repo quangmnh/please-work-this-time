@@ -45,18 +45,18 @@
     "play_list": [
         {
             "name": "sad",
-            "count": 1,
+            "count": 2,
             "songlist": [
-                1
+                1,
+                0
             ]
         },
         {
             "name": "happy",
-            "count": 3,
+            "count": 2,
             "songlist": [
                 0,
-                1,
-                4
+                1
             ]
         }
     ]

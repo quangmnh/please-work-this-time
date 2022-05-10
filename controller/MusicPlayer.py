@@ -195,6 +195,14 @@ class MusicPlayer:
             del self.playBack[index]
             self.playback_count -= 1
 
+    def deletePlaylist(self, playlist_name: str):
+        idx = 0
+        for playlist in self.playlistList:
+            if playlist.getPlaylistName() == playlist_name:
+                break
+            idx += 1
+        del self.playlistList[idx]
+
     def changeRepeatMode(self) -> None:
         self.repeatMode = (self.repeatMode + 1) % 3
 

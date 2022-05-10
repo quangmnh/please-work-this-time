@@ -27,7 +27,7 @@ from utils1.snake_case import snake_case
 # from helper.playlist_page import *
 
 # Controllers
-from controller.MusicPlayer import MusicPlayer, getDBFromJSON, getPlaylistList
+from controller.MusicPlayer import MusicPlayer, getDBFromJSON, getPlaylistList, PlayList
 from utils1.utils import *
 
 import sys
@@ -35,8 +35,8 @@ import platform
 import random
 from time import time
 
-from controller.model_manager import *
-from controller.blutooth_controller import *
+# from controller.model_manager import *
+# from controller.blutooth_controller import *
 
 # EXAMPLE DATA
 ############################################
@@ -72,10 +72,10 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         #comment this section for windows testing and set these to None, fuk u all windows users 
-        self.camera = CameraManagement()
-        self.face_recognition = ONNXClassifierWrapper("controller/new_model.trt", [1, 5], target_dtype = np.float32)
-        self.emotion_recognition = ONNXClassifierWrapper2("controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype = np.float32)
-        self.bluetooth = BluetoothController(10)
+        # self.camera = CameraManagement()
+        # self.face_recognition = ONNXClassifierWrapper("controller/new_model.trt", [1, 5], target_dtype = np.float32)
+        # self.emotion_recognition = ONNXClassifierWrapper2("controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype = np.float32)
+        # self.bluetooth = BluetoothController(10)
 
         # Icons
         self.play_icon = PlayIcon()
@@ -507,6 +507,12 @@ class MainWindow(QMainWindow):
                 trackList=[]
             )
 
+            new_playlist = PlayList(
+                name=playlist_name,
+                trackList=[]
+            )
+            self.media_player.playlistList.append(new_playlist)
+
             with open(json_dir, encoding='utf-8') as f:
                 data = json.load(f)
 
@@ -564,6 +570,9 @@ class MainWindow(QMainWindow):
         )
         # Add page to page stack
         page_widget.addWidget(playlist_page)
+
+        self.clearAllComboBox()
+        self.updateAllComboBox()
 
     def change_playlist_page(
             self,
@@ -639,8 +648,14 @@ class MainWindow(QMainWindow):
         with open(json_dir, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=4)
 
+        # Delete playlist in playlistList of Music player
+        self.media_player.deletePlaylist(playlist_name)
+
         # Remove label from list widget
         playlist_list_widget.takeItem(playlist_list_widget.row(playlist_label))
+
+        self.clearAllComboBox()
+        self.updateAllComboBox()
 
     ### End : Playlist
 
@@ -667,6 +682,11 @@ class MainWindow(QMainWindow):
             # Repeat only one track
             else:
                 self.on_play_song(self.media_player.curr_playing)
+
+        if self.ui.btn_settings_enable_hand_gesture.isChecked():
+            # Handle hand gesture
+            # img = self.camera.get_frame()
+            pass
 
     # Progress bar
 
