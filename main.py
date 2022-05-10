@@ -267,7 +267,7 @@ class MainWindow(QMainWindow):
             "Happy" : 0,
             "Neutral" : 0,
             "Sad" : 0,
-            "Suprise" : 0,
+            "Surprise" : 0,
         }
         start = time()
         while time() - start<8:
