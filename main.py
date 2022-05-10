@@ -272,19 +272,23 @@ class MainWindow(QMainWindow):
         start = time()
         while time() - start<8:
             frame = self.camera.get_frame()
-            box = self.face_recognition.predict(self.camera.get_blob(frame))
-            if box is None:
+            if frame is None:
+                print("frame is none")
                 continue
             else:
-                (height, width) = frame.shape[:2]
-                box = box * np.array([width, height, width, height])
-                # (x, y, w, h) = box.astype('int')
-                roi = self.camera.get_roi(box, frame)
-                if roi is None:
+                box = self.face_recognition.predict(self.camera.get_blob(frame))
+                if box is None:
                     continue
                 else:
-                    label = self.emotion_recognition.predict(roi)
-                    temp[label] += 1
+                    (height, width) = frame.shape[:2]
+                    box = box * np.array([width, height, width, height])
+                    # (x, y, w, h) = box.astype('int')
+                    roi = self.camera.get_roi(box, frame)
+                    if roi is None:
+                        continue
+                    else:
+                        label = self.emotion_recognition.predict(roi)
+                        temp[label] += 1
         true_label = max(temp, key=temp.get)
 
         if true_label == 'Angry':
