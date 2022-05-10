@@ -280,6 +280,8 @@ class MainWindow(QMainWindow):
                 if box is None:
                     continue
                 else:
+                    print(box)
+                    print(frame.shape)
                     (height, width) = frame.shape[:2]
                     box = box * np.array([width, height, width, height])
                     # (x, y, w, h) = box.astype('int')
