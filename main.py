@@ -270,7 +270,7 @@ class MainWindow(QMainWindow):
             "Suprise" : 0,
         }
         start = time()
-        while time() - start<8000:
+        while time() - start<8:
             frame = self.camera.get_frame()
             box = self.face_recognition.predict(self.camera.get_blob(frame))
             if box is None:
