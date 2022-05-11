@@ -126,7 +126,11 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(15)
         self.listWidget_playlists.setFont(font)
-        self.listWidget_playlists.setStyleSheet("color: #FFF;")
+        self.listWidget_playlists.setStyleSheet("color: #FFF; \n"
+                                                "QListWidget::item:selected {\n"
+                                                "     background-color: transparent;\n"
+                                                "    border: 0px solid;\n"
+                                                "}")
         self.listWidget_playlists.setObjectName("listWidget_playlists")
         self.verticalLayout_3.addWidget(self.listWidget_playlists)
         self.Btn_Settings = QtWidgets.QPushButton(self.frame_top_menus)
@@ -794,6 +798,10 @@ class Ui_MainWindow(object):
         self.listWidget_settings_bluetooth_devices.setFont(font)
         self.listWidget_settings_bluetooth_devices.setObjectName(
             "listWidget_settings_bluetooth_devices")
+        self.listWidget_settings_bluetooth_devices.setStyleSheet("QListWidget::item:selected {\n"
+                                                                 "     background-color: transparent;\n"
+                                                                 "    border: 0px solid;\n"
+                                                                 "}")
         self.verticalLayout_18.addWidget(
             self.listWidget_settings_bluetooth_devices)
         self.verticalLayout_19.addWidget(self.frame_settings_bluetooth)
@@ -823,7 +831,12 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(15)
         self.listWidget_library_songs.setFont(font)
-        self.listWidget_library_songs.setStyleSheet("color: #FFF;")
+        # self.listWidget_library_songs.setStyleSheet("color: #FFF;")
+        self.listWidget_library_songs.setStyleSheet("color: #FFF; \n"
+                                                    "QListWidget::item:selected {\n"
+                                                    "     background-color: transparent;\n"
+                                                    "    border: 0px solid;\n"
+                                                    "}")
         self.listWidget_library_songs.setObjectName("listWidget_library_songs")
         self.verticalLayout_10.addWidget(self.listWidget_library_songs)
         self.verticalLayout_9.addWidget(self.frame_library)
