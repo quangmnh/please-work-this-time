@@ -327,7 +327,7 @@ QPushButton:hover {
           <item>
            <widget class="QStackedWidget" name="Pages_Widget">
             <property name="currentIndex">
-             <number>3</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="page_dashboard">
              <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -474,7 +474,7 @@ QPushButton:hover {
                   <widget class="QLabel" name="label_fer_result">
                    <property name="font">
                     <font>
-                     <pointsize>15</pointsize>
+                     <pointsize>20</pointsize>
                     </font>
                    </property>
                    <property name="styleSheet">
@@ -482,161 +482,6 @@ QPushButton:hover {
                    </property>
                    <property name="text">
                     <string>Your current emotion is: Happy. Playing playlist: Playlist 1</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="page_emotion_recognition_no_playlist">
-             <layout class="QHBoxLayout" name="horizontalLayout_13">
-              <item>
-               <widget class="QFrame" name="frame_emotion_recognition_no_playlist">
-                <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QVBoxLayout" name="verticalLayout_5">
-                 <item>
-                  <widget class="QLabel" name="label_emotion_recognition_no_playlist">
-                   <property name="font">
-                    <font>
-                     <pointsize>30</pointsize>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">color: #FFF;</string>
-                   </property>
-                   <property name="text">
-                    <string>Emotion recognition result</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_fer_result_no_playlist">
-                   <property name="font">
-                    <font>
-                     <pointsize>15</pointsize>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">color: #FFF;</string>
-                   </property>
-                   <property name="text">
-                    <string>Currently there is no playlist mapped for detected emotion. 
- Setup your preference now in Settings</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                   <property name="wordWrap">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="btn_go_to_settings_no_playlist">
-                   <property name="minimumSize">
-                    <size>
-                     <width>0</width>
-                     <height>60</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>200</width>
-                     <height>16777215</height>
-                    </size>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <pointsize>10</pointsize>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">QPushButton {
-	color: rgb(255,255,255);
- 	background-color: rgb(50,50,50);
-	border: 0px solid;
-}
-QPushButton:hover {
-	background-color: rgb(85, 170, 255);
-}</string>
-                   </property>
-                   <property name="text">
-                    <string>Go to settings</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="page_emotion_recognition_loading">
-             <layout class="QVBoxLayout" name="verticalLayout_12">
-              <item>
-               <widget class="QFrame" name="frame_emotion_recognition_loading">
-                <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QVBoxLayout" name="verticalLayout_8">
-                 <item>
-                  <widget class="QLabel" name="label_emotion_recognition_loading">
-                   <property name="font">
-                    <font>
-                     <pointsize>30</pointsize>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">color: #FFF;</string>
-                   </property>
-                   <property name="text">
-                    <string>Emotion recognition</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_emotion_recognition_info_loading">
-                   <property name="font">
-                    <font>
-                     <pointsize>15</pointsize>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">color: #FFF;</string>
-                   </property>
-                   <property name="text">
-                    <string>Detecting your emotion, please wait...</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                   <property name="wordWrap">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QFrame" name="frame_emotion_recognition_loading_orb">
-                   <property name="minimumSize">
-                    <size>
-                     <width>0</width>
-                     <height>200</height>
-                    </size>
-                   </property>
-                   <property name="frameShape">
-                    <enum>QFrame::StyledPanel</enum>
-                   </property>
-                   <property name="frameShadow">
-                    <enum>QFrame::Raised</enum>
                    </property>
                   </widget>
                  </item>

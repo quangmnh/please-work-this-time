@@ -186,3 +186,12 @@ class PlaylistPage(QtWidgets.QWidget):
 
         # self.play_btn.clicked.connect(play_list_method)
         # self.remove_btn.clicked.connect(remove_method)
+
+
+class LoadingPage(QtWidgets.QWidget):
+    def __init__(self, parent=None) -> None:
+        super(LoadingPage, self).__init__(parent)
+        self.loading_page = QtWidgets.QWidget()
+        self.loading_page.setObjectName("page_loading")
+        self.verticalLayout_13 = QtWidgets.QVBoxLayout(self.loading_page)
+        self.verticalLayout_13.setObjectName("verticalLayout_13")

@@ -5,8 +5,7 @@ from PyQt5.QtMultimedia import QMediaPlayer
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont, QFontDatabase,
                          QIcon, QKeySequence, QLinearGradient, QPalette, QPainter, QPixmap, QRadialGradient)
-from PyQt5.QtCore import (QCoreApplication, QPropertyAnimation, QDate, QDateTime,
-                          QMetaObject, QObject, QPoint, QRect, QSize, QTime, QUrl, Qt, QEvent)
+from PyQt5.QtCore import (QObject, QThread, pyqtSignal)
 from PyQt5 import QtCore, QtGui, QtWidgets
 # GUI file
 from views.ui_main import Ui_MainWindow
@@ -14,7 +13,7 @@ from views.ui_main import Ui_MainWindow
 # Components
 from views.components import (BluetoothDevice, LibrarySong, PlaylistLabel, PlaylistSong,
                               PlayIcon, PauseIcon, RepeatEnabledIcon,
-                              RepeatIcon, RepeatOneIcon, ShuffleEnabledIcon, ShuffleIcon)
+                              RepeatIcon, RepeatOneIcon, ShuffleEnabledIcon, ShuffleIcon, QtWaitingSpinner)
 
 # Pages
 from views.pages import PlaylistPage
@@ -67,16 +66,31 @@ bluetooth_devices = [
 # END: EXAMPLE DATA ########################
 
 
+class Worker(QObject):
+    finished = pyqtSignal()
+    progress = pyqtSignal(int)
+
+    def __init__(self, long_run_method, parent: None) -> None:
+        super().__init__(parent)
+        self.method = long_run_method
+
+    def run(self):
+        self.method()
+        self.finished.emit()
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        #comment this section for windows testing and set these to None, fuk u all windows users 
+        # comment this section for windows testing and set these to None, fuk u all windows users
         self.camera = CameraManagement()
-        self.face_recognition = ONNXClassifierWrapper2("controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype = np.float32)
-        self.emotion_recognition = ONNXClassifierWrapper("controller/new_model.trt", [1, 5], target_dtype = np.float32)
+        self.face_recognition = ONNXClassifierWrapper2(
+            "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
+        self.emotion_recognition = ONNXClassifierWrapper(
+            "controller/new_model.trt", [1, 5], target_dtype=np.float32)
         self.bluetooth = BluetoothController(10)
 
         # Icons
@@ -90,6 +104,12 @@ class MainWindow(QMainWindow):
         self.shuffle_icon = ShuffleIcon()
         self.shuffle_enabled = ShuffleEnabledIcon()
         # End : Icons
+
+        # Add spinner to loading screen
+        self.loading_orb = QtWaitingSpinner(
+            self.ui.frame_emotion_recognition_loading_orb)
+        self.loading_orb.start()
+        # End : Add spinner
 
         self.media_player = MusicPlayer(
             playBack=trackDB.getTrackList(),
@@ -119,7 +139,11 @@ class MainWindow(QMainWindow):
         self.ui.Btn_Library.clicked.connect(self.on_library_open)
 
         # EMOTION RECOGNITION PAGE
-        self.ui.Btn_menu_fer.clicked.connect(self.on_emotion_recognition)
+        self.ui.Btn_menu_fer.clicked.connect(lambda:
+
+                                             self.runLongTask()
+
+                                             )
 
         # SETTINGS PAGE
         self.ui.Btn_Settings.clicked.connect(
@@ -133,6 +157,10 @@ class MainWindow(QMainWindow):
         # SETTINGS: EMOTION PLAYLIST MAP PAGE
         self.ui.Btn_settings_emotion_map.clicked.connect(
             lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings_emotion_playlist_map))
+        self.ui.btn_go_to_settings_no_playlist.clicked.connect(
+            lambda: self.ui.Pages_Widget.setCurrentWidget(
+                self.ui.page_settings_emotion_playlist_map)
+        )
         # SETTINGS: BLUETOOTH PAGE
         self.ui.Btn_settings_bluetooth.clicked.connect(
             lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings_bluetooth))
@@ -214,13 +242,15 @@ class MainWindow(QMainWindow):
     def on_add_songs_from_usb(self):
         auto_detect_music_in_usb()
         updateTrackDatabaseFromFolderToJsonFile(
-            track_folder=os.path.join('C:/', 'Users', 'Victus', 'Downloads', 'Music'),
+            track_folder=os.path.join(
+                'C:/', 'Users', 'Victus', 'Downloads', 'Music'),
             json_dir=json_dir
         )
 
         global trackDB, library_songs
         trackDB = getDBFromJSON(json_dir)
-        library_songs = convert_from_track_list_to_list_dict(trackDB.getTrackList())
+        library_songs = convert_from_track_list_to_list_dict(
+            trackDB.getTrackList())
         self.media_player.trackDB = trackDB
         self.on_library_open()
 
@@ -246,7 +276,7 @@ class MainWindow(QMainWindow):
         else:
             self.bluetooth.disconnect_device(device["mac"])
             return 0
-    ### END: Bluetooth
+    # END: Bluetooth
 
     # Emotion Map
     def on_emotion_map_happy(self, playlistIndex: int):
@@ -279,25 +309,39 @@ class MainWindow(QMainWindow):
             print("Hand gesture disabled")
     # END: Hand gesture
 
+    # Long running task
+    def runLongTask(self):
+        self.ui.Pages_Widget.setCurrentWidget(
+            self.ui.page_emotion_recognition_loading)
+        self.thread = QThread()
+        self.worker = Worker(self.on_emotion_recognition, None)
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(lambda: (self.thread.deleteLater(
+        ), self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition_no_playlist)))
+        self.thread.start()
+
     # Emotion recognition
     def on_emotion_recognition(self):
         # TODO: PLease use the true label var for choosing and playing the right playlist
-        self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition)
         temp = {
-            "Angry" : 0,
-            "Happy" : 0,
-            "Neutral" : 0,
-            "Sad" : 0,
-            "Surprise" : 0,
+            "Angry": 0,
+            "Happy": 0,
+            "Neutral": 0,
+            "Sad": 0,
+            "Surprise": 0,
         }
         start = time()
-        while time() - start<8:
+        while time() - start < 8:
             frame = self.camera.get_frame()
             if frame is None:
                 # print("frame is none")
                 continue
             else:
-                box = self.face_recognition.predict(self.camera.get_blob(frame))
+                box = self.face_recognition.predict(
+                    self.camera.get_blob(frame))
                 if box is None:
                     continue
                 else:
@@ -336,6 +380,7 @@ class MainWindow(QMainWindow):
     # END: Emotion recognition
 
     # Library
+
     def on_library_open(self):
         # TODO: Display all the songs once the library is opened
         self.ui.Pages_Widget.setCurrentWidget(self.ui.page_library)
@@ -386,7 +431,8 @@ class MainWindow(QMainWindow):
             with open(json_dir, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=4)
 
-            library_songs = convert_from_track_list_to_list_dict(self.media_player.getPlaybackList())
+            library_songs = convert_from_track_list_to_list_dict(
+                self.media_player.getPlaybackList())
 
             display_list_item(
                 self.ui.listWidget_library_songs,
@@ -488,7 +534,7 @@ class MainWindow(QMainWindow):
             playlistPage.getPlaylistName()
         )
 
-    ### End : Library
+    # End : Library
 
     # Playlist
     def on_create_playlist(self):
@@ -627,7 +673,8 @@ class MainWindow(QMainWindow):
 
                     print(playlist['songlist'])
                     for idx in playlist['songlist']:
-                        trackList.append(self.media_player.trackDB.getTrackAtIndex(idx))
+                        trackList.append(
+                            self.media_player.trackDB.getTrackAtIndex(idx))
 
                 track_list = convert_from_track_list_to_list_dict(trackList)
 
@@ -684,7 +731,7 @@ class MainWindow(QMainWindow):
         self.clearAllComboBox()
         self.updateAllComboBox()
 
-    ### End : Playlist
+    # End : Playlist
 
     # Player
     # Play/Pause buttong
@@ -764,7 +811,7 @@ class MainWindow(QMainWindow):
         else:
             self.ui.btn_player_navigator_shuffle.setIcon(
                 self.shuffle_icon.icon)
-    ### End : Player
+    # End : Player
 
     # END : HANDLERS #######################################################
 
@@ -795,7 +842,8 @@ if __name__ == "__main__":
     json_dir = os.path.join('sample.json')
 
     trackDB = getDBFromJSON(json_dir)
-    library_songs = convert_from_track_list_to_list_dict(trackDB.getTrackList())
+    library_songs = convert_from_track_list_to_list_dict(
+        trackDB.getTrackList())
     playlistList = getPlaylistList(json_dir, trackDB)
 
     window = MainWindow()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui_main_new.ui'
+# Form implementation generated from reading ui file 'ui_main.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -19,6 +19,7 @@ class Ui_MainWindow(object):
         MainWindow.resize(1024, 600)
         MainWindow.setMinimumSize(QtCore.QSize(1024, 600))
         MainWindow.setMaximumSize(QtCore.QSize(1024, 600))
+        # MainWindow.showFullScreen()
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -249,129 +250,13 @@ class Ui_MainWindow(object):
         self.label_fer_result = QtWidgets.QLabel(
             self.frame_emotion_recognition)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setPointSize(20)
         self.label_fer_result.setFont(font)
         self.label_fer_result.setStyleSheet("color: #FFF;")
         self.label_fer_result.setObjectName("label_fer_result")
         self.verticalLayout_16.addWidget(self.label_fer_result)
         self.verticalLayout_17.addWidget(self.frame_emotion_recognition)
         self.Pages_Widget.addWidget(self.page_emotion_recognition)
-        self.page_emotion_recognition_no_playlist = QtWidgets.QWidget()
-        self.page_emotion_recognition_no_playlist.setObjectName(
-            "page_emotion_recognition_no_playlist")
-        self.horizontalLayout_13 = QtWidgets.QHBoxLayout(
-            self.page_emotion_recognition_no_playlist)
-        self.horizontalLayout_13.setObjectName("horizontalLayout_13")
-        self.frame_emotion_recognition_no_playlist = QtWidgets.QFrame(
-            self.page_emotion_recognition_no_playlist)
-        self.frame_emotion_recognition_no_playlist.setFrameShape(
-            QtWidgets.QFrame.StyledPanel)
-        self.frame_emotion_recognition_no_playlist.setFrameShadow(
-            QtWidgets.QFrame.Raised)
-        self.frame_emotion_recognition_no_playlist.setObjectName(
-            "frame_emotion_recognition_no_playlist")
-        self.verticalLayout_5 = QtWidgets.QVBoxLayout(
-            self.frame_emotion_recognition_no_playlist)
-        self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.label_emotion_recognition_no_playlist = QtWidgets.QLabel(
-            self.frame_emotion_recognition_no_playlist)
-        font = QtGui.QFont()
-        font.setPointSize(30)
-        self.label_emotion_recognition_no_playlist.setFont(font)
-        self.label_emotion_recognition_no_playlist.setStyleSheet(
-            "color: #FFF;")
-        self.label_emotion_recognition_no_playlist.setObjectName(
-            "label_emotion_recognition_no_playlist")
-        self.verticalLayout_5.addWidget(
-            self.label_emotion_recognition_no_playlist)
-        self.label_fer_result_no_playlist = QtWidgets.QLabel(
-            self.frame_emotion_recognition_no_playlist)
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.label_fer_result_no_playlist.setFont(font)
-        self.label_fer_result_no_playlist.setStyleSheet("color: #FFF;")
-        self.label_fer_result_no_playlist.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_fer_result_no_playlist.setWordWrap(True)
-        self.label_fer_result_no_playlist.setObjectName(
-            "label_fer_result_no_playlist")
-        self.verticalLayout_5.addWidget(self.label_fer_result_no_playlist)
-        self.btn_go_to_settings_no_playlist = QtWidgets.QPushButton(
-            self.frame_emotion_recognition_no_playlist)
-        self.btn_go_to_settings_no_playlist.setMinimumSize(QtCore.QSize(0, 60))
-        self.btn_go_to_settings_no_playlist.setMaximumSize(
-            QtCore.QSize(200, 16777215))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.btn_go_to_settings_no_playlist.setFont(font)
-        self.btn_go_to_settings_no_playlist.setStyleSheet("QPushButton {\n"
-                                                          "    color: rgb(255,255,255);\n"
-                                                          "     background-color: rgb(50,50,50);\n"
-                                                          "    border: 0px solid;\n"
-                                                          "}\n"
-                                                          "QPushButton:hover {\n"
-                                                          "    background-color: rgb(85, 170, 255);\n"
-                                                          "}")
-        self.btn_go_to_settings_no_playlist.setObjectName(
-            "btn_go_to_settings_no_playlist")
-        self.verticalLayout_5.addWidget(self.btn_go_to_settings_no_playlist)
-        self.horizontalLayout_13.addWidget(
-            self.frame_emotion_recognition_no_playlist)
-        self.Pages_Widget.addWidget(self.page_emotion_recognition_no_playlist)
-        self.page_emotion_recognition_loading = QtWidgets.QWidget()
-        self.page_emotion_recognition_loading.setObjectName(
-            "page_emotion_recognition_loading")
-        self.verticalLayout_12 = QtWidgets.QVBoxLayout(
-            self.page_emotion_recognition_loading)
-        self.verticalLayout_12.setObjectName("verticalLayout_12")
-        self.frame_emotion_recognition_loading = QtWidgets.QFrame(
-            self.page_emotion_recognition_loading)
-        self.frame_emotion_recognition_loading.setFrameShape(
-            QtWidgets.QFrame.StyledPanel)
-        self.frame_emotion_recognition_loading.setFrameShadow(
-            QtWidgets.QFrame.Raised)
-        self.frame_emotion_recognition_loading.setObjectName(
-            "frame_emotion_recognition_loading")
-        self.verticalLayout_8 = QtWidgets.QVBoxLayout(
-            self.frame_emotion_recognition_loading)
-        self.verticalLayout_8.setObjectName("verticalLayout_8")
-        self.label_emotion_recognition_loading = QtWidgets.QLabel(
-            self.frame_emotion_recognition_loading)
-        font = QtGui.QFont()
-        font.setPointSize(30)
-        self.label_emotion_recognition_loading.setFont(font)
-        self.label_emotion_recognition_loading.setStyleSheet("color: #FFF;")
-        self.label_emotion_recognition_loading.setObjectName(
-            "label_emotion_recognition_loading")
-        self.verticalLayout_8.addWidget(self.label_emotion_recognition_loading)
-        self.label_emotion_recognition_info_loading = QtWidgets.QLabel(
-            self.frame_emotion_recognition_loading)
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.label_emotion_recognition_info_loading.setFont(font)
-        self.label_emotion_recognition_info_loading.setStyleSheet(
-            "color: #FFF;")
-        self.label_emotion_recognition_info_loading.setAlignment(
-            QtCore.Qt.AlignCenter)
-        self.label_emotion_recognition_info_loading.setWordWrap(True)
-        self.label_emotion_recognition_info_loading.setObjectName(
-            "label_emotion_recognition_info_loading")
-        self.verticalLayout_8.addWidget(
-            self.label_emotion_recognition_info_loading)
-        self.frame_emotion_recognition_loading_orb = QtWidgets.QFrame(
-            self.frame_emotion_recognition_loading)
-        self.frame_emotion_recognition_loading_orb.setMinimumSize(
-            QtCore.QSize(0, 200))
-        self.frame_emotion_recognition_loading_orb.setFrameShape(
-            QtWidgets.QFrame.StyledPanel)
-        self.frame_emotion_recognition_loading_orb.setFrameShadow(
-            QtWidgets.QFrame.Raised)
-        self.frame_emotion_recognition_loading_orb.setObjectName(
-            "frame_emotion_recognition_loading_orb")
-        self.verticalLayout_8.addWidget(
-            self.frame_emotion_recognition_loading_orb)
-        self.verticalLayout_12.addWidget(
-            self.frame_emotion_recognition_loading)
-        self.Pages_Widget.addWidget(self.page_emotion_recognition_loading)
         self.page_settings = QtWidgets.QWidget()
         self.page_settings.setObjectName("page_settings")
         self.verticalLayout_15 = QtWidgets.QVBoxLayout(self.page_settings)
@@ -1150,16 +1035,6 @@ class Ui_MainWindow(object):
             _translate("MainWindow", "Emotion recognition result"))
         self.label_fer_result.setText(_translate(
             "MainWindow", "Your current emotion is: Happy. Playing playlist: Playlist 1"))
-        self.label_emotion_recognition_no_playlist.setText(
-            _translate("MainWindow", "Emotion recognition result"))
-        self.label_fer_result_no_playlist.setText(_translate("MainWindow", "Currently there is no playlist mapped for detected emotion. \n"
-                                                             " Setup your preference now in Settings"))
-        self.btn_go_to_settings_no_playlist.setText(
-            _translate("MainWindow", "Go to settings"))
-        self.label_emotion_recognition_loading.setText(
-            _translate("MainWindow", "Emotion recognition"))
-        self.label_emotion_recognition_info_loading.setText(
-            _translate("MainWindow", "Detecting your emotion, please wait..."))
         self.label_dashboard_2.setText(_translate("MainWindow", "Settings"))
         self.Btn_settings_hand_gesture.setText(
             _translate("MainWindow", "Hand gesture"))
@@ -1201,10 +1076,10 @@ class Ui_MainWindow(object):
             _translate("MainWindow", "Artist name"))
 
     def change_label_player_track_in_navigator(
-        self,
-        MainWindow,
-        trackName: str = "Song name",
-        artistName: str = "Artist name"
+            self,
+            MainWindow,
+            trackName: str = "Song name",
+            artistName: str = "Artist name"
     ):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
