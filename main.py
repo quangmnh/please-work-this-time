@@ -254,6 +254,8 @@ class MainWindow(QMainWindow):
     def on_open_bluetooth_page(self):
         # Bluetooth settings page display change
         if (self.bluetooth.get_paired_device() != None):
+            print("[DEBUG] current bluetooth device: ",
+                  self.bluetooth.get_paired_device())
             self.ui.btn_settings_bluetooth_scan_devices.setText(
                 "Device info: " + self.bluetooth.get_paired_device()["name"])
             self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
