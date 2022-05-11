@@ -320,7 +320,7 @@ class MainWindow(QMainWindow):
             return None
         else:
             disconnect_result = self.bluetooth.disconnect_device(device["mac"])
-            if disconnect_result == 0:
+            if disconnect_result != None:
                 if (self.bluetooth.get_paired_device() != None):
                     print("[DEBUG] disconnect current bluetooth device: ",
                           self.bluetooth.get_paired_device())
@@ -334,6 +334,8 @@ class MainWindow(QMainWindow):
                         "Scan devices")
                     self.ui.btn_settings_bluetooth_scan_devices.setDisabled(
                         False)
+            else:
+                print("[DEBUG] Went down here")
             return 0
     # END: Bluetooth
 
