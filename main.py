@@ -186,9 +186,9 @@ class MainWindow(QMainWindow):
         self.ui.Btn_menu_settings.clicked.connect(
             lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings))
 
-        # SETTINGS: HAND GESTURE PAGE
-        self.ui.Btn_settings_hand_gesture.clicked.connect(
-            lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings_hand_gesture))
+        # # SETTINGS: HAND GESTURE PAGE
+        # self.ui.Btn_settings_hand_gesture.clicked.connect(
+        #     lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings_hand_gesture))
         # SETTINGS: EMOTION PLAYLIST MAP PAGE
         self.ui.Btn_settings_emotion_map.clicked.connect(
             lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings_emotion_playlist_map))
@@ -277,8 +277,9 @@ class MainWindow(QMainWindow):
     def on_add_songs_from_usb(self):
         auto_detect_music_in_usb()
         updateTrackDatabaseFromFolderToJsonFile(
-            track_folder=os.path.join(
-                'C:/', 'Users', 'Victus', 'Downloads', 'Music'),
+            # track_folder=os.path.join(
+            # 'C:/', 'Users', 'Victus', 'Downloads', 'Music'),
+            track_folder=os.path.join('/home/quangmnh/Music'),
             json_dir=json_dir
         )
 
@@ -305,43 +306,48 @@ class MainWindow(QMainWindow):
 
     def on_scan_bluetooth_devices(self):
         # TODO: Scan bluetooth devices
+        bluetooth_devices = None
         if self.bluetooth.get_paired_device() is None:
             bluetooth_devices = self.bluetooth.bluetooth_scan()
         # else:
         #     bluetooth_devices = self.bluetooth.get_paired_device()
-        display_list_item(self.ui.listWidget_settings_bluetooth_devices, [BluetoothDevice(
-            device, on_connect_device=self.on_connect_device) for device in bluetooth_devices])
+        if bluetooth_devices is not None:
+            display_list_item(self.ui.listWidget_settings_bluetooth_devices, [BluetoothDevice(
+                device, on_connect_device=self.on_connect_device) for device in bluetooth_devices])
+
+    def on_connect_device(self, device_info):
+        # TODO: Connect to device
+        self.bluetooth.connect_device(device_info["name"], device_info["mac"])
         if (self.bluetooth.get_paired_device() != None):
             print("[DEBUG] current bluetooth device: ",
                   self.bluetooth.get_paired_device())
             self.ui.btn_settings_bluetooth_scan_devices.setText(
                 "Device info: " + self.bluetooth.get_paired_device()["name"])
             self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
+            self.ui.listWidget_settings_bluetooth_devices.clear()
         else:
             self.ui.btn_settings_bluetooth_scan_devices.setText("Scan devices")
             self.ui.btn_settings_bluetooth_scan_devices.setDisabled(False)
-
-    def on_connect_device(self, device_info):
-        # TODO: Connect to device
-        self.bluetooth.connect_device(device_info["name"], device_info["mac"])
-        self.on_scan_bluetooth_devices()
+            self.ui.listWidget_settings_bluetooth_devices.clear()
+        # self.on_scan_bluetooth_devices()
 
     def on_disconnect_device(self):
         device = self.bluetooth.get_paired_device()
         if device is None:
             return None
         else:
-            self.bluetooth.disconnect_device(device["mac"])
-            if (self.bluetooth.get_paired_device() != None):
-                print("[DEBUG] current bluetooth device: ",
-                      self.bluetooth.get_paired_device())
-                self.ui.btn_settings_bluetooth_scan_devices.setText(
-                    "Device info: " + self.bluetooth.get_paired_device()["name"])
-                self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
-            else:
-                self.ui.btn_settings_bluetooth_scan_devices.setText(
-                    "Scan devices")
-                self.ui.btn_settings_bluetooth_scan_devices.setDisabled(False)
+            disconnect_result = self.bluetooth.disconnect_device(device["mac"])
+            if disconnect_result != None:
+                if (self.bluetooth.get_paired_device() != None):
+                    self.ui.btn_settings_bluetooth_scan_devices.setText(
+                        "Device info: " + self.bluetooth.get_paired_device()["name"])
+                    self.ui.btn_settings_bluetooth_scan_devices.setDisabled(
+                        True)
+                else:
+                    self.ui.btn_settings_bluetooth_scan_devices.setText(
+                        "Scan devices")
+                    self.ui.btn_settings_bluetooth_scan_devices.setDisabled(
+                        False)
             return 0
     # END: Bluetooth
 
@@ -452,12 +458,15 @@ class MainWindow(QMainWindow):
             self.media_player.curr_emotion_playlist = self.media_player.surprise_list
 
         self.media_player.playBack = self.media_player.curr_emotion_playlist.getTrackList()
-        self.change_playlist_page(
-            self.ui.Pages_Widget,
-            self.media_player.curr_emotion_playlist.getPlaylistName(),
-        )
+        # self.change_playlist_page(
+        #     self.ui.Pages_Widget,
+        #     self.media_player.curr_emotion_playlist.getPlaylistName(),
+        # )
 
         self.on_playlist_play(self.media_player.playBack)
+        self.ui.label_fer_result.setText("Your current emotion is " + true_label +
+                                         "\n Playing playlist " + self.media_player.curr_emotion_playlist.getPlaylistName())
+        self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition)
 
     # END: Emotion recognition
 

@@ -126,7 +126,12 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(15)
         self.listWidget_playlists.setFont(font)
-        self.listWidget_playlists.setStyleSheet("color: #FFF;")
+        self.listWidget_playlists.setStyleSheet("QListWidget::item {\n"
+                                                "    color: #FFF;\n"
+                                                "}\n"
+                                                "QListWidget::item:selected {\n"
+                                                "    background: transparent;\n"
+                                                "}")
         self.listWidget_playlists.setObjectName("listWidget_playlists")
         self.verticalLayout_3.addWidget(self.listWidget_playlists)
         self.Btn_Settings = QtWidgets.QPushButton(self.frame_top_menus)
@@ -389,23 +394,23 @@ class Ui_MainWindow(object):
         self.label_dashboard_2.setStyleSheet("color: #FFF;")
         self.label_dashboard_2.setObjectName("label_dashboard_2")
         self.verticalLayout_14.addWidget(self.label_dashboard_2)
-        self.Btn_settings_hand_gesture = QtWidgets.QPushButton(
-            self.frame_settings)
-        self.Btn_settings_hand_gesture.setMinimumSize(QtCore.QSize(0, 60))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.Btn_settings_hand_gesture.setFont(font)
-        self.Btn_settings_hand_gesture.setStyleSheet("QPushButton {\n"
-                                                     "    color: rgb(255,255,255);\n"
-                                                     "     background-color: rgb(45,45,45);\n"
-                                                     "    border: 0px solid;\n"
-                                                     "}\n"
-                                                     "QPushButton:hover {\n"
-                                                     "    background-color: rgb(85, 170, 255);\n"
-                                                     "}")
-        self.Btn_settings_hand_gesture.setObjectName(
-            "Btn_settings_hand_gesture")
-        self.verticalLayout_14.addWidget(self.Btn_settings_hand_gesture)
+        # self.Btn_settings_hand_gesture = QtWidgets.QPushButton(
+        #     self.frame_settings)
+        # self.Btn_settings_hand_gesture.setMinimumSize(QtCore.QSize(0, 60))
+        # font = QtGui.QFont()
+        # font.setPointSize(15)
+        # self.Btn_settings_hand_gesture.setFont(font)
+        # self.Btn_settings_hand_gesture.setStyleSheet("QPushButton {\n"
+        #                                              "    color: rgb(255,255,255);\n"
+        #                                              "     background-color: rgb(45,45,45);\n"
+        #                                              "    border: 0px solid;\n"
+        #                                              "}\n"
+        #                                              "QPushButton:hover {\n"
+        #                                              "    background-color: rgb(85, 170, 255);\n"
+        #                                              "}")
+        # self.Btn_settings_hand_gesture.setObjectName(
+        #     "Btn_settings_hand_gesture")
+        # self.verticalLayout_14.addWidget(self.Btn_settings_hand_gesture)
         self.Btn_settings_emotion_map = QtWidgets.QPushButton(
             self.frame_settings)
         self.Btn_settings_emotion_map.setMinimumSize(QtCore.QSize(0, 60))
@@ -794,6 +799,12 @@ class Ui_MainWindow(object):
         self.listWidget_settings_bluetooth_devices.setFont(font)
         self.listWidget_settings_bluetooth_devices.setObjectName(
             "listWidget_settings_bluetooth_devices")
+        self.listWidget_settings_bluetooth_devices.setStyleSheet("QListWidget::item {\n"
+                                                                 "    color: #FFF;\n"
+                                                                 "}\n"
+                                                                 "QListWidget::item:selected {\n"
+                                                                 "    background: transparent;\n"
+                                                                 "}")
         self.verticalLayout_18.addWidget(
             self.listWidget_settings_bluetooth_devices)
         self.verticalLayout_19.addWidget(self.frame_settings_bluetooth)
@@ -823,7 +834,13 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(15)
         self.listWidget_library_songs.setFont(font)
-        self.listWidget_library_songs.setStyleSheet("color: #FFF;")
+        # self.listWidget_library_songs.setStyleSheet("color: #FFF;")
+        self.listWidget_library_songs.setStyleSheet("QListWidget::item {\n"
+                                                    "    color: #FFF;\n"
+                                                    "}\n"
+                                                    "QListWidget::item:selected {\n"
+                                                    "    background: transparent;\n"
+                                                    "}")
         self.listWidget_library_songs.setObjectName("listWidget_library_songs")
         self.verticalLayout_10.addWidget(self.listWidget_library_songs)
         self.verticalLayout_9.addWidget(self.frame_library)
@@ -1161,8 +1178,8 @@ class Ui_MainWindow(object):
         self.label_emotion_recognition_info_loading.setText(
             _translate("MainWindow", "Detecting your emotion, please wait..."))
         self.label_dashboard_2.setText(_translate("MainWindow", "Settings"))
-        self.Btn_settings_hand_gesture.setText(
-            _translate("MainWindow", "Hand gesture"))
+        # self.Btn_settings_hand_gesture.setText(
+        #     _translate("MainWindow", "Hand gesture"))
         self.Btn_settings_emotion_map.setText(
             _translate("MainWindow", "Emotion Playlist map"))
         self.Btn_settings_bluetooth.setText(

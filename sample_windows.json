@@ -42,10 +42,56 @@
             "url": "C:/Users\\Victus\\Downloads\\Music\\SauTatCa-MONSTARERIKST319-4301357.mp3"
         }
     ],
-    "play_list": [],
-    "angry_playlist": -1,
-    "happy_playlist": -1,
-    "neutral_playlist": -1,
-    "sad_playlist": -1,
-    "surprise_playlist": -1
+    "play_list": [
+        {
+            "id": 0,
+            "name": "sad",
+            "count": 2,
+            "songlist": [
+                0,
+                1
+            ]
+        },
+        {
+            "id": 1,
+            "name": "happy",
+            "count": 2,
+            "songlist": [
+                0,
+                1
+            ]
+        },
+        {
+            "id": 2,
+            "name": "angry",
+            "count": 2,
+            "songlist": [
+                0,
+                1
+            ]
+        },
+        {
+            "id": 3,
+            "name": "neutral",
+            "count": 2,
+            "songlist": [
+                0,
+                1
+            ]
+        },
+        {
+            "id": 4,
+            "name": "surprise",
+            "count": 2,
+            "songlist": [
+                0,
+                1
+            ]
+        }
+    ],
+    "angry_playlist": 2,
+    "happy_playlist": 1,
+    "neutral_playlist": 3,
+    "sad_playlist": 0,
+    "surprise_playlist": 4
 }
