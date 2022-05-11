@@ -23,9 +23,10 @@
             "name": "sad",
             "count": 2,
             "songlist": [
-                1,
-                0
-            ]
+                0,
+                1
+            ],
+            "emotion_map": "sad"
         },
         {
             "name": "happy",
@@ -33,34 +34,35 @@
             "songlist": [
                 0,
                 1
-            ]
-        }
-        ,
-        {
-            "name": "neutral",
-            "count": 2,
-            "songlist": [
-                0,
-                1
-            ]
-        }
-        ,
+            ],
+            "emotion_map": "happy"
+        },
         {
             "name": "angry",
             "count": 2,
             "songlist": [
                 0,
                 1
-            ]
-        }
-        ,
+            ],
+            "emotion_map": "angry"
+        },
+        {
+            "name": "neutral",
+            "count": 2,
+            "songlist": [
+                0,
+                1
+            ],
+            "emotion_map": "neutral"
+        },
         {
             "name": "surprise",
             "count": 2,
             "songlist": [
                 0,
                 1
-            ]
+            ],
+            "emotion_map": "surprise"
         }
     ]
 }

@@ -117,16 +117,34 @@ class MainWindow(QMainWindow):
             trackDB=trackDB
         )
 
-        for playlistPage in self.media_player.playlistList:
+        for play_list in self.media_player.playlistList:
             self.add_playlist_page(
                 self.ui.Pages_Widget,
-                playlistPage.getPlaylistName(),
+                play_list.getPlaylistName(),
                 self.ui.listWidget_playlists,
-                playlistPage.getTrackList()
+                play_list.getTrackList()
             )
 
             self.clearAllComboBox()
             self.updateAllComboBox()
+
+            if play_list.emotion_map == "happy":
+                self.media_player.happy_list = play_list
+                self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText(play_list.getPlaylistName())
+            elif play_list.emotion_map == "sad":
+                self.media_player.sad_list = play_list
+                self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText(play_list.getPlaylistName())
+            elif play_list.emotion_map == "angry":
+                self.media_player.angry_list = play_list
+                self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText(play_list.getPlaylistName())
+            elif play_list.emotion_map == "neutral":
+                self.media_player.neutral_list = play_list
+                self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText(play_list.getPlaylistName())
+            elif play_list.emotion_map == "surprise":
+                self.media_player.surprise_list = play_list
+                self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(play_list.getPlaylistName())
+            else:
+                pass
 
         # PAGES
         ########################################################################
@@ -624,7 +642,8 @@ class MainWindow(QMainWindow):
                 new_data = {
                     "name": playlist_name,
                     "count": 0,
-                    "songlist": []
+                    "songlist": [],
+                    "emotion_map": "None"
                 }
                 play_list.append(new_data)
 
