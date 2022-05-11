@@ -261,8 +261,9 @@ class MainWindow(QMainWindow):
     def on_add_songs_from_usb(self):
         auto_detect_music_in_usb()
         updateTrackDatabaseFromFolderToJsonFile(
-            track_folder=os.path.join(
-                'C:/', 'Users', 'Victus', 'Downloads', 'Music'),
+            # track_folder=os.path.join(
+                # 'C:/', 'Users', 'Victus', 'Downloads', 'Music'),
+            track_folder=os.path.join('/home/quangmnh/Music'),
             json_dir=json_dir
         )
 

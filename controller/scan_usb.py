@@ -41,7 +41,8 @@ def detect_music_file(path):
     music_file = []
     for root, dirs, files in os.walk(path):
         for file in files:
-            if file.endswith(('.ogg', '.mp3', '.wav', '.flac')):
+            # if file.endswith(('.ogg', '.mp3', '.wav', '.flac')):
+            if file.endswith(('.mp3')):
                 # print(file)
                 music_file.append(os.path.join(root, file))
     return music_file
@@ -62,8 +63,9 @@ def auto_detect_music_in_usb():
     usb_path = find_usb_path()
     app_folder_path = ''
     if (sys.platform == 'win32'):
-        app_folder_path = os.path.join("C:/", "Users", "Victus", "Downloads", "Music")
+        app_folder_path = os.path.join(
+            "C:/", "Users", "Victus", "Downloads", "Music")
     elif (sys.platform == 'linux'):
-        app_folder_path = '/home/music'
+        app_folder_path = '/home/quangmnh/Music'
     for i in usb_path:
         copy_music_from_A_to_B(i, app_folder_path)
