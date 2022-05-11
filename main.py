@@ -430,7 +430,7 @@ class MainWindow(QMainWindow):
             "Surprise": 0,
         }
         start = time()
-        while time() - start < 8:
+        while time() - start < 4:
             frame = self.camera.get_frame()
             if frame is None:
                 # print("frame is none")
