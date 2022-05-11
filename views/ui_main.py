@@ -394,23 +394,23 @@ class Ui_MainWindow(object):
         self.label_dashboard_2.setStyleSheet("color: #FFF;")
         self.label_dashboard_2.setObjectName("label_dashboard_2")
         self.verticalLayout_14.addWidget(self.label_dashboard_2)
-        self.Btn_settings_hand_gesture = QtWidgets.QPushButton(
-            self.frame_settings)
-        self.Btn_settings_hand_gesture.setMinimumSize(QtCore.QSize(0, 60))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.Btn_settings_hand_gesture.setFont(font)
-        self.Btn_settings_hand_gesture.setStyleSheet("QPushButton {\n"
-                                                     "    color: rgb(255,255,255);\n"
-                                                     "     background-color: rgb(45,45,45);\n"
-                                                     "    border: 0px solid;\n"
-                                                     "}\n"
-                                                     "QPushButton:hover {\n"
-                                                     "    background-color: rgb(85, 170, 255);\n"
-                                                     "}")
-        self.Btn_settings_hand_gesture.setObjectName(
-            "Btn_settings_hand_gesture")
-        self.verticalLayout_14.addWidget(self.Btn_settings_hand_gesture)
+        # self.Btn_settings_hand_gesture = QtWidgets.QPushButton(
+        #     self.frame_settings)
+        # self.Btn_settings_hand_gesture.setMinimumSize(QtCore.QSize(0, 60))
+        # font = QtGui.QFont()
+        # font.setPointSize(15)
+        # self.Btn_settings_hand_gesture.setFont(font)
+        # self.Btn_settings_hand_gesture.setStyleSheet("QPushButton {\n"
+        #                                              "    color: rgb(255,255,255);\n"
+        #                                              "     background-color: rgb(45,45,45);\n"
+        #                                              "    border: 0px solid;\n"
+        #                                              "}\n"
+        #                                              "QPushButton:hover {\n"
+        #                                              "    background-color: rgb(85, 170, 255);\n"
+        #                                              "}")
+        # self.Btn_settings_hand_gesture.setObjectName(
+        #     "Btn_settings_hand_gesture")
+        # self.verticalLayout_14.addWidget(self.Btn_settings_hand_gesture)
         self.Btn_settings_emotion_map = QtWidgets.QPushButton(
             self.frame_settings)
         self.Btn_settings_emotion_map.setMinimumSize(QtCore.QSize(0, 60))
@@ -836,11 +836,11 @@ class Ui_MainWindow(object):
         self.listWidget_library_songs.setFont(font)
         # self.listWidget_library_songs.setStyleSheet("color: #FFF;")
         self.listWidget_library_songs.setStyleSheet("QListWidget::item {\n"
-                                                     "    color: #FFF;\n"
-                                                     "}\n"
-                                                     "QListWidget::item:selected {\n"
-                                                     "    background: transparent;\n"
-                                                     "}")
+                                                    "    color: #FFF;\n"
+                                                    "}\n"
+                                                    "QListWidget::item:selected {\n"
+                                                    "    background: transparent;\n"
+                                                    "}")
         self.listWidget_library_songs.setObjectName("listWidget_library_songs")
         self.verticalLayout_10.addWidget(self.listWidget_library_songs)
         self.verticalLayout_9.addWidget(self.frame_library)

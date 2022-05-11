@@ -170,9 +170,9 @@ class MainWindow(QMainWindow):
         self.ui.Btn_menu_settings.clicked.connect(
             lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings))
 
-        # SETTINGS: HAND GESTURE PAGE
-        self.ui.Btn_settings_hand_gesture.clicked.connect(
-            lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings_hand_gesture))
+        # # SETTINGS: HAND GESTURE PAGE
+        # self.ui.Btn_settings_hand_gesture.clicked.connect(
+        #     lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings_hand_gesture))
         # SETTINGS: EMOTION PLAYLIST MAP PAGE
         self.ui.Btn_settings_emotion_map.clicked.connect(
             lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings_emotion_playlist_map))
@@ -262,7 +262,7 @@ class MainWindow(QMainWindow):
         auto_detect_music_in_usb()
         updateTrackDatabaseFromFolderToJsonFile(
             # track_folder=os.path.join(
-                # 'C:/', 'Users', 'Victus', 'Downloads', 'Music'),
+            # 'C:/', 'Users', 'Victus', 'Downloads', 'Music'),
             track_folder=os.path.join('/home/quangmnh/Music'),
             json_dir=json_dir
         )
@@ -427,12 +427,15 @@ class MainWindow(QMainWindow):
             self.media_player.curr_emotion_playlist = self.media_player.surprise_list
 
         self.media_player.playBack = self.media_player.curr_emotion_playlist.getTrackList()
-        self.change_playlist_page(
-            self.ui.Pages_Widget,
-            self.media_player.curr_emotion_playlist.getPlaylistName(),
-        )
+        # self.change_playlist_page(
+        #     self.ui.Pages_Widget,
+        #     self.media_player.curr_emotion_playlist.getPlaylistName(),
+        # )
 
         self.on_playlist_play(self.media_player.playBack)
+        self.ui.label_fer_result.setText("Your current emotion is " + true_label +
+                                         "\n Playing playlist " + self.media_player.curr_emotion_playlist.getPlaylistName())
+        self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition)
 
     # END: Emotion recognition
 
