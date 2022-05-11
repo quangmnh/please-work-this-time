@@ -8,9 +8,9 @@ import os
 def createJsonData(
         track_folder: str,
         # Adding parameter for playlist, if any
-        numOfPlaylists: int = 2,
+        numOfPlaylists: int = 5,
         json_save_dir: str = os.path.join(os.getcwd()),
-        json_file_name: str = "sample.json"
+        json_file_name: str = "sample_windows.json"
 ):
     track_dir = os.path.join(track_folder)
 
@@ -42,10 +42,10 @@ def createJsonData(
         name = "sad"
         count = len(songlist)
         playlist_data = {
+            "id": idx,
             "name": name,
             "count": count,
-            "songlist": songlist,
-            "emotion_map": "happy"
+            "songlist": songlist
         }
         playlist.append(playlist_data)
 
@@ -53,7 +53,12 @@ def createJsonData(
     json_data = {
         "profile": username,
         "songdb": songdb,
-        "play_list": playlist
+        "play_list": playlist,
+        "angry_playlist": 0,
+        "happy_playlist": 1,
+        "neutral_playlist": 2,
+        "sad_playlist": 3,
+        "surprise_playlist": 4
     }
 
     with open(f'{json_save_dir}{json_file_name}', "w", encoding='utf-8') as f:
@@ -89,6 +94,29 @@ def updateTrackDatabaseFromFolderToJsonFile(
         data = json.load(f)
 
         data['songdb'] = songdb
+
+    with open(json_dir, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=4)
+
+
+def updateEmotionPlaylistJson(
+        json_dir: str,
+        emotion: str,
+        playlistIndex: int = 0
+):
+    with open(json_dir, encoding='utf-8') as f:
+        data = json.load(f)
+
+        if emotion == 'angry':
+            data['angry_playlist'] = playlistIndex
+        elif emotion == 'happy':
+            data['happy_playlist'] = playlistIndex
+        elif emotion == 'neutral':
+            data['neutral_playlist'] = playlistIndex
+        elif emotion == 'sad':
+            data['sad_playlist'] = playlistIndex
+        else:
+            data['surprise_playlist'] = playlistIndex
 
     with open(json_dir, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4)

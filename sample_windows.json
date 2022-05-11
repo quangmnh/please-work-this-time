@@ -7,7 +7,7 @@
             "artist": "Lee Andy",
             "duration": 295,
             "image_url": "https://sakjdlsadjsa.com",
-            "url": "C:\\Users\\Victus\\Downloads\\Music\\AnGiAnhMoi.mp3"
+            "url": "C:/Users\\Victus\\Downloads\\Music\\AnGiAnhMoi.mp3"
         },
         {
             "id": 1,
@@ -15,7 +15,7 @@
             "artist": "Lou Ho\u00e0ng",
             "duration": 34,
             "image_url": "https://sakjdlsadjsa.com",
-            "url": "C:\\Users\\Victus\\Downloads\\Music\\CamGiacLucAySeRaSao.mp3"
+            "url": "C:/Users\\Victus\\Downloads\\Music\\CamGiacLucAySeRaSao.mp3"
         },
         {
             "id": 2,
@@ -23,7 +23,7 @@
             "artist": "Th\u1ecbnh Suy",
             "duration": 272,
             "image_url": "https://sakjdlsadjsa.com",
-            "url": "C:\\Users\\Victus\\Downloads\\Music\\ChuyenRang1-ThinhSuy-6465355.mp3"
+            "url": "C:/Users\\Victus\\Downloads\\Music\\ChuyenRang1-ThinhSuy-6465355.mp3"
         },
         {
             "id": 3,
@@ -31,7 +31,7 @@
             "artist": "Charlie Puth",
             "duration": 198,
             "image_url": "https://sakjdlsadjsa.com",
-            "url": "C:\\Users\\Victus\\Downloads\\Music\\HowLong-CharliePuth-5201892.mp3"
+            "url": "C:/Users\\Victus\\Downloads\\Music\\HowLong-CharliePuth-5201892.mp3"
         },
         {
             "id": 4,
@@ -39,25 +39,13 @@
             "artist": "MONSTAR (ERIK ST.319)",
             "duration": 235,
             "image_url": "https://sakjdlsadjsa.com",
-            "url": "C:\\Users\\Victus\\Downloads\\Music\\SauTatCa-MONSTARERIKST319-4301357.mp3"
+            "url": "C:/Users\\Victus\\Downloads\\Music\\SauTatCa-MONSTARERIKST319-4301357.mp3"
         }
     ],
-    "play_list": [
-        {
-            "name": "sad",
-            "count": 2,
-            "songlist": [
-                1,
-                0
-            ]
-        },
-        {
-            "name": "happy",
-            "count": 2,
-            "songlist": [
-                0,
-                1
-            ]
-        }
-    ]
+    "play_list": [],
+    "angry_playlist": -1,
+    "happy_playlist": -1,
+    "neutral_playlist": -1,
+    "sad_playlist": -1,
+    "surprise_playlist": -1
 }

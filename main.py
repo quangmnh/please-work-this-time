@@ -28,7 +28,7 @@ from utils1.snake_case import snake_case
 # Controllers
 from controller.MusicPlayer import MusicPlayer, getDBFromJSON, getPlaylistList, PlayList
 from controller.scan_usb import auto_detect_music_in_usb
-from controller.create_json import updateTrackDatabaseFromFolderToJsonFile
+from controller.create_json import updateTrackDatabaseFromFolderToJsonFile, updateEmotionPlaylistJson
 from utils1.utils import *
 
 import sys
@@ -36,8 +36,8 @@ import platform
 import random
 from time import time
 
-from controller.model_manager import *
-from controller.blutooth_controller import *
+# from controller.model_manager import *
+# from controller.blutooth_controller import *
 
 # EXAMPLE DATA
 ############################################
@@ -86,12 +86,12 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         # comment this section for windows testing and set these to None, fuk u all windows users
-        self.camera = CameraManagement()
-        self.face_recognition = ONNXClassifierWrapper2(
-            "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
-        self.emotion_recognition = ONNXClassifierWrapper(
-            "controller/new_model.trt", [1, 5], target_dtype=np.float32)
-        self.bluetooth = BluetoothController(10)
+        # self.camera = CameraManagement()
+        # self.face_recognition = ONNXClassifierWrapper2(
+        #     "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
+        # self.emotion_recognition = ONNXClassifierWrapper(
+        #     "controller/new_model.trt", [1, 5], target_dtype=np.float32)
+        # self.bluetooth = BluetoothController(10)
 
         # Icons
         self.play_icon = PlayIcon()
@@ -125,26 +125,47 @@ class MainWindow(QMainWindow):
                 play_list.getTrackList()
             )
 
-            self.clearAllComboBox()
-            self.updateAllComboBox()
+        self.clearAllComboBox()
+        self.updateAllComboBox()
 
-            if play_list.emotion_map == "happy":
-                self.media_player.happy_list = play_list
-                self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText(play_list.getPlaylistName())
-            elif play_list.emotion_map == "sad":
-                self.media_player.sad_list = play_list
-                self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText(play_list.getPlaylistName())
-            elif play_list.emotion_map == "angry":
-                self.media_player.angry_list = play_list
-                self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText(play_list.getPlaylistName())
-            elif play_list.emotion_map == "neutral":
-                self.media_player.neutral_list = play_list
-                self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText(play_list.getPlaylistName())
-            elif play_list.emotion_map == "surprise":
-                self.media_player.surprise_list = play_list
-                self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(play_list.getPlaylistName())
+        with open(json_dir, encoding='utf-8') as f:
+            data = json.load(f)
+
+            if data['angry_playlist'] < 0:
+                self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText('None')
             else:
-                pass
+                self.media_player.angry_list = self.media_player.playlistList[data['angry_playlist']]
+                self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText(
+                    self.media_player.angry_list.getPlaylistName())
+
+            if data['happy_playlist'] < 0:
+                self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText('None')
+            else:
+                self.media_player.happy_list = self.media_player.playlistList[data['happy_playlist']]
+                self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText(
+                    self.media_player.happy_list.getPlaylistName())
+
+            if data['neutral_playlist'] < 0:
+                self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText('None')
+            else:
+                self.media_player.neutral_list = self.media_player.playlistList[data['neutral_playlist']]
+                self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText(
+                    self.media_player.neutral_list.getPlaylistName())
+
+            if data['sad_playlist'] < 0:
+                self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText('None')
+            else:
+                self.media_player.sad_list = self.media_player.playlistList[data['sad_playlist']]
+                self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText(
+                    self.media_player.sad_list.getPlaylistName())
+
+            if data['surprise_playlist'] < 0:
+                self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText('None')
+            else:
+                self.media_player.surprise_list = self.media_player.playlistList[data['surprise_playlist']]
+                self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(
+                    self.media_player.surprise_list.getPlaylistName())
+
 
         # PAGES
         ########################################################################
@@ -327,23 +348,38 @@ class MainWindow(QMainWindow):
     # Emotion Map
     def on_emotion_map_happy(self, playlistIndex: int):
         # TODO: Assign playlist to happy emotion according to user's input
+        if playlistIndex < 0:
+            return
         self.media_player.happy_list = self.media_player.playlistList[playlistIndex]
+        updateEmotionPlaylistJson(json_dir, 'happy', playlistIndex)
 
     def on_emotion_map_sad(self, playlistIndex: int):
         # TODO: Assign playlist to sad emotion according to user's input
+        if playlistIndex < 0:
+            return
         self.media_player.sad_list = self.media_player.playlistList[playlistIndex]
+        updateEmotionPlaylistJson(json_dir, 'sad', playlistIndex)
 
     def on_emotion_map_angry(self, playlistIndex: int):
         # TODO: Assign playlist to angry emotion according to user's input
+        if playlistIndex < 0:
+            return
         self.media_player.angry_list = self.media_player.playlistList[playlistIndex]
+        updateEmotionPlaylistJson(json_dir, 'angry', playlistIndex)
 
     def on_emotion_map_surprise(self, playlistIndex: int):
         # TODO: Assign playlist to surprise emotion according to user's input
+        if playlistIndex < 0:
+            return
         self.media_player.surprise_list = self.media_player.playlistList[playlistIndex]
+        updateEmotionPlaylistJson(json_dir, 'surprise', playlistIndex)
 
     def on_emotion_map_neutral(self, playlistIndex: int):
         # TODO: Assign playlist to neutral emotion according to user's input
+        if playlistIndex < 0:
+            return
         self.media_player.neutral_list = self.media_player.playlistList[playlistIndex]
+        updateEmotionPlaylistJson(json_dir, 'neutral', playlistIndex)
     # END : Emotion Map
 
     # Hand gesture
@@ -638,6 +674,7 @@ class MainWindow(QMainWindow):
                 play_list = data.get('play_list')
 
                 new_data = {
+                    "id": len(self.media_player.playlistList),
                     "name": playlist_name,
                     "count": 0,
                     "songlist": [],
@@ -646,6 +683,44 @@ class MainWindow(QMainWindow):
                 play_list.append(new_data)
 
                 data['play_list'] = play_list
+
+                self.clearAllComboBox()
+                self.updateAllComboBox()
+
+                if data['angry_playlist'] < 0:
+                    self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText('None')
+                else:
+                    self.media_player.angry_list = self.media_player.playlistList[data['angry_playlist']]
+                    self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText(
+                        self.media_player.angry_list.getPlaylistName())
+
+                if data['happy_playlist'] < 0:
+                    self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText('None')
+                else:
+                    self.media_player.happy_list = self.media_player.playlistList[data['happy_playlist']]
+                    self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText(
+                        self.media_player.happy_list.getPlaylistName())
+
+                if data['neutral_playlist'] < 0:
+                    self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText('None')
+                else:
+                    self.media_player.neutral_list = self.media_player.playlistList[data['neutral_playlist']]
+                    self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText(
+                        self.media_player.neutral_list.getPlaylistName())
+
+                if data['sad_playlist'] < 0:
+                    self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText('None')
+                else:
+                    self.media_player.sad_list = self.media_player.playlistList[data['sad_playlist']]
+                    self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText(
+                        self.media_player.sad_list.getPlaylistName())
+
+                if data['surprise_playlist'] < 0:
+                    self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText('None')
+                else:
+                    self.media_player.surprise_list = self.media_player.playlistList[data['surprise_playlist']]
+                    self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(
+                        self.media_player.surprise_list.getPlaylistName())
 
             with open(json_dir, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=4)
@@ -691,15 +766,10 @@ class MainWindow(QMainWindow):
         # Add page to page stack
         page_widget.addWidget(playlist_page)
 
-        self.clearAllComboBox()
-        self.updateAllComboBox()
-
     def change_playlist_page(
             self,
             page_widget: QtWidgets.QStackedWidget,
-            playlist_name: str,
-            # track_list: "list[dict]",
-            # trackList: "list[Track]"
+            playlist_name: str
     ):
         # TODO: Display the playlist songs here also
         num_page = page_widget.count()
@@ -753,6 +823,12 @@ class MainWindow(QMainWindow):
                 page_widget.setCurrentIndex(0)
                 break
 
+        # Delete playlist in playlistList of Music player
+        self.media_player.deletePlaylist(playlist_name)
+
+        # Remove label from list widget
+        playlist_list_widget.takeItem(playlist_list_widget.row(playlist_label))
+
         with open(json_dir, encoding='utf-8') as f:
             data = json.load(f)
 
@@ -762,18 +838,24 @@ class MainWindow(QMainWindow):
                 if playlist['name'] == playlist_name:
                     break
                 idx += 1
-            del play_list[idx]
 
             data['play_list'] = play_list
 
+            if data['angry_playlist'] == playlist['id']:
+                data['angry_playlist'] = -1
+            elif data['happy_playlist'] == playlist['id']:
+                data['happy_playlist'] = -1
+            elif data['neutral_playlist'] == playlist['id']:
+                data['neutral_playlist'] = -1
+            elif data['sad_playlist'] == playlist['id']:
+                data['sad_playlist'] = -1
+            else:
+                data['surprise_playlist'] = -1
+
+            del play_list[idx]
+
         with open(json_dir, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=4)
-
-        # Delete playlist in playlistList of Music player
-        self.media_player.deletePlaylist(playlist_name)
-
-        # Remove label from list widget
-        playlist_list_widget.takeItem(playlist_list_widget.row(playlist_label))
 
         self.clearAllComboBox()
         self.updateAllComboBox()
@@ -863,6 +945,12 @@ class MainWindow(QMainWindow):
     # END : HANDLERS #######################################################
 
     def updateAllComboBox(self):
+        # self.ui.comboBox_settings_emotion_playlist_map_happy.addItem('None')
+        # self.ui.comboBox_settings_emotion_playlist_map_sad.addItem('None')
+        # self.ui.comboBox_settings_emotion_playlist_map_neutral.addItem('None')
+        # self.ui.comboBox_settings_emotion_playlist_map_surprise.addItem('None')
+        # self.ui.comboBox_settings_emotion_playlist_map_angry.addItem('None')
+
         for playlistPage in self.media_player.playlistList:
             self.ui.comboBox_settings_emotion_playlist_map_happy.addItem(
                 playlistPage.getPlaylistName())
@@ -886,7 +974,7 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    json_dir = os.path.join('sample.json')
+    json_dir = os.path.join('sample_windows.json')
 
     trackDB = getDBFromJSON(json_dir)
     library_songs = convert_from_track_list_to_list_dict(

@@ -88,13 +88,11 @@ class PlayList:
     def __init__(
             self,
             trackList: "list[Track]" = [],
-            name: str = "Unknown",
-            emotion_map: str = "None"
+            name: str = "Unknown"
     ) -> None:
         self.playListName = name
         self.numOfTracks = len(trackList)
         self.trackList = trackList
-        self.emotion_map = emotion_map
 
     def addTrack(
             self,
@@ -294,8 +292,7 @@ def getPlaylistList(
 
             playlist = PlayList(
                 trackList=trackList,
-                name=playlist_info.get("name"),
-                emotion_map=playlist_info.get("emotion_map")
+                name=playlist_info.get("name")
             )
 
             if playlist is not None:
