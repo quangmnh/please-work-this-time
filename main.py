@@ -983,7 +983,7 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    json_dir = os.path.join('sample_windows.json')
+    json_dir = os.path.join('sample.json')
 
     trackDB = getDBFromJSON(json_dir)
     library_songs = convert_from_track_list_to_list_dict(
