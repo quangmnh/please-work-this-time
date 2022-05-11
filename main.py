@@ -323,14 +323,17 @@ class MainWindow(QMainWindow):
             if disconnect_result:
                 if (self.bluetooth.get_paired_device() != None):
                     print("[DEBUG] disconnect current bluetooth device: ",
-                        self.bluetooth.get_paired_device())
+                          self.bluetooth.get_paired_device())
                     self.ui.btn_settings_bluetooth_scan_devices.setText(
                         "Device info: " + self.bluetooth.get_paired_device()["name"])
-                    self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
+                    self.ui.btn_settings_bluetooth_scan_devices.setDisabled(
+                        True)
                 else:
+                    print("[DEBUG] disconnect successfully")
                     self.ui.btn_settings_bluetooth_scan_devices.setText(
                         "Scan devices")
-                    self.ui.btn_settings_bluetooth_scan_devices.setDisabled(False)
+                    self.ui.btn_settings_bluetooth_scan_devices.setDisabled(
+                        False)
             return 0
     # END: Bluetooth
 
