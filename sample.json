@@ -3,19 +3,43 @@
     "songdb": [
         {
             "id": 0,
-            "name": "ChimSau",
-            "artist": "MCK feat Trung Tran",
+            "name": "\u0102n G\u00ec Anh M\u1eddi - Lee Andy",
+            "artist": "Lee Andy",
             "duration": 295,
             "image_url": "https://sakjdlsadjsa.com",
-            "url": "/home/quangmnh/Music/ChimSau.mp3"
+            "url": "C:/Users\\Victus\\Downloads\\Music\\AnGiAnhMoi.mp3"
         },
         {
             "id": 1,
-            "name": "Soledad",
-            "artist": "Westlife",
+            "name": "C\u1ea3m Gi\u00e1c L\u00fac \u1ea4y S\u1ebd Ra Sao (Nh\u1ea1c Chu\u00f4ng)",
+            "artist": "Lou Ho\u00e0ng",
             "duration": 34,
             "image_url": "https://sakjdlsadjsa.com",
-            "url": "/home/quangmnh/Music/Soledad.mp3"
+            "url": "C:/Users\\Victus\\Downloads\\Music\\CamGiacLucAySeRaSao.mp3"
+        },
+        {
+            "id": 2,
+            "name": "Chuy\u1ec7n R\u1eb1ng 1",
+            "artist": "Th\u1ecbnh Suy",
+            "duration": 272,
+            "image_url": "https://sakjdlsadjsa.com",
+            "url": "C:/Users\\Victus\\Downloads\\Music\\ChuyenRang1-ThinhSuy-6465355.mp3"
+        },
+        {
+            "id": 3,
+            "name": "How Long",
+            "artist": "Charlie Puth",
+            "duration": 198,
+            "image_url": "https://sakjdlsadjsa.com",
+            "url": "C:/Users\\Victus\\Downloads\\Music\\HowLong-CharliePuth-5201892.mp3"
+        },
+        {
+            "id": 4,
+            "name": "Sau T\u1ea5t C\u1ea3 - MONSTAR (ERIK ST.319)",
+            "artist": "MONSTAR (ERIK ST.319)",
+            "duration": 235,
+            "image_url": "https://sakjdlsadjsa.com",
+            "url": "C:/Users\\Victus\\Downloads\\Music\\SauTatCa-MONSTARERIKST319-4301357.mp3"
         }
     ],
     "play_list": [
@@ -23,9 +47,11 @@
             "name": "sad",
             "count": 2,
             "songlist": [
+                0,
                 1,
-                0
-            ]
+                2
+            ],
+            "emotion_map": "sad"
         },
         {
             "name": "happy",
@@ -33,34 +59,8 @@
             "songlist": [
                 0,
                 1
-            ]
-        }
-        ,
-        {
-            "name": "neutral",
-            "count": 2,
-            "songlist": [
-                0,
-                1
-            ]
-        }
-        ,
-        {
-            "name": "angry",
-            "count": 2,
-            "songlist": [
-                0,
-                1
-            ]
-        }
-        ,
-        {
-            "name": "surprise",
-            "count": 2,
-            "songlist": [
-                0,
-                1
-            ]
+            ],
+            "emotion_map": "happy"
         }
     ]
 }

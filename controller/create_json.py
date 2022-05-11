@@ -44,7 +44,8 @@ def createJsonData(
         playlist_data = {
             "name": name,
             "count": count,
-            "songlist": songlist
+            "songlist": songlist,
+            "emotion_map": "happy"
         }
         playlist.append(playlist_data)
 
