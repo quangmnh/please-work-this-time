@@ -36,8 +36,8 @@ import platform
 import random
 from time import time
 
-# from controller.model_manager import *
-# from controller.blutooth_controller import *
+from controller.model_manager import *
+from controller.blutooth_controller import *
 
 # EXAMPLE DATA
 ############################################
@@ -86,12 +86,12 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         # comment this section for windows testing and set these to None, fuk u all windows users
-        # self.camera = CameraManagement()
-        # self.face_recognition = ONNXClassifierWrapper2(
-        #     "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
-        # self.emotion_recognition = ONNXClassifierWrapper(
-        #     "controller/new_model.trt", [1, 5], target_dtype=np.float32)
-        # self.bluetooth = BluetoothController(10)
+        self.camera = CameraManagement()
+        self.face_recognition = ONNXClassifierWrapper2(
+            "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
+        self.emotion_recognition = ONNXClassifierWrapper(
+            "controller/new_model.trt", [1, 5], target_dtype=np.float32)
+        self.bluetooth = BluetoothController(10)
 
         # Icons
         self.play_icon = PlayIcon()
