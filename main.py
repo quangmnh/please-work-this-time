@@ -130,19 +130,24 @@ class MainWindow(QMainWindow):
 
             if play_list.emotion_map == "happy":
                 self.media_player.happy_list = play_list
-                self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText(play_list.getPlaylistName())
+                self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText(
+                    play_list.getPlaylistName())
             elif play_list.emotion_map == "sad":
                 self.media_player.sad_list = play_list
-                self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText(play_list.getPlaylistName())
+                self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText(
+                    play_list.getPlaylistName())
             elif play_list.emotion_map == "angry":
                 self.media_player.angry_list = play_list
-                self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText(play_list.getPlaylistName())
+                self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText(
+                    play_list.getPlaylistName())
             elif play_list.emotion_map == "neutral":
                 self.media_player.neutral_list = play_list
-                self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText(play_list.getPlaylistName())
+                self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText(
+                    play_list.getPlaylistName())
             elif play_list.emotion_map == "surprise":
                 self.media_player.surprise_list = play_list
-                self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(play_list.getPlaylistName())
+                self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(
+                    play_list.getPlaylistName())
             else:
                 pass
 
@@ -292,37 +297,40 @@ class MainWindow(QMainWindow):
         if bluetooth_devices is not None:
             display_list_item(self.ui.listWidget_settings_bluetooth_devices, [BluetoothDevice(
                 device, on_connect_device=self.on_connect_device) for device in bluetooth_devices])
+
+    def on_connect_device(self, device_info):
+        # TODO: Connect to device
+        self.bluetooth.connect_device(device_info["name"], device_info["mac"])
         if (self.bluetooth.get_paired_device() != None):
             print("[DEBUG] current bluetooth device: ",
                   self.bluetooth.get_paired_device())
             self.ui.btn_settings_bluetooth_scan_devices.setText(
                 "Device info: " + self.bluetooth.get_paired_device()["name"])
             self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
+            self.ui.listWidget_settings_bluetooth_devices.clear()
         else:
             self.ui.btn_settings_bluetooth_scan_devices.setText("Scan devices")
             self.ui.btn_settings_bluetooth_scan_devices.setDisabled(False)
-
-    def on_connect_device(self, device_info):
-        # TODO: Connect to device
-        self.bluetooth.connect_device(device_info["name"], device_info["mac"])
-        self.on_scan_bluetooth_devices()
+            self.ui.listWidget_settings_bluetooth_devices.clear()
+        # self.on_scan_bluetooth_devices()
 
     def on_disconnect_device(self):
         device = self.bluetooth.get_paired_device()
         if device is None:
             return None
         else:
-            self.bluetooth.disconnect_device(device["mac"])
-            if (self.bluetooth.get_paired_device() != None):
-                print("[DEBUG] current bluetooth device: ",
-                      self.bluetooth.get_paired_device())
-                self.ui.btn_settings_bluetooth_scan_devices.setText(
-                    "Device info: " + self.bluetooth.get_paired_device()["name"])
-                self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
-            else:
-                self.ui.btn_settings_bluetooth_scan_devices.setText(
-                    "Scan devices")
-                self.ui.btn_settings_bluetooth_scan_devices.setDisabled(False)
+            disconnect_result = self.bluetooth.disconnect_device(device["mac"])
+            if disconnect_result:
+                if (self.bluetooth.get_paired_device() != None):
+                    print("[DEBUG] disconnect current bluetooth device: ",
+                        self.bluetooth.get_paired_device())
+                    self.ui.btn_settings_bluetooth_scan_devices.setText(
+                        "Device info: " + self.bluetooth.get_paired_device()["name"])
+                    self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
+                else:
+                    self.ui.btn_settings_bluetooth_scan_devices.setText(
+                        "Scan devices")
+                    self.ui.btn_settings_bluetooth_scan_devices.setDisabled(False)
             return 0
     # END: Bluetooth
 
