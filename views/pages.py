@@ -152,7 +152,7 @@ class PlaylistPage(QtWidgets.QWidget):
         # self.listWidget_playlist_songs.setStyleSheet("color: #FFF;")
         self.listWidget_playlist_songs.setStyleSheet("color: #FFF; \n"
                                                      "QListWidget::item:selected {\n"
-                                                     "     background-color: transparent;\n"
+                                                     "     background: transparent;\n"
                                                      "    border: 0px solid;\n"
                                                      "}")
         self.listWidget_playlist_songs.setObjectName(

@@ -128,7 +128,7 @@ class Ui_MainWindow(object):
         self.listWidget_playlists.setFont(font)
         self.listWidget_playlists.setStyleSheet("color: #FFF; \n"
                                                 "QListWidget::item:selected {\n"
-                                                "     background-color: transparent;\n"
+                                                "     background: transparent;\n"
                                                 "    border: 0px solid;\n"
                                                 "}")
         self.listWidget_playlists.setObjectName("listWidget_playlists")
@@ -799,7 +799,7 @@ class Ui_MainWindow(object):
         self.listWidget_settings_bluetooth_devices.setObjectName(
             "listWidget_settings_bluetooth_devices")
         self.listWidget_settings_bluetooth_devices.setStyleSheet("QListWidget::item:selected {\n"
-                                                                 "     background-color: transparent;\n"
+                                                                 "     background: transparent;\n"
                                                                  "    border: 0px solid;\n"
                                                                  "}")
         self.verticalLayout_18.addWidget(
@@ -834,7 +834,7 @@ class Ui_MainWindow(object):
         # self.listWidget_library_songs.setStyleSheet("color: #FFF;")
         self.listWidget_library_songs.setStyleSheet("color: #FFF; \n"
                                                     "QListWidget::item:selected {\n"
-                                                    "     background-color: transparent;\n"
+                                                    "     background: transparent;\n"
                                                     "    border: 0px solid;\n"
                                                     "}")
         self.listWidget_library_songs.setObjectName("listWidget_library_songs")
