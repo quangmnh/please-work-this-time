@@ -132,40 +132,48 @@ class MainWindow(QMainWindow):
             data = json.load(f)
 
             if data['angry_playlist'] < 0:
-                self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText('None')
+                self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText(
+                    'None')
             else:
-                self.media_player.angry_list = self.media_player.playlistList[data['angry_playlist']]
+                self.media_player.angry_list = self.media_player.playlistList[
+                    data['angry_playlist']]
                 self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText(
                     self.media_player.angry_list.getPlaylistName())
 
             if data['happy_playlist'] < 0:
-                self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText('None')
+                self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText(
+                    'None')
             else:
-                self.media_player.happy_list = self.media_player.playlistList[data['happy_playlist']]
+                self.media_player.happy_list = self.media_player.playlistList[
+                    data['happy_playlist']]
                 self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText(
                     self.media_player.happy_list.getPlaylistName())
 
             if data['neutral_playlist'] < 0:
-                self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText('None')
+                self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText(
+                    'None')
             else:
-                self.media_player.neutral_list = self.media_player.playlistList[data['neutral_playlist']]
+                self.media_player.neutral_list = self.media_player.playlistList[
+                    data['neutral_playlist']]
                 self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText(
                     self.media_player.neutral_list.getPlaylistName())
 
             if data['sad_playlist'] < 0:
-                self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText('None')
+                self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText(
+                    'None')
             else:
                 self.media_player.sad_list = self.media_player.playlistList[data['sad_playlist']]
                 self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText(
                     self.media_player.sad_list.getPlaylistName())
 
             if data['surprise_playlist'] < 0:
-                self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText('None')
+                self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(
+                    'None')
             else:
-                self.media_player.surprise_list = self.media_player.playlistList[data['surprise_playlist']]
+                self.media_player.surprise_list = self.media_player.playlistList[
+                    data['surprise_playlist']]
                 self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(
                     self.media_player.surprise_list.getPlaylistName())
-
 
         # PAGES
         ########################################################################
@@ -457,6 +465,12 @@ class MainWindow(QMainWindow):
         else:
             self.media_player.curr_emotion_playlist = self.media_player.surprise_list
 
+        if (self.media_player.curr_emotion_playlist.playListName == "" and self.media_player.curr_emotion_playlist.numOfTracks == 0):
+            self.ui.label_fer_result_no_playlist.setText(
+                "Currently there is no playlist mapped for " + true_label + " emotion. \n" + " Setup your preference now in Settings")
+            self.ui.Pages_Widget.setCurrentWidget(
+                self.ui.page_emotion_recognition_no_playlist)
+            return
         self.media_player.playBack = self.media_player.curr_emotion_playlist.getTrackList()
         # self.change_playlist_page(
         #     self.ui.Pages_Widget,
@@ -697,37 +711,46 @@ class MainWindow(QMainWindow):
                 self.updateAllComboBox()
 
                 if data['angry_playlist'] < 0:
-                    self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText('None')
+                    self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText(
+                        'None')
                 else:
-                    self.media_player.angry_list = self.media_player.playlistList[data['angry_playlist']]
+                    self.media_player.angry_list = self.media_player.playlistList[
+                        data['angry_playlist']]
                     self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText(
                         self.media_player.angry_list.getPlaylistName())
 
                 if data['happy_playlist'] < 0:
-                    self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText('None')
+                    self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText(
+                        'None')
                 else:
-                    self.media_player.happy_list = self.media_player.playlistList[data['happy_playlist']]
+                    self.media_player.happy_list = self.media_player.playlistList[
+                        data['happy_playlist']]
                     self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText(
                         self.media_player.happy_list.getPlaylistName())
 
                 if data['neutral_playlist'] < 0:
-                    self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText('None')
+                    self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText(
+                        'None')
                 else:
-                    self.media_player.neutral_list = self.media_player.playlistList[data['neutral_playlist']]
+                    self.media_player.neutral_list = self.media_player.playlistList[
+                        data['neutral_playlist']]
                     self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText(
                         self.media_player.neutral_list.getPlaylistName())
 
                 if data['sad_playlist'] < 0:
-                    self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText('None')
+                    self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText(
+                        'None')
                 else:
                     self.media_player.sad_list = self.media_player.playlistList[data['sad_playlist']]
                     self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText(
                         self.media_player.sad_list.getPlaylistName())
 
                 if data['surprise_playlist'] < 0:
-                    self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText('None')
+                    self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(
+                        'None')
                 else:
-                    self.media_player.surprise_list = self.media_player.playlistList[data['surprise_playlist']]
+                    self.media_player.surprise_list = self.media_player.playlistList[
+                        data['surprise_playlist']]
                     self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(
                         self.media_player.surprise_list.getPlaylistName())
 

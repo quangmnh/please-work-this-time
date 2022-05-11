@@ -88,7 +88,7 @@ class PlayList:
     def __init__(
             self,
             trackList: "list[Track]" = [],
-            name: str = "Unknown"
+            name: str = ""
     ) -> None:
         self.playListName = name
         self.numOfTracks = len(trackList)
