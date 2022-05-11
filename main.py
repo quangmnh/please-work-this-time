@@ -320,6 +320,7 @@ class MainWindow(QMainWindow):
             return None
         else:
             disconnect_result = self.bluetooth.disconnect_device(device["mac"])
+            print("[DEBUG] result: ", disconnect_result)
             if disconnect_result != None:
                 if (self.bluetooth.get_paired_device() != None):
                     print("[DEBUG] disconnect current bluetooth device: ",
