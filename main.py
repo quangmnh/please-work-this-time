@@ -128,6 +128,15 @@ class MainWindow(QMainWindow):
             self.clearAllComboBox()
             self.updateAllComboBox()
 
+        # Bluetooth settings page display change
+        if (self.bluetooth.get_paired_device != None):
+            self.ui.btn_settings_bluetooth_scan_devices.setText(
+                "Device info: " + self.bluetooth.get_paired_device["name"])
+            self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
+        else:
+            self.ui.btn_settings_bluetooth_scan_devices.setText("Scan devices")
+            self.ui.btn_settings_bluetooth_scan_devices.setDisabled(False)
+
         # PAGES
         ########################################################################
 
@@ -259,8 +268,8 @@ class MainWindow(QMainWindow):
         # TODO: Scan bluetooth devices
         if self.bluetooth.get_paired_device() is None:
             bluetooth_devices = self.bluetooth.bluetooth_scan()
-        else:
-            bluetooth_devices = self.bluetooth.get_paired_device()
+        # else:
+        #     bluetooth_devices = self.bluetooth.get_paired_device()
         display_list_item(self.ui.listWidget_settings_bluetooth_devices, [BluetoothDevice(
             device, on_connect_device=self.on_connect_device) for device in bluetooth_devices])
 

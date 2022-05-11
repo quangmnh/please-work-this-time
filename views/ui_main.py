@@ -754,7 +754,7 @@ class Ui_MainWindow(object):
         self.btn_settings_bluetooth_scan_devices.setMinimumSize(
             QtCore.QSize(100, 50))
         self.btn_settings_bluetooth_scan_devices.setMaximumSize(
-            QtCore.QSize(100, 16777215))
+            QtCore.QSize(16777215, 16777215))
         self.btn_settings_bluetooth_scan_devices.setStyleSheet("QPushButton {\n"
                                                                "    color: rgb(255,255,255);\n"
                                                                "     background-color: rgb(35,35,35);\n"
