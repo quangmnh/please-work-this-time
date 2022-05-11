@@ -290,6 +290,15 @@ class MainWindow(QMainWindow):
         #     bluetooth_devices = self.bluetooth.get_paired_device()
         display_list_item(self.ui.listWidget_settings_bluetooth_devices, [BluetoothDevice(
             device, on_connect_device=self.on_connect_device) for device in bluetooth_devices])
+        if (self.bluetooth.get_paired_device() != None):
+            print("[DEBUG] current bluetooth device: ",
+                  self.bluetooth.get_paired_device())
+            self.ui.btn_settings_bluetooth_scan_devices.setText(
+                "Device info: " + self.bluetooth.get_paired_device()["name"])
+            self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
+        else:
+            self.ui.btn_settings_bluetooth_scan_devices.setText("Scan devices")
+            self.ui.btn_settings_bluetooth_scan_devices.setDisabled(False)
 
     def on_connect_device(self, device_info):
         # TODO: Connect to device
@@ -302,6 +311,16 @@ class MainWindow(QMainWindow):
             return None
         else:
             self.bluetooth.disconnect_device(device["mac"])
+            if (self.bluetooth.get_paired_device() != None):
+                print("[DEBUG] current bluetooth device: ",
+                      self.bluetooth.get_paired_device())
+                self.ui.btn_settings_bluetooth_scan_devices.setText(
+                    "Device info: " + self.bluetooth.get_paired_device()["name"])
+                self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
+            else:
+                self.ui.btn_settings_bluetooth_scan_devices.setText(
+                    "Scan devices")
+                self.ui.btn_settings_bluetooth_scan_devices.setDisabled(False)
             return 0
     # END: Bluetooth
 
