@@ -87,8 +87,10 @@ class MainWindow(QMainWindow):
 
         # comment this section for windows testing and set these to None, fuk u all windows users
         self.camera = CameraManagement()
-        self.face_recognition = ONNXClassifierWrapper2("controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
-        self.emotion_recognition = ONNXClassifierWrapper("controller/new_model.trt", [1, 5], target_dtype=np.float32)
+        self.face_recognition = ONNXClassifierWrapper2(
+            "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
+        self.emotion_recognition = ONNXClassifierWrapper(
+            "controller/new_model.trt", [1, 5], target_dtype=np.float32)
         self.bluetooth = BluetoothController(10)
 
         # Icons
@@ -126,15 +128,6 @@ class MainWindow(QMainWindow):
             self.clearAllComboBox()
             self.updateAllComboBox()
 
-        # Bluetooth settings page display change
-        if (self.bluetooth.get_paired_device != None):
-            self.ui.btn_settings_bluetooth_scan_devices.setText(
-                "Device info: " + self.bluetooth.get_paired_device["name"])
-            self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
-        else:
-            self.ui.btn_settings_bluetooth_scan_devices.setText("Scan devices")
-            self.ui.btn_settings_bluetooth_scan_devices.setDisabled(False)
-
         # PAGES
         ########################################################################
 
@@ -166,7 +159,7 @@ class MainWindow(QMainWindow):
         )
         # SETTINGS: BLUETOOTH PAGE
         self.ui.Btn_settings_bluetooth.clicked.connect(
-            lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings_bluetooth))
+            self.on_open_bluetooth_page)
 
         ## END PAGES ###########################################################
 
@@ -258,6 +251,17 @@ class MainWindow(QMainWindow):
         self.on_library_open()
 
     # Bluetooth
+    def on_open_bluetooth_page(self):
+        # Bluetooth settings page display change
+        if (self.bluetooth.get_paired_device() != None):
+            self.ui.btn_settings_bluetooth_scan_devices.setText(
+                "Device info: " + self.bluetooth.get_paired_device()["name"])
+            self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
+        else:
+            self.ui.btn_settings_bluetooth_scan_devices.setText("Scan devices")
+            self.ui.btn_settings_bluetooth_scan_devices.setDisabled(False)
+        self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings_bluetooth)
+
     def on_scan_bluetooth_devices(self):
         # TODO: Scan bluetooth devices
         if self.bluetooth.get_paired_device() is None:
