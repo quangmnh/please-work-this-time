@@ -1178,8 +1178,8 @@ class Ui_MainWindow(object):
         self.label_emotion_recognition_info_loading.setText(
             _translate("MainWindow", "Detecting your emotion, please wait..."))
         self.label_dashboard_2.setText(_translate("MainWindow", "Settings"))
-        self.Btn_settings_hand_gesture.setText(
-            _translate("MainWindow", "Hand gesture"))
+        # self.Btn_settings_hand_gesture.setText(
+        #     _translate("MainWindow", "Hand gesture"))
         self.Btn_settings_emotion_map.setText(
             _translate("MainWindow", "Emotion Playlist map"))
         self.Btn_settings_bluetooth.setText(
