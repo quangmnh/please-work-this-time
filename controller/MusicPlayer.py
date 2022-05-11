@@ -88,11 +88,13 @@ class PlayList:
     def __init__(
             self,
             trackList: "list[Track]" = [],
-            name: str = ""
+            name: str = "",
+            _id: int = -1
     ) -> None:
         self.playListName = name
         self.numOfTracks = len(trackList)
         self.trackList = trackList
+        self.id = _id
 
     def addTrack(
             self,
