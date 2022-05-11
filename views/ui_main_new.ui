@@ -327,7 +327,7 @@ QPushButton:hover {
           <item>
            <widget class="QStackedWidget" name="Pages_Widget">
             <property name="currentIndex">
-             <number>0</number>
+             <number>9</number>
             </property>
             <widget class="QWidget" name="page_dashboard">
              <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -1095,7 +1095,7 @@ QPushButton:hover {
                       </property>
                       <property name="maximumSize">
                        <size>
-                        <width>100</width>
+                        <width>16777215</width>
                         <height>16777215</height>
                        </size>
                       </property>
@@ -1343,8 +1343,23 @@ QPushButton:hover {
                     </font>
                    </property>
                    <property name="styleSheet">
-                    <string notr="true">color: #FFF;</string>
+                    <string notr="true">QListWidget::item {
+	color: #FFF;
+}
+QListWidget::item:selected {
+    background: transparent;
+}</string>
                    </property>
+                   <item>
+                    <property name="text">
+                     <string>New Item</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>New Item</string>
+                    </property>
+                   </item>
                   </widget>
                  </item>
                 </layout>

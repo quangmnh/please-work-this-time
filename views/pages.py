@@ -150,10 +150,11 @@ class PlaylistPage(QtWidgets.QWidget):
         font.setPointSize(15)
         self.listWidget_playlist_songs.setFont(font)
         # self.listWidget_playlist_songs.setStyleSheet("color: #FFF;")
-        self.listWidget_playlist_songs.setStyleSheet("color: #FFF; \n"
+        self.listWidget_playlist_songs.setStyleSheet("QListWidget::item {\n"
+                                                     "    color: #FFF;\n"
+                                                     "}\n"
                                                      "QListWidget::item:selected {\n"
-                                                     "     background: transparent;\n"
-                                                     "    border: 0px solid;\n"
+                                                     "    background: transparent;\n"
                                                      "}")
         self.listWidget_playlist_songs.setObjectName(
             "listWidget_playlist_songs_" + playlist_name)
