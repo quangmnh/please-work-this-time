@@ -266,12 +266,14 @@ class MainWindow(QMainWindow):
 
     def on_scan_bluetooth_devices(self):
         # TODO: Scan bluetooth devices
+        bluetooth_devices = None
         if self.bluetooth.get_paired_device() is None:
             bluetooth_devices = self.bluetooth.bluetooth_scan()
         # else:
         #     bluetooth_devices = self.bluetooth.get_paired_device()
-        display_list_item(self.ui.listWidget_settings_bluetooth_devices, [BluetoothDevice(
-            device, on_connect_device=self.on_connect_device) for device in bluetooth_devices])
+        if bluetooth_devices is not None:
+            display_list_item(self.ui.listWidget_settings_bluetooth_devices, [BluetoothDevice(
+                device, on_connect_device=self.on_connect_device) for device in bluetooth_devices])
         if (self.bluetooth.get_paired_device() != None):
             print("[DEBUG] current bluetooth device: ",
                   self.bluetooth.get_paired_device())
