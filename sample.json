@@ -20,6 +20,7 @@
     ],
     "play_list": [
         {
+            "id": 0,
             "name": "sad",
             "count": 2,
             "songlist": [
@@ -28,6 +29,7 @@
             ]
         },
         {
+            "id": 1,
             "name": "happy",
             "count": 2,
             "songlist": [
@@ -36,6 +38,7 @@
             ]
         },
         {
+            "id": 2,
             "name": "angry",
             "count": 2,
             "songlist": [
@@ -44,6 +47,7 @@
             ]
         },
         {
+            "id": 3,
             "name": "neutral",
             "count": 2,
             "songlist": [
@@ -52,6 +56,7 @@
             ]
         },
         {
+            "id": 4,
             "name": "surprise",
             "count": 2,
             "songlist": [
@@ -59,5 +64,10 @@
                 1
             ]
         }
-    ]
+    ],
+    "angry_playlist": 2,
+    "happy_playlist": 1,
+    "neutral_playlist": 3,
+    "sad_playlist": 0,
+    "surprise_playlist": 4
 }
