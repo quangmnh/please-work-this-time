@@ -87,10 +87,8 @@ class MainWindow(QMainWindow):
 
         # comment this section for windows testing and set these to None, fuk u all windows users
         self.camera = CameraManagement()
-        self.face_recognition = ONNXClassifierWrapper2(
-            "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
-        self.emotion_recognition = ONNXClassifierWrapper(
-            "controller/new_model.trt", [1, 5], target_dtype=np.float32)
+        self.face_recognition = ONNXClassifierWrapper2("controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
+        self.emotion_recognition = ONNXClassifierWrapper("controller/new_model.trt", [1, 5], target_dtype=np.float32)
         self.bluetooth = BluetoothController(10)
 
         # Icons
@@ -148,11 +146,7 @@ class MainWindow(QMainWindow):
         self.ui.Btn_Library.clicked.connect(self.on_library_open)
 
         # EMOTION RECOGNITION PAGE
-        self.ui.Btn_menu_fer.clicked.connect(lambda:
-
-                                             self.runLongTask()
-
-                                             )
+        self.ui.Btn_menu_fer.clicked.connect(self.on_emotion_recognition)
 
         # SETTINGS PAGE
         self.ui.Btn_Settings.clicked.connect(
