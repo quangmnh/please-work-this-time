@@ -186,7 +186,7 @@ class MainWindow(QMainWindow):
         self.ui.Btn_Library.clicked.connect(self.on_library_open)
 
         # EMOTION RECOGNITION PAGE
-        self.ui.Btn_menu_fer.clicked.connect(self.on_emotion_recognition)
+        self.ui.Btn_menu_fer.clicked.connect(self.runLongTask)
 
         # SETTINGS PAGE
         self.ui.Btn_Settings.clicked.connect(
@@ -925,15 +925,20 @@ class MainWindow(QMainWindow):
         )
 
         if flag == 'angry':
-            self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText('None')
+            self.ui.comboBox_settings_emotion_playlist_map_angry.setCurrentText(
+                'None')
         if flag == 'happy':
-            self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText('None')
+            self.ui.comboBox_settings_emotion_playlist_map_happy.setCurrentText(
+                'None')
         if flag == 'neutral':
-            self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText('None')
+            self.ui.comboBox_settings_emotion_playlist_map_neutral.setCurrentText(
+                'None')
         if flag == 'sad':
-            self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText('None')
+            self.ui.comboBox_settings_emotion_playlist_map_sad.setCurrentText(
+                'None')
         if flag == 'surprise':
-            self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText('None')
+            self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(
+                'None')
 
     # End : Playlist
 
