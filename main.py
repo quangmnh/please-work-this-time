@@ -8,6 +8,7 @@ from PyQt5.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont, QFont
 from PyQt5.QtCore import (QObject, QThread, pyqtSignal)
 from PyQt5 import QtCore, QtGui, QtWidgets
 # GUI file
+from utils1.snake_case import snake_case
 from views.ui_main import Ui_MainWindow
 
 # Components
@@ -482,7 +483,7 @@ class MainWindow(QMainWindow):
         #     self.media_player.curr_emotion_playlist.getPlaylistName(),
         # )
 
-        self.on_playlist_play(self.media_player.playBack)
+        self.on_playlist_play(self.media_player.curr_emotion_playlist.getPlaylistName())
         self.ui.label_fer_result.setText("Your current emotion is " + true_label +
                                          "\n Playing playlist " + self.media_player.curr_emotion_playlist.getPlaylistName())
         self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition)
@@ -523,12 +524,18 @@ class MainWindow(QMainWindow):
 
         if _type == "library_songs":
             if self.media_player.playBack != self.media_player.trackDB:
-                self.media_player.playBack = self.media_player.trackDB
+                self.media_player.playBack = self.media_player.trackDB.getTrackList()
 
             trackDB.deleteTrackAtIndex(index)
 
             with open(json_dir, encoding='utf-8') as f:
                 data = json.load(f)
+
+                for play_list in data['play_list']:
+                    songlist = play_list['songlist']
+                    if index in songlist:
+                        del songlist[songlist.index(index)]
+                        play_list['count'] -= 1
 
                 songdb = data.get('songdb')
                 del songdb[index]
@@ -558,11 +565,14 @@ class MainWindow(QMainWindow):
 
         else:
             # Assign to playlist
-            self.media_player.deleteSong(index)
+            curr_playlist = None
+            for playlist in self.media_player.playlistList:
+                if playlist.getPlaylistName() == playlistName:
+                    curr_playlist = playlist
+                    break
 
-            new_playback = convert_from_track_list_to_list_dict(
-                self.media_player.getPlaybackList()
-            )
+            if curr_playlist is not None:
+                curr_playlist.deleteTrack(index)
 
             with open(json_dir, encoding='utf-8') as f:
                 data = json.load(f)
@@ -579,8 +589,6 @@ class MainWindow(QMainWindow):
             self.change_playlist_page(
                 self.ui.Pages_Widget,
                 playlistName
-                # new_playback,
-                # self.media_player.getPlaybackList()
             )
 
     def add_to_playlist_dialog(self, trackIndex):
@@ -613,6 +621,8 @@ class MainWindow(QMainWindow):
             trackIndex: int = 0,
     ):
         # TODO: Add song to playlist
+        print('Current playlist: ', self.media_player.playlistList[playlistIndex].getPlaylistName())
+
         with open(json_dir, encoding='utf-8') as f:
             data = json.load(f)
 
@@ -623,19 +633,15 @@ class MainWindow(QMainWindow):
             else:
                 song_list.append(trackIndex)
 
+            song_list.sort()
             data['play_list'][playlistIndex]['songlist'] = song_list
             data['play_list'][playlistIndex]['count'] = len(song_list)
 
         with open(json_dir, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=4)
 
-        new_trackDB = getDBFromJSON(json_dir)
-        global trackDB
-        trackDB = new_trackDB
-        self.media_player = MusicPlayer(
-            playBack=new_trackDB.getTrackList(),
-            playlistList=getPlaylistList(json_dir, new_trackDB),
-            trackDB=new_trackDB
+        self.media_player.playlistList[playlistIndex].addTrack(
+            self.media_player.trackDB.getTrackAtIndex(trackIndex)
         )
 
         playlistPage = self.media_player.playlistList[playlistIndex]
@@ -656,9 +662,20 @@ class MainWindow(QMainWindow):
         # Đã implement, không cần xài hàm này nữa
         pass
 
-    def on_playlist_play(self, trackList: "list[Track]" = []):
+    def on_playlist_play(self, playlist_name: str):
         # TODO : Play the playlist
-        self.on_play_song(0, trackList)
+
+        curr_playlist = None
+        for playlist in self.media_player.playlistList:
+            if playlist.getPlaylistName() == playlist_name:
+                curr_playlist = playlist
+                break
+
+        if curr_playlist is not None:
+            print('[DEBUG]')
+            print(curr_playlist.printPlaylistInfo())
+            if len(curr_playlist.getTrackList()) != 0:
+                self.on_play_song(0, curr_playlist.getTrackList())
 
     def create_playlist_dialog(self, parent: QtWidgets.QWidget, page_widget: QtWidgets.QStackedWidget, playlist_list_widget: QtWidgets.QListWidget):
         dialog = QtWidgets.QInputDialog(parent)
@@ -702,15 +719,14 @@ class MainWindow(QMainWindow):
                 play_list = data.get('play_list')
 
                 new_data = {
-                    "id": len(self.media_player.playlistList),
+                    "id": len(self.media_player.playlistList) - 1,
                     "name": playlist_name,
                     "count": 0,
-                    "songlist": [],
-                    "emotion_map": "None"
+                    "songlist": []
                 }
                 play_list.append(new_data)
 
-                data['play_list'] = play_list
+                # data['play_list'] = play_list
 
                 self.clearAllComboBox()
                 self.updateAllComboBox()
@@ -794,7 +810,7 @@ class MainWindow(QMainWindow):
 
         playlist_page = PlaylistPage(
             playlist_name,
-            lambda: self.on_playlist_play(trackList),
+            lambda: self.on_playlist_play(playlist_name),
             self.on_playlist_song_play,
             lambda: self.remove_playlist_page(
                 page_widget, playlist_name, playlist_list_widget, entry),
@@ -947,19 +963,21 @@ class MainWindow(QMainWindow):
         else:
             self.ui.btn_player_navigator_playPause.setIcon(self.play_icon.icon)
 
-        if self.media_player.getCurrPos()/1000 >= self.media_player.playBack[self.media_player.curr_playing].getTrackDuration():
-            # Turn off repeat mode
-            if self.media_player.repeatMode == 0:
-                if self.media_player.curr_playing == len(self.media_player.playBack):
-                    pass
-                else:
+        print('LENGTH OF PLAYBACK: ', len(self.media_player.getPlaybackList()))
+        if len(self.media_player.getPlaybackList()) > 0:
+            if self.media_player.getCurrPos()/1000 >= self.media_player.playBack[self.media_player.curr_playing].getTrackDuration():
+                # Turn off repeat mode
+                if self.media_player.repeatMode == 0:
+                    if self.media_player.curr_playing == len(self.media_player.playBack):
+                        pass
+                    else:
+                        self.on_next_song()
+                # Repeat all tracks
+                elif self.media_player.repeatMode == 1:
                     self.on_next_song()
-            # Repeat all tracks
-            elif self.media_player.repeatMode == 1:
-                self.on_next_song()
-            # Repeat only one track
-            else:
-                self.on_play_song(self.media_player.curr_playing)
+                # Repeat only one track
+                else:
+                    self.on_play_song(self.media_player.curr_playing)
 
         if self.ui.btn_settings_enable_hand_gesture.isChecked():
             # Handle hand gesture
@@ -987,11 +1005,13 @@ class MainWindow(QMainWindow):
 
     def on_next_song(self):
         index = self.media_player.next()
-        self.on_play_song(index, self.media_player.playBack)
+        if index < len(self.media_player.playBack):
+            self.on_play_song(index, self.media_player.playBack)
 
     def on_previous_song(self):
         index = self.media_player.prev()
-        self.on_play_song(index, self.media_player.playBack)
+        if index < len(self.media_player.playBack):
+            self.on_play_song(index, self.media_player.playBack)
 
     def on_repeat_mode(self):
         self.media_player.changeRepeatMode()
