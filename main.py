@@ -37,8 +37,8 @@ import platform
 import random
 from time import time
 
-# from controller.model_manager import *
-# from controller.blutooth_controller import *
+from controller.model_manager import *
+from controller.blutooth_controller import *
 
 # EXAMPLE DATA
 ############################################
@@ -87,12 +87,12 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         # comment this section for windows testing and set these to None, fuk u all windows users
-        # self.camera = CameraManagement()
-        # self.face_recognition = ONNXClassifierWrapper2(
-        #     "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
-        # self.emotion_recognition = ONNXClassifierWrapper(
-        #     "controller/new_model.trt", [1, 5], target_dtype=np.float32)
-        # self.bluetooth = BluetoothController(10)
+        self.camera = CameraManagement()
+        self.face_recognition = ONNXClassifierWrapper2(
+            "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
+        self.emotion_recognition = ONNXClassifierWrapper(
+            "controller/new_model.trt", [1, 5], target_dtype=np.float32)
+        self.bluetooth = BluetoothController(10)
 
         # Icons
         self.play_icon = PlayIcon()
@@ -175,6 +175,9 @@ class MainWindow(QMainWindow):
                     data['surprise_playlist']]
                 self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(
                     self.media_player.surprise_list.getPlaylistName())
+
+        # Set volume slider to 100
+        self.ui.slider_player_volume.setValue(100)
 
         # PAGES
         ########################################################################
@@ -483,7 +486,8 @@ class MainWindow(QMainWindow):
         #     self.media_player.curr_emotion_playlist.getPlaylistName(),
         # )
 
-        self.on_playlist_play(self.media_player.curr_emotion_playlist.getPlaylistName())
+        self.on_playlist_play(
+            self.media_player.curr_emotion_playlist.getPlaylistName())
         self.ui.label_fer_result.setText("Your current emotion is " + true_label +
                                          "\n Playing playlist " + self.media_player.curr_emotion_playlist.getPlaylistName())
         self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition)
@@ -621,7 +625,8 @@ class MainWindow(QMainWindow):
             trackIndex: int = 0,
     ):
         # TODO: Add song to playlist
-        print('Current playlist: ', self.media_player.playlistList[playlistIndex].getPlaylistName())
+        print('Current playlist: ',
+              self.media_player.playlistList[playlistIndex].getPlaylistName())
 
         with open(json_dir, encoding='utf-8') as f:
             data = json.load(f)
@@ -1076,7 +1081,7 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    json_dir = os.path.join('sample_windows.json')
+    json_dir = os.path.join('sample.json')
 
     trackDB = getDBFromJSON(json_dir)
     library_songs = convert_from_track_list_to_list_dict(
