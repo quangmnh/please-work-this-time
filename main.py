@@ -37,8 +37,8 @@ import platform
 import random
 from time import time
 
-from controller.model_manager import *
-from controller.blutooth_controller import *
+# from controller.model_manager import *
+# from controller.blutooth_controller import *
 
 # EXAMPLE DATA
 ############################################
@@ -87,12 +87,12 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         # comment this section for windows testing and set these to None, fuk u all windows users
-        self.camera = CameraManagement()
-        self.face_recognition = ONNXClassifierWrapper2(
-            "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
-        self.emotion_recognition = ONNXClassifierWrapper(
-            "controller/new_model.trt", [1, 5], target_dtype=np.float32)
-        self.bluetooth = BluetoothController(10)
+        # self.camera = CameraManagement()
+        # self.face_recognition = ONNXClassifierWrapper2(
+        #     "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
+        # self.emotion_recognition = ONNXClassifierWrapper(
+        #     "controller/new_model.trt", [1, 5], target_dtype=np.float32)
+        # self.bluetooth = BluetoothController(10)
 
         # Icons
         self.play_icon = PlayIcon()
@@ -973,7 +973,7 @@ class MainWindow(QMainWindow):
             if self.media_player.getCurrPos()/1000 >= self.media_player.playBack[self.media_player.curr_playing].getTrackDuration():
                 # Turn off repeat mode
                 if self.media_player.repeatMode == 0:
-                    if self.media_player.curr_playing == len(self.media_player.playBack):
+                    if self.media_player.curr_playing == len(self.media_player.playBack) - 1:
                         pass
                     else:
                         self.on_next_song()
@@ -1009,14 +1009,16 @@ class MainWindow(QMainWindow):
         self.media_player.togglePlayPause()
 
     def on_next_song(self):
-        index = self.media_player.next()
-        if index < len(self.media_player.playBack):
-            self.on_play_song(index, self.media_player.playBack)
+        if self.media_player.repeatMode != 2:
+            index = self.media_player.next()
+            if index < len(self.media_player.playBack):
+                self.on_play_song(index, self.media_player.playBack)
 
     def on_previous_song(self):
-        index = self.media_player.prev()
-        if index < len(self.media_player.playBack):
-            self.on_play_song(index, self.media_player.playBack)
+        if self.media_player.repeatMode != 2:
+            index = self.media_player.prev()
+            if index < len(self.media_player.playBack):
+                self.on_play_song(index, self.media_player.playBack)
 
     def on_repeat_mode(self):
         self.media_player.changeRepeatMode()
@@ -1074,7 +1076,7 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    json_dir = os.path.join('sample.json')
+    json_dir = os.path.join('sample_windows.json')
 
     trackDB = getDBFromJSON(json_dir)
     library_songs = convert_from_track_list_to_list_dict(
