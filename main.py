@@ -176,6 +176,9 @@ class MainWindow(QMainWindow):
                 self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(
                     self.media_player.surprise_list.getPlaylistName())
 
+        # Set volume slider to 100
+        self.ui.slider_player_volume.setValue(100)
+
         # PAGES
         ########################################################################
 
@@ -483,7 +486,8 @@ class MainWindow(QMainWindow):
         #     self.media_player.curr_emotion_playlist.getPlaylistName(),
         # )
 
-        self.on_playlist_play(self.media_player.curr_emotion_playlist.getPlaylistName())
+        self.on_playlist_play(
+            self.media_player.curr_emotion_playlist.getPlaylistName())
         self.ui.label_fer_result.setText("Your current emotion is " + true_label +
                                          "\n Playing playlist " + self.media_player.curr_emotion_playlist.getPlaylistName())
         self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition)
@@ -621,7 +625,8 @@ class MainWindow(QMainWindow):
             trackIndex: int = 0,
     ):
         # TODO: Add song to playlist
-        print('Current playlist: ', self.media_player.playlistList[playlistIndex].getPlaylistName())
+        print('Current playlist: ',
+              self.media_player.playlistList[playlistIndex].getPlaylistName())
 
         with open(json_dir, encoding='utf-8') as f:
             data = json.load(f)
