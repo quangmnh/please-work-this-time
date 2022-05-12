@@ -982,7 +982,7 @@ class MainWindow(QMainWindow):
                     self.on_next_song()
                 # Repeat only one track
                 else:
-                    self.on_play_song(self.media_player.curr_playing)
+                    self.on_play_song(self.media_player.curr_playing, self.media_player.getPlaybackList())
 
         if self.ui.btn_settings_enable_hand_gesture.isChecked():
             # Handle hand gesture
