@@ -186,7 +186,7 @@ class MainWindow(QMainWindow):
 
         # Start process for testing
         self.test_p = TestProcess()
-        self.test_p.start("python", ["utils1/fer.py"])
+        self.test_p.start("python", ["controller/fer.py"])
 
         # Icons
         self.play_icon = PlayIcon()

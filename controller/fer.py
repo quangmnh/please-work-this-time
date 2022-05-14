@@ -1,4 +1,4 @@
-from controller.model_manager import *
+from model_manager import *
 from time import time
 import sys
 
