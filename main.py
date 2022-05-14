@@ -157,7 +157,8 @@ class TestProcess(QProcess):
 
         # rest of function
         # print("[DEBUG] Print from result received in process: ", msg.decode())
-        self.emotion_result.emit(msg.decode())
+        if ("Angry" in msg.decode() or "Happy" in msg.decode() or "Neutral" in msg.decode() or "Sad" in msg.decode() or "Surprise" in msg.decode()):
+            self.emotion_result.emit(msg.decode())
 
     def _on_std_error(self):
         """
@@ -299,7 +300,9 @@ class MainWindow(QMainWindow):
 
         # Fix the handler to on_emotion_recognition if failed
         self.ui.Btn_menu_fer.clicked.connect(
-            lambda: self.test_p.write("Testing signal\n".encode()))
+            lambda: (self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition_loading),
+                     self.test_p.write("Testing signal\n".encode()))
+        )
 
         # SETTINGS PAGE
         self.ui.Btn_Settings.clicked.connect(
@@ -395,7 +398,7 @@ class MainWindow(QMainWindow):
     # EXTRA test
     def on_emotion_result(self, result):
         true_label = result
-        # print("[DEBUG] Print after signal: ", result)
+        print("[DEBUG] Print after signal: ", true_label)
         if (true_label == 'Angry' or true_label == 'Happy' or true_label == 'Neutral' or true_label == 'Sad' or true_label == 'Surprise'):
             if true_label == 'Angry':
                 self.media_player.curr_emotion_playlist = self.media_player.angry_list
