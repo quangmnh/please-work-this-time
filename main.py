@@ -1199,7 +1199,7 @@ if __name__ == "__main__":
     start = time()
     app = QApplication(sys.argv)
 
-    json_dir = os.path.join('test_sample.json')
+    json_dir = os.path.join('sample.json')
 
     trackDB = getDBFromJSON(json_dir)
     library_songs = convert_from_track_list_to_list_dict(
