@@ -69,14 +69,49 @@ bluetooth_devices = [
 
 class Worker(QObject):
     finished = pyqtSignal()
-    progress = pyqtSignal(int)
+    result = pyqtSignal(str)
 
-    def __init__(self, long_run_method, parent: None) -> None:
+    def __init__(self, camera, face_recognition, emotion_recognition, bluetooth, parent: None) -> None:
         super().__init__(parent)
-        self.method = long_run_method
+        self.camera = camera
+        self.face_recognition = face_recognition
+        self.emotion_recognition = emotion_recognition
+        self.bluetooth = bluetooth
 
     def run(self):
-        self.method()
+        # TODO: PLease use the true label var for choosing and playing the right playlist
+        temp = {
+            "Angry": 0,
+            "Happy": 0,
+            "Neutral": 0,
+            "Sad": 0,
+            "Surprise": 0,
+        }
+        start = time()
+        while time() - start < 4:
+            frame = self.camera.get_frame()
+            if frame is None:
+                # print("frame is none")
+                continue
+            else:
+                box = self.face_recognition.predict(
+                    self.camera.get_blob(frame))
+                if box is None:
+                    continue
+                else:
+                    # print(box)
+                    # print(frame.shape)
+                    (height, width) = frame.shape[:2]
+                    box = box * np.array([width, height, width, height])
+                    # (x, y, w, h) = box.astype('int')
+                    roi = self.camera.get_roi(box, frame)
+                    if roi is None:
+                        continue
+                    else:
+                        label = self.emotion_recognition.predict(roi)
+                        temp[label] += 1
+        true_label = max(temp, key=temp.get)
+        self.result.emit(true_label)
         self.finished.emit()
 
 
@@ -430,18 +465,22 @@ class MainWindow(QMainWindow):
             print("Hand gesture disabled")
     # END: Hand gesture
 
+    def print_result(self, n):
+        print("[DEBUG] emotion fetched result: ", n)
+
     # Long running task
     def runLongTask(self):
         self.ui.Pages_Widget.setCurrentWidget(
             self.ui.page_emotion_recognition_loading)
         self.thread = QThread()
-        self.worker = Worker(self.on_emotion_recognition, None)
+        self.worker = Worker(self.camera, self.face_recognition,
+                             self.emotion_recognition, self.bluetooth, None)
         self.worker.moveToThread(self.thread)
         self.thread.started.connect(self.worker.run)
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(lambda: (self.thread.deleteLater(
-        ), self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition_no_playlist)))
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.result.connect(self.print_result)
         self.thread.start()
 
     # Emotion recognition
