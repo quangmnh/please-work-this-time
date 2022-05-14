@@ -189,7 +189,7 @@ class MainWindow(QMainWindow):
         self.bluetooth = BluetoothController(10)
 
         # Start process for testing
-        self.test_p = TestProcess()
+        self.test_p = TestProcess(MainWindow)
         self.test_p.start("python3", ["controller/fer.py"])
 
         # Icons
@@ -394,7 +394,38 @@ class MainWindow(QMainWindow):
 
     # EXTRA test
     def on_emotion_result(self, result):
-        print("[DEBUG] Print after signal: ", result)
+        true_label = result
+        # print("[DEBUG] Print after signal: ", result)
+        if (true_label == 'Angry' or true_label == 'Happy' or true_label == 'Neutral' or true_label == 'Sad' or true_label == 'Surprise'):
+            if true_label == 'Angry':
+                self.media_player.curr_emotion_playlist = self.media_player.angry_list
+            elif true_label == 'Happy':
+                self.media_player.curr_emotion_playlist = self.media_player.happy_list
+            elif true_label == 'Neutral':
+                self.media_player.curr_emotion_playlist = self.media_player.neutral_list
+            elif true_label == 'Sad':
+                self.media_player.curr_emotion_playlist = self.media_player.sad_list
+            else:
+                self.media_player.curr_emotion_playlist = self.media_player.surprise_list
+
+            if (self.media_player.curr_emotion_playlist.playListName == "" and self.media_player.curr_emotion_playlist.numOfTracks == 0):
+                self.ui.label_fer_result_no_playlist.setText(
+                    "Currently there is no playlist mapped for " + true_label + " emotion. \n" + " Setup your preference now in Settings")
+                self.ui.Pages_Widget.setCurrentWidget(
+                    self.ui.page_emotion_recognition_no_playlist)
+                return
+            self.media_player.playBack = self.media_player.curr_emotion_playlist.getTrackList()
+            # self.change_playlist_page(
+            #     self.ui.Pages_Widget,
+            #     self.media_player.curr_emotion_playlist.getPlaylistName(),
+            # )
+
+            self.on_playlist_play(
+                self.media_player.curr_emotion_playlist.getPlaylistName())
+            self.ui.label_fer_result.setText("Your current emotion is " + true_label +
+                                             "\n Playing playlist " + self.media_player.curr_emotion_playlist.getPlaylistName())
+            self.ui.Pages_Widget.setCurrentWidget(
+                self.ui.page_emotion_recognition)
     # End : EXTRA test
 
     # HANDLERS
