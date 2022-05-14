@@ -171,7 +171,7 @@ class TestProcess(QProcess):
         err += self.readAllStandardError().data()
 
         if ("WARN:0" in err.decode()):
-            print("[DEBUG] Print from result received in process: ", err.decode())
+            # print("[DEBUG] Print from result received in process: ", err.decode())
             self.finish_initiate_signal.emit(1)
 
 
@@ -459,7 +459,7 @@ class MainWindow(QMainWindow):
                     song.get('url')
                 )
                 trackDB.addTrack(track)
-                print(len(trackDB.getTrackList()))
+                # print(len(trackDB.getTrackList()))
 
         library_songs = convert_from_track_list_to_list_dict(
             trackDB.getTrackList())
@@ -470,8 +470,8 @@ class MainWindow(QMainWindow):
     def on_open_bluetooth_page(self):
         # Bluetooth settings page display change
         if (self.bluetooth.get_paired_device() != None):
-            print("[DEBUG] current bluetooth device: ",
-                  self.bluetooth.get_paired_device())
+            # print("[DEBUG] current bluetooth device: ",
+            #   self.bluetooth.get_paired_device())
             self.ui.btn_settings_bluetooth_scan_devices.setText(
                 "Device info: " + self.bluetooth.get_paired_device()["name"])
             self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
@@ -495,8 +495,8 @@ class MainWindow(QMainWindow):
         # TODO: Connect to device
         self.bluetooth.connect_device(device_info["name"], device_info["mac"])
         if (self.bluetooth.get_paired_device() != None):
-            print("[DEBUG] current bluetooth device: ",
-                  self.bluetooth.get_paired_device())
+            # print("[DEBUG] current bluetooth device: ",
+            #   self.bluetooth.get_paired_device())
             self.ui.btn_settings_bluetooth_scan_devices.setText(
                 "Device info: " + self.bluetooth.get_paired_device()["name"])
             self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
@@ -764,7 +764,7 @@ class MainWindow(QMainWindow):
             )
 
     def add_to_playlist_dialog(self, trackIndex):
-        print("Current trackIndex: ", trackIndex)
+        # print("Current trackIndex: ", trackIndex)
         Dialog = QtWidgets.QDialog(None)
         Dialog.setWindowTitle("Select playlist to add:")
         Dialog.resize(200, 100)
@@ -793,8 +793,8 @@ class MainWindow(QMainWindow):
             trackIndex: int = 0,
     ):
         # TODO: Add song to playlist
-        print('Current playlist: ',
-              self.media_player.playlistList[playlistIndex].getPlaylistName())
+        # print('Current playlist: ',
+        #   self.media_player.playlistList[playlistIndex].getPlaylistName())
 
         with open(json_dir, encoding='utf-8') as f:
             data = json.load(f)
@@ -845,8 +845,8 @@ class MainWindow(QMainWindow):
                 break
 
         if curr_playlist is not None:
-            print('[DEBUG]')
-            print(curr_playlist.printPlaylistInfo())
+            # print('[DEBUG]')
+            # print(curr_playlist.printPlaylistInfo())
             if len(curr_playlist.getTrackList()) != 0:
                 self.on_play_song(0, curr_playlist.getTrackList())
 
@@ -1014,7 +1014,7 @@ class MainWindow(QMainWindow):
 
                     trackList = []
 
-                    print(playlist['songlist'])
+                    # print(playlist['songlist'])
                     for idx in playlist['songlist']:
                         trackList.append(
                             self.media_player.trackDB.getTrackAtIndex(idx))
@@ -1141,7 +1141,7 @@ class MainWindow(QMainWindow):
         else:
             self.ui.btn_player_navigator_playPause.setIcon(self.play_icon.icon)
 
-        print('LENGTH OF PLAYBACK: ', len(self.media_player.getPlaybackList()))
+        # print('LENGTH OF PLAYBACK: ', len(self.media_player.getPlaybackList()))
         if len(self.media_player.getPlaybackList()) > 0:
             if self.media_player.getCurrPos()/1000 >= self.media_player.playBack[self.media_player.curr_playing].getTrackDuration():
                 # Turn off repeat mode
