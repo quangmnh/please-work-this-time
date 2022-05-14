@@ -67,51 +67,26 @@ bluetooth_devices = [
 # END: EXAMPLE DATA ########################
 
 
-class Worker(QObject):
+class BluetoothWorker(QObject):
     finished = pyqtSignal()
     result = pyqtSignal(str)
 
-    def __init__(self, camera, face_recognition, emotion_recognition, bluetooth, parent: None) -> None:
+    def __init__(self, scan_method, connect_method, disconnect_method, parent: None) -> None:
         super().__init__(parent)
-        self.camera = camera
-        self.face_recognition = face_recognition
-        self.emotion_recognition = emotion_recognition
-        self.bluetooth = bluetooth
+        self.scan_method = scan_method
+        self.connect_method = connect_method
+        self.disconnect_method = disconnect_method
 
-    def run(self):
-        # TODO: PLease use the true label var for choosing and playing the right playlist
-        temp = {
-            "Angry": 0,
-            "Happy": 0,
-            "Neutral": 0,
-            "Sad": 0,
-            "Surprise": 0,
-        }
-        start = time()
-        while time() - start < 4:
-            frame = self.camera.get_frame()
-            if frame is None:
-                # print("frame is none")
-                continue
-            else:
-                box = self.face_recognition.predict(
-                    self.camera.get_blob(frame))
-                if box is None:
-                    continue
-                else:
-                    # print(box)
-                    # print(frame.shape)
-                    (height, width) = frame.shape[:2]
-                    box = box * np.array([width, height, width, height])
-                    # (x, y, w, h) = box.astype('int')
-                    roi = self.camera.get_roi(box, frame)
-                    if roi is None:
-                        continue
-                    else:
-                        label = self.emotion_recognition.predict(roi)
-                        temp[label] += 1
-        true_label = max(temp, key=temp.get)
-        self.result.emit(true_label)
+    def run_scan(self):
+        self.scan_method()
+        self.finished.emit()
+
+    def run_connect(self):
+        self.connect_method()
+        self.finished.emit()
+
+    def run_disconnect(self):
+        self.disconnect_method()
         self.finished.emit()
 
 
@@ -346,8 +321,10 @@ class MainWindow(QMainWindow):
         self.ui.Btn_Add_Playlist.clicked.connect(
             self.on_create_playlist)
         ## Bluetooth settings     ####
+        # self.ui.btn_settings_bluetooth_scan_devices.clicked.connect(
+        #     self.on_scan_bluetooth_devices)
         self.ui.btn_settings_bluetooth_scan_devices.clicked.connect(
-            self.on_scan_bluetooth_devices)
+            self.run_long_scan)
         self.ui.btn_settings_bluetooth_disconnect.clicked.connect(
             self.on_disconnect_device)
         ## Hand gesture settings  ####
@@ -380,7 +357,7 @@ class MainWindow(QMainWindow):
         # PLAYER
         # Track slider
         # Considering event for this
-        self.ui.slider_player_navigator_progress_bar.sliderPressed.connect(
+        self.ui.slider_player_navigator_progress_bar.sliderMoved.connect(
             self.on_set_position)
         # Volume slider
         self.ui.slider_player_volume.valueChanged.connect(self.on_set_volume)
@@ -599,22 +576,46 @@ class MainWindow(QMainWindow):
     def print_result(self, n):
         print("[DEBUG] emotion fetched result: ", n)
 
-    # Long running task
-    def runLongTask(self):
-        self.ui.Pages_Widget.setCurrentWidget(
-            self.ui.page_emotion_recognition_loading)
+    # Long running task bluetooth
+    def run_long_scan(self):
+        self.ui.btn_settings_bluetooth_scan_devices.setDisabled(True)
+        self.ui.btn_settings_bluetooth_scan_devices.setText("Scanning...")
         self.thread = QThread()
-        self.worker = Worker(self.camera, self.face_recognition,
-                             self.emotion_recognition, self.bluetooth, None)
+        self.worker = BluetoothWorker(self.on_scan_bluetooth_devices, self.on_connect_device,
+                                      self.on_disconnect_device, None)
         self.worker.moveToThread(self.thread)
-        self.thread.started.connect(self.worker.run)
+        self.thread.started.connect(self.worker.run_scan)
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
-        self.worker.result.connect(self.print_result)
         self.thread.start()
 
+    def run_long_connect(self, device_info):
+        self.thread = QThread()
+        self.worker = BluetoothWorker(self.on_scan_bluetooth_devices, self.on_connect_device,
+                                      self.on_disconnect_device, None)
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(self.worker.run_connect)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.start()
+
+    def run_long_disconnect(self):
+        self.thread = QThread()
+        self.worker = BluetoothWorker(self.on_scan_bluetooth_devices, self.on_connect_device,
+                                      self.on_disconnect_device, None)
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(self.worker.run_disconnect)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.start()
+
+    # END: Long running task
+
     # Emotion recognition
+
     def on_emotion_recognition(self):
         # TODO: PLease use the true label var for choosing and playing the right playlist
         temp = {
