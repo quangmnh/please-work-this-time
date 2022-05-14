@@ -168,6 +168,7 @@ class TestProcess(QProcess):
             err += self.readAllStandardError().data()
 
         # rest of function
+        print("[DEBUG] Print from error received in process: ", err.decode())
 
 
 class MainWindow(QMainWindow):
