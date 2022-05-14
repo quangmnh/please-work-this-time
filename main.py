@@ -298,7 +298,21 @@ class MainWindow(QMainWindow):
         )
 
         global trackDB, library_songs
-        trackDB = getDBFromJSON(json_dir)
+
+        trackDB.trackList = []
+        trackDB.numOfTracks = 0
+
+        with open(json_dir, encoding='utf-8') as f:
+            data = json.load(f)
+
+            for song in data['songdb']:
+                track = Track(
+                    song.get('id'),
+                    song.get('url')
+                )
+                trackDB.addTrack(track)
+                print(len(trackDB.getTrackList()))
+
         library_songs = convert_from_track_list_to_list_dict(
             trackDB.getTrackList())
         self.media_player.trackDB = trackDB
