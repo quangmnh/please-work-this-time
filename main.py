@@ -300,7 +300,7 @@ class MainWindow(QMainWindow):
         self.test_p.emotion_result.connect(self.on_emotion_result)
         self.test_p.finish_initiate_signal.connect(
             lambda: (self.ui.Btn_menu_fer.setDisabled(False), self.ui.Btn_menu_fer.setText("Emotion recognition")))
-        self.test_p.error_signal(self.on_restart_process)
+        self.test_p.error_signal.connect(self.on_restart_process)
         # End : EXTRA
 
         # Fix the handler to on_emotion_recognition if failed
