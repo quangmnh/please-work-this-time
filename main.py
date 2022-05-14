@@ -156,7 +156,7 @@ class TestProcess(QProcess):
         # rest of function
         print("[DEBUG] Print from result received in process: ", msg.decode())
 
-    def _on_script_error(self):
+    def _on_std_error(self):
         """
         """
         self.setReadChannel(QProcess.StandardError)
