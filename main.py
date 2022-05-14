@@ -117,6 +117,7 @@ class Worker(QObject):
 
 class TestProcess(QProcess):
     finish_initiate_signal = pyqtSignal(int)
+    error_signal = pyqtSignal(int)
     emotion_result = pyqtSignal(str)
 
     def __init__(self, io_timeout=300):
@@ -172,8 +173,11 @@ class TestProcess(QProcess):
 
         print("[DEBUG] Print from result received in process: ", err.decode())
 
-        if ("WARN:0" in err.decode()):
+        if ("status:0" in err.decode()):
             self.finish_initiate_signal.emit(1)
+
+        if ("timeout" in err.decode() or "TIMEOUT" in err.decode()):
+            self.error_signal.emit(1)
 
 
 class MainWindow(QMainWindow):
@@ -296,7 +300,7 @@ class MainWindow(QMainWindow):
         self.test_p.emotion_result.connect(self.on_emotion_result)
         self.test_p.finish_initiate_signal.connect(
             lambda: (self.ui.Btn_menu_fer.setDisabled(False), self.ui.Btn_menu_fer.setText("Emotion recognition")))
-
+        self.test_p.error_signal(self.on_restart_process)
         # End : EXTRA
 
         # Fix the handler to on_emotion_recognition if failed
@@ -430,6 +434,15 @@ class MainWindow(QMainWindow):
                                              "\n Playing playlist " + self.media_player.curr_emotion_playlist.getPlaylistName())
             self.ui.Pages_Widget.setCurrentWidget(
                 self.ui.page_emotion_recognition)
+
+    def on_restart_process(self):
+        self.test_p.kill()
+        self.ui.Btn_menu_fer.setDisabled(True)
+        self.ui.Btn_menu_fer.setText("Currently restarting...")
+        if (self.test_p.state() == QProcess.NotRunning):
+            print("[DEBUG] Restart on error")
+            self.test_p.start("python3", ["controller/fer.py"])
+
     # End : EXTRA test
 
     # HANDLERS
