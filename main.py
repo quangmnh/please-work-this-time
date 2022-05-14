@@ -170,8 +170,9 @@ class TestProcess(QProcess):
         # new data waiting
         err += self.readAllStandardError().data()
 
+        print("[DEBUG] Print from result received in process: ", err.decode())
+
         if ("WARN:0" in err.decode()):
-            # print("[DEBUG] Print from result received in process: ", err.decode())
             self.finish_initiate_signal.emit(1)
 
 
