@@ -399,14 +399,14 @@ class MainWindow(QMainWindow):
     def on_emotion_result(self, result):
         true_label = result
         print("[DEBUG] Print after signal: ", true_label)
-        if (true_label == 'Angry' or true_label == 'Happy' or true_label == 'Neutral' or true_label == 'Sad' or true_label == 'Surprise'):
-            if true_label == 'Angry':
+        if ('Angry' in true_label or 'Happy' in true_label or 'Neutral' in true_label or 'Sad' in true_label or 'Surprise' in true_label):
+            if 'Angry' in true_label:
                 self.media_player.curr_emotion_playlist = self.media_player.angry_list
-            elif true_label == 'Happy':
+            elif 'Happy' in true_label:
                 self.media_player.curr_emotion_playlist = self.media_player.happy_list
-            elif true_label == 'Neutral':
+            elif 'Neutral' in true_label:
                 self.media_player.curr_emotion_playlist = self.media_player.neutral_list
-            elif true_label == 'Sad':
+            elif 'Sad' in true_label:
                 self.media_player.curr_emotion_playlist = self.media_player.sad_list
             else:
                 self.media_player.curr_emotion_playlist = self.media_player.surprise_list
