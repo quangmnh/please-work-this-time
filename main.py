@@ -291,7 +291,9 @@ class MainWindow(QMainWindow):
         updateTrackDatabaseFromFolderToJsonFile(
             # track_folder=os.path.join(
             # 'C:/', 'Users', 'Victus', 'Downloads', 'Music'),
-            track_folder=os.path.join('/home/quangmnh/Music'),
+            track_folder=os.path.join(
+                "C:/", "Users", "Victus", "Downloads", "Music"),
+            # "D:/", "Music"),
             json_dir=json_dir
         )
 

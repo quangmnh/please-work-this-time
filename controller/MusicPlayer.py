@@ -19,8 +19,9 @@ class Track:
         self.trackId = trackId
         self.trackURL = trackURL
         audio = eyed3.load(trackURL)
-        self.name = audio.tag.title
-        self.artist = audio.tag.artist
+        self.name = audio.tag.title if (
+            audio.tag.title) else os.path.basename(trackURL)[:-4]
+        self.artist = audio.tag.artist if (audio.tag.artist) else "Unknown"
         self.duration = audio.info.time_secs
         self.imageURL = imageURL
 
