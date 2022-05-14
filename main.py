@@ -37,7 +37,7 @@ import platform
 import random
 from time import time
 
-# from controller.model_manager import *
+from controller.model_manager import *
 from controller.blutooth_controller import *
 
 # EXAMPLE DATA
@@ -187,16 +187,16 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         # comment this section for windows testing and set these to None, fuk u all windows users
-        # self.camera = CameraManagement()
-        # self.face_recognition = ONNXClassifierWrapper2(
-        #     "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
-        # self.emotion_recognition = ONNXClassifierWrapper(
-        #     "controller/new_model.trt", [1, 5], target_dtype=np.float32)
+        self.camera = CameraManagement()
+        self.face_recognition = ONNXClassifierWrapper2(
+            "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
+        self.emotion_recognition = ONNXClassifierWrapper(
+            "controller/new_model.trt", [1, 5], target_dtype=np.float32)
         self.bluetooth = BluetoothController(10)
 
         # Start process for testing
         self.test_p = TestProcess(MainWindow)
-        self.test_p.start("python3", ["controller/fer.py"])
+        # self.test_p.start("python3", ["controller/fer.py"])
 
         # Icons
         self.play_icon = PlayIcon()
@@ -304,10 +304,12 @@ class MainWindow(QMainWindow):
         # End : EXTRA
 
         # Fix the handler to on_emotion_recognition if failed
-        self.ui.Btn_menu_fer.clicked.connect(
-            lambda: (self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition_loading),
-                     self.test_p.write("Testing signal\n".encode()))
-        )
+        # self.ui.Btn_menu_fer.clicked.connect(
+        #     lambda: (self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition_loading),
+        #              self.test_p.write("Testing signal\n".encode()))
+        # )
+
+        self.ui.Btn_menu_fer.clicked.connect(self.on_emotion_recognition)
 
         # SETTINGS PAGE
         self.ui.Btn_Settings.clicked.connect(
