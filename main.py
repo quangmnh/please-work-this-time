@@ -38,7 +38,7 @@ import random
 from time import time
 
 # from controller.model_manager import *
-# from controller.blutooth_controller import *
+from controller.blutooth_controller import *
 
 # EXAMPLE DATA
 ############################################
