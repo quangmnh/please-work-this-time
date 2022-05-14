@@ -182,7 +182,7 @@ class MainWindow(QMainWindow):
         #     "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
         # self.emotion_recognition = ONNXClassifierWrapper(
         #     "controller/new_model.trt", [1, 5], target_dtype=np.float32)
-        # self.bluetooth = BluetoothController(10)
+        self.bluetooth = BluetoothController(10)
 
         # Start process for testing
         self.test_p = TestProcess()
