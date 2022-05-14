@@ -5,7 +5,7 @@ from PyQt5.QtMultimedia import QMediaPlayer
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont, QFontDatabase,
                          QIcon, QKeySequence, QLinearGradient, QPalette, QPainter, QPixmap, QRadialGradient)
-from PyQt5.QtCore import (QObject, QThread, pyqtSignal)
+from PyQt5.QtCore import (QObject, QThread, pyqtSignal, QProcess)
 from PyQt5 import QtCore, QtGui, QtWidgets
 # GUI file
 from utils1.snake_case import snake_case
@@ -37,8 +37,8 @@ import platform
 import random
 from time import time
 
-from controller.model_manager import *
-from controller.blutooth_controller import *
+# from controller.model_manager import *
+# from controller.blutooth_controller import *
 
 # EXAMPLE DATA
 ############################################
@@ -115,6 +115,61 @@ class Worker(QObject):
         self.finished.emit()
 
 
+class TestProcess(QProcess):
+
+    def __init__(self, io_timeout=300):
+        super().__init__()
+        self.io_timeout = io_timeout
+
+        self.finished.connect(
+            lambda code, status: self._on_finished(code, status))
+
+        self.readyReadStandardOutput.connect(
+            lambda: self._on_output()
+        )
+
+        self.readyReadStandardError.connect(
+            lambda: self._on_std_error()
+        )
+
+    def _on_finished(self, exit_code=None, exit_status=None):
+        """
+        """
+        if not self.atEnd():
+            std_out = self.readAllStandardOutput().data().decode().strip()
+            std_err = self.readAllStandardError().data().decode().strip()
+
+        # rest of function
+
+    def _on_output(self):
+        """
+        """
+        self.setReadChannel(QProcess.StandardOutput)
+
+        # collect all data
+        msg = b''
+        # while self.waitForReadyRead(self.io_timeout):
+        #     # new data waiting
+        #     msg += self.readAllStandardOutput().data()
+        msg += self.readAllStandardOutput().data()
+
+        # rest of function
+        print("[DEBUG] Print from result received in process: ", msg.decode())
+
+    def _on_script_error(self):
+        """
+        """
+        self.setReadChannel(QProcess.StandardError)
+
+        # collect all data
+        err = b''
+        while self.waitForReadyRead(self.io_timeout):
+            # new data waiting
+            err += self.readAllStandardError().data()
+
+        # rest of function
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
@@ -122,12 +177,16 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         # comment this section for windows testing and set these to None, fuk u all windows users
-        self.camera = CameraManagement()
-        self.face_recognition = ONNXClassifierWrapper2(
-            "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
-        self.emotion_recognition = ONNXClassifierWrapper(
-            "controller/new_model.trt", [1, 5], target_dtype=np.float32)
-        self.bluetooth = BluetoothController(10)
+        # self.camera = CameraManagement()
+        # self.face_recognition = ONNXClassifierWrapper2(
+        #     "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
+        # self.emotion_recognition = ONNXClassifierWrapper(
+        #     "controller/new_model.trt", [1, 5], target_dtype=np.float32)
+        # self.bluetooth = BluetoothController(10)
+
+        # Start process for testing
+        self.test_p = TestProcess()
+        self.test_p.start("python", ["utils1/fer.py"])
 
         # Icons
         self.play_icon = PlayIcon()
@@ -225,7 +284,8 @@ class MainWindow(QMainWindow):
         self.ui.Btn_Library.clicked.connect(self.on_library_open)
 
         # EMOTION RECOGNITION PAGE
-        self.ui.Btn_menu_fer.clicked.connect(self.runLongTask)
+        self.ui.Btn_menu_fer.clicked.connect(
+            lambda: self.test_p.write("Testing signal\n".encode()))
 
         # SETTINGS PAGE
         self.ui.Btn_Settings.clicked.connect(
@@ -1135,10 +1195,11 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == "__main__":
+    os.environ["PYTHONUNBUFFERED"] = "1"
     start = time()
     app = QApplication(sys.argv)
 
-    json_dir = os.path.join('sample.json')
+    json_dir = os.path.join('test_sample.json')
 
     trackDB = getDBFromJSON(json_dir)
     library_songs = convert_from_track_list_to_list_dict(
