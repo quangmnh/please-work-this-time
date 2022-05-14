@@ -116,6 +116,8 @@ class Worker(QObject):
 
 
 class TestProcess(QProcess):
+    finish_initiate_signal = pyqtSignal(int)
+    emotion_result = pyqtSignal(str)
 
     def __init__(self, io_timeout=300):
         super().__init__()
@@ -154,7 +156,8 @@ class TestProcess(QProcess):
         msg += self.readAllStandardOutput().data()
 
         # rest of function
-        print("[DEBUG] Print from result received in process: ", msg.decode())
+        # print("[DEBUG] Print from result received in process: ", msg.decode())
+        self.emotion_result.emit(msg.decode())
 
     def _on_std_error(self):
         """
@@ -166,8 +169,9 @@ class TestProcess(QProcess):
         # new data waiting
         err += self.readAllStandardError().data()
 
-        # rest of function
-        print("[DEBUG] Print from error received in process: ", err.decode())
+        if ("WARN:0" in err.decode()):
+            print("[DEBUG] Print from result received in process: ", err.decode())
+            self.finish_initiate_signal.emit(1)
 
 
 class MainWindow(QMainWindow):
@@ -284,6 +288,16 @@ class MainWindow(QMainWindow):
         self.ui.Btn_Library.clicked.connect(self.on_library_open)
 
         # EMOTION RECOGNITION PAGE
+        # EXTRA
+        self.ui.Btn_menu_fer.setDisabled(True)
+        self.ui.Btn_menu_fer.setText("Currently loading...")
+        self.test_p.emotion_result.connect(self.on_emotion_result)
+        self.test_p.finish_initiate_signal.connect(
+            lambda: (self.ui.Btn_menu_fer.setDisabled(False), self.ui.Btn_menu_fer.setText("Emotion recognition")))
+
+        # End : EXTRA
+
+        # Fix the handler to on_emotion_recognition if failed
         self.ui.Btn_menu_fer.clicked.connect(
             lambda: self.test_p.write("Testing signal\n".encode()))
 
@@ -377,6 +391,11 @@ class MainWindow(QMainWindow):
         ########################################################################
         self.show()
         ## END MAIN WINDOW #####################################################
+
+    # EXTRA test
+    def on_emotion_result(self, result):
+        print("[DEBUG] Print after signal: ", result)
+    # End : EXTRA test
 
     # HANDLERS
     ########################################################################
