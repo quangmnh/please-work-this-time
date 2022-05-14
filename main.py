@@ -37,7 +37,7 @@ import platform
 import random
 from time import time
 
-from controller.model_manager import *
+# from controller.model_manager import *
 from controller.blutooth_controller import *
 
 # EXAMPLE DATA
@@ -169,7 +169,7 @@ class MainWindow(QMainWindow):
         #     "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
         # self.emotion_recognition = ONNXClassifierWrapper(
         #     "controller/new_model.trt", [1, 5], target_dtype=np.float32)
-        self.bluetooth = BluetoothController(10)
+        self.bluetooth = BluetoothController(5)
 
         # Start process for testing
         self.test_p = TestProcess(MainWindow)
@@ -324,7 +324,7 @@ class MainWindow(QMainWindow):
         # self.ui.btn_settings_bluetooth_scan_devices.clicked.connect(
         #     self.on_scan_bluetooth_devices)
         self.ui.btn_settings_bluetooth_scan_devices.clicked.connect(
-            self.run_long_scan)
+            self.on_scan_bluetooth_devices)
         self.ui.btn_settings_bluetooth_disconnect.clicked.connect(
             self.on_disconnect_device)
         ## Hand gesture settings  ####
