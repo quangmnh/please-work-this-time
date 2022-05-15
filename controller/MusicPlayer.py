@@ -7,6 +7,7 @@ from copy import deepcopy
 import random
 import eyed3
 import json
+from time import time
 
 
 class Track:
@@ -307,4 +308,4 @@ def getPlaylistList(
 
 
 if __name__ == '__main__':
-    pass
+    start_running = time()

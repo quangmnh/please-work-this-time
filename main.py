@@ -745,8 +745,6 @@ class MainWindow(QMainWindow):
         print("[TEST] Library page open time: ", time() - start)
 
     def on_play_song(self, index: int, playback: "list[Track]" = []):
-        global start_running
-        print('[TEST] Elapsed time: ', time() - start_running)
         self.media_player.playBack = playback
         self.media_player.playback_count = len(self.media_player.playBack)
 
@@ -1339,8 +1337,8 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     os.environ["PYTHONUNBUFFERED"] = "1"
-    global start_running
-    start_running = time()
+    # global start_running
+    # start_running = time()
     start = time()
     app = QApplication(sys.argv)
 
