@@ -745,6 +745,8 @@ class MainWindow(QMainWindow):
         print("[TEST] Library page open time: ", time() - start)
 
     def on_play_song(self, index: int, playback: "list[Track]" = []):
+        global start_running
+        print('[TEST] Elapsed time: ', time() - start_running)
         self.media_player.playBack = playback
         self.media_player.playback_count = len(self.media_player.playBack)
 
@@ -1218,8 +1220,6 @@ class MainWindow(QMainWindow):
         # print('LENGTH OF PLAYBACK: ', len(self.media_player.getPlaybackList()))
         if len(self.media_player.getPlaybackList()) > 0:
             if self.media_player.getCurrPos()/1000 >= self.media_player.playBack[self.media_player.curr_playing].getTrackDuration():
-                global start_running
-                print('[TEST] Elapsed time: ', time() - start_running)
                 # Turn off repeat mode
                 if self.media_player.repeatMode == 0:
                     if self.media_player.curr_playing == len(self.media_player.playBack) - 1:

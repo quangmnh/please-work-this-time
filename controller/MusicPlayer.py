@@ -211,6 +211,8 @@ class MusicPlayer:
 
     def playSongAt(self, index):
         # print(self.playBack[index].getTrackURL())
+        global start_running
+        print('[TEST] Elapsed time: ', time() - start_running)
         self.curr_playing = index
         media_content = QMediaContent(
             QUrl.fromLocalFile(self.playBack[index].getTrackURL()))
