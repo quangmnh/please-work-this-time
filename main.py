@@ -167,6 +167,11 @@ class TestProcess(QProcess):
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
+        self.media_player = MusicPlayer(
+            playBack=trackDB.getTrackList(),
+            playlistList=playlistList,
+            trackDB=trackDB
+        )
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
@@ -203,12 +208,6 @@ class MainWindow(QMainWindow):
             self.ui.frame_emotion_recognition_loading_orb)
         self.loading_orb.start()
         # End : Add spinner
-
-        self.media_player = MusicPlayer(
-            playBack=trackDB.getTrackList(),
-            playlistList=playlistList,
-            trackDB=trackDB
-        )
 
         for play_list in self.media_player.playlistList:
             self.add_playlist_page(
