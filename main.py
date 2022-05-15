@@ -37,7 +37,9 @@ import platform
 import random
 from time import time
 
-# from controller.model_manager import *
+# For testing initialize time
+from controller.model_manager import *
+# END : For testing initialize time
 from controller.blutooth_controller import *
 
 # EXAMPLE DATA
@@ -164,16 +166,20 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         # comment this section for windows testing and set these to None, fuk u all windows users
-        # self.camera = CameraManagement()
-        # self.face_recognition = ONNXClassifierWrapper2(
-        #     "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
-        # self.emotion_recognition = ONNXClassifierWrapper(
-        #     "controller/new_model.trt", [1, 5], target_dtype=np.float32)
+        # For testing initialize time
+        self.camera = CameraManagement()
+        self.face_recognition = ONNXClassifierWrapper2(
+            "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
+        self.emotion_recognition = ONNXClassifierWrapper(
+            "controller/new_model.trt", [1, 5], target_dtype=np.float32)
+        # END : For testing initialize time
         self.bluetooth = BluetoothController(5)
 
         # Start process for testing
         self.test_p = TestProcess(MainWindow)
-        self.test_p.start("python3", ["controller/fer.py"])
+        # For testing initialize time : Comment this
+        # self.test_p.start("python3", ["controller/fer.py"])
+        # END : For testing initialize time
 
         # Icons
         self.play_icon = PlayIcon()
@@ -435,7 +441,8 @@ class MainWindow(QMainWindow):
             # track_folder=os.path.join(
             # 'C:/', 'Users', 'Victus', 'Downloads', 'Music'),
             track_folder=os.path.join(
-                "C:/", "Users", "Victus", "Downloads", "Music"),
+                # "C:/", "Users", "Victus", "Downloads", "Music"),
+                "/home/quangmnh/Music"),
             # "D:/", "Music"),
             json_dir=json_dir
         )
