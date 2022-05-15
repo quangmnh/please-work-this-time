@@ -31,6 +31,7 @@ from controller.MusicPlayer import MusicPlayer, getDBFromJSON, getPlaylistList, 
 from controller.scan_usb import auto_detect_music_in_usb
 from controller.create_json import updateTrackDatabaseFromFolderToJsonFile, updateEmotionPlaylistJson
 from utils1.utils import *
+from controller.MusicPlayer import start_running
 
 import sys
 import platform
