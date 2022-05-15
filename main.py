@@ -48,8 +48,6 @@ playlist_no = 1
 
 start_fer = 0
 
-start_running = 0
-
 
 def increase_playlist_no():
     global playlist_no
@@ -1341,6 +1339,8 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     os.environ["PYTHONUNBUFFERED"] = "1"
+    global start_running
+    start_running = time()
     start = time()
     app = QApplication(sys.argv)
 
