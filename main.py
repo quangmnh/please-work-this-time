@@ -48,6 +48,8 @@ playlist_no = 1
 
 start_fer = 0
 
+start_running = 0
+
 
 def increase_playlist_no():
     global playlist_no
@@ -1218,6 +1220,8 @@ class MainWindow(QMainWindow):
         # print('LENGTH OF PLAYBACK: ', len(self.media_player.getPlaybackList()))
         if len(self.media_player.getPlaybackList()) > 0:
             if self.media_player.getCurrPos()/1000 >= self.media_player.playBack[self.media_player.curr_playing].getTrackDuration():
+                global start_running
+                print('[TEST] Elapsed time: ', time() - start_running)
                 # Turn off repeat mode
                 if self.media_player.repeatMode == 0:
                     if self.media_player.curr_playing == len(self.media_player.playBack) - 1:
