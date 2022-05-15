@@ -38,13 +38,15 @@ import random
 from time import time
 
 # For testing initialize time
-from controller.model_manager import *
+# from controller.model_manager import *
 # END : For testing initialize time
 from controller.blutooth_controller import *
 
 # EXAMPLE DATA
 ############################################
 playlist_no = 1
+
+start_fer = 0
 
 
 def increase_playlist_no():
@@ -136,6 +138,8 @@ class TestProcess(QProcess):
         # rest of function
         # print("[DEBUG] Print from result received in process: ", msg.decode())
         if ("Angry" in msg.decode() or "Happy" in msg.decode() or "Neutral" in msg.decode() or "Sad" in msg.decode() or "Surprise" in msg.decode()):
+            global start_fer
+            print("[TEST] Emotion result time: ", time() - start_fer)
             self.emotion_result.emit(msg.decode())
 
     def _on_std_error(self):
@@ -167,18 +171,18 @@ class MainWindow(QMainWindow):
 
         # comment this section for windows testing and set these to None, fuk u all windows users
         # For testing initialize time
-        self.camera = CameraManagement()
-        self.face_recognition = ONNXClassifierWrapper2(
-            "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
-        self.emotion_recognition = ONNXClassifierWrapper(
-            "controller/new_model.trt", [1, 5], target_dtype=np.float32)
+        # self.camera = CameraManagement()
+        # self.face_recognition = ONNXClassifierWrapper2(
+        #     "controller/new_caffe.trt", [1, 1, 200, 7], 0.5, target_dtype=np.float32)
+        # self.emotion_recognition = ONNXClassifierWrapper(
+        #     "controller/new_model.trt", [1, 5], target_dtype=np.float32)
         # END : For testing initialize time
         self.bluetooth = BluetoothController(5)
 
         # Start process for testing
         self.test_p = TestProcess(MainWindow)
         # For testing initialize time : Comment this
-        # self.test_p.start("python3", ["controller/fer.py"])
+        self.test_p.start("python3", ["controller/fer.py"])
         # END : For testing initialize time
 
         # Icons
@@ -270,8 +274,7 @@ class MainWindow(QMainWindow):
         ########################################################################
 
         # DASHBOARD PAGE
-        self.ui.Btn_Dashboard.clicked.connect(
-            lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_dashboard))
+        self.ui.Btn_Dashboard.clicked.connect(self.on_dashboard_page)
 
         # LIBRARY PAGE
         self.ui.Btn_Library.clicked.connect(self.on_library_open)
@@ -288,28 +291,28 @@ class MainWindow(QMainWindow):
 
         # Fix the handler to on_emotion_recognition if failed
         self.ui.Btn_menu_fer.clicked.connect(
-            lambda: (self.ui.Pages_Widget.setCurrentWidget(self.ui.page_emotion_recognition_loading),
-                     self.test_p.write("Testing signal\n".encode()))
+            lambda: (
+                self.ui.Pages_Widget.setCurrentWidget(
+                    self.ui.page_emotion_recognition_loading),
+                self.test_p.write("Testing signal\n".encode()),
+                self.assign_start_fer_time()
+            )
         )
 
         # self.ui.Btn_menu_fer.clicked.connect(self.on_emotion_recognition)
 
         # SETTINGS PAGE
-        self.ui.Btn_Settings.clicked.connect(
-            lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings))
-        self.ui.Btn_menu_settings.clicked.connect(
-            lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings))
+        self.ui.Btn_Settings.clicked.connect(self.on_setting_page)
+        self.ui.Btn_menu_settings.clicked.connect(self.on_setting_page)
 
         # # SETTINGS: HAND GESTURE PAGE
         # self.ui.Btn_settings_hand_gesture.clicked.connect(
         #     lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings_hand_gesture))
         # SETTINGS: EMOTION PLAYLIST MAP PAGE
         self.ui.Btn_settings_emotion_map.clicked.connect(
-            lambda: self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings_emotion_playlist_map))
+            self.on_emotion_playlist_map_page)
         self.ui.btn_go_to_settings_no_playlist.clicked.connect(
-            lambda: self.ui.Pages_Widget.setCurrentWidget(
-                self.ui.page_settings_emotion_playlist_map)
-        )
+            self.on_emotion_playlist_map_page)
         # SETTINGS: BLUETOOTH PAGE
         self.ui.Btn_settings_bluetooth.clicked.connect(
             self.on_open_bluetooth_page)
@@ -388,9 +391,13 @@ class MainWindow(QMainWindow):
         ## END MAIN WINDOW #####################################################
 
     # EXTRA test
+    def assign_start_fer_time(self):
+        global start_fer
+        start_fer = time()
+
     def on_emotion_result(self, result):
         true_label = result
-        print("[DEBUG] Print after signal: ", true_label)
+        # print("[DEBUG] Print after signal: ", true_label)
         if ('Angry' in true_label or 'Happy' in true_label or 'Neutral' in true_label or 'Sad' in true_label or 'Surprise' in true_label):
             if 'Angry' in true_label:
                 self.media_player.curr_emotion_playlist = self.media_player.angry_list
@@ -427,15 +434,34 @@ class MainWindow(QMainWindow):
         self.ui.Btn_menu_fer.setDisabled(True)
         self.ui.Btn_menu_fer.setText("Currently restarting...")
         if (self.test_p.state() == QProcess.NotRunning):
-            print("[DEBUG] Restart on error")
+            # print("[DEBUG] Restart on error")
             self.test_p.start("python3", ["controller/fer.py"])
 
     # End : EXTRA test
 
     # HANDLERS
     ########################################################################
+    # Dashboard page
+    def on_dashboard_page(self):
+        start = time()
+        self.ui.Pages_Widget.setCurrentWidget(self.ui.page_dashboard)
+        print("[TEST] Dashboard page open time: ", time() - start)
+
+    # Setting page
+    def on_setting_page(self):
+        start = time()
+        self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings)
+        print("[TEST] Setting page open time: ", time() - start)
+
+    def on_emotion_playlist_map_page(self):
+        start = time()
+        self.ui.Pages_Widget.setCurrentWidget(
+            self.ui.page_settings_emotion_playlist_map)
+        print("[TEST] Emotion playlist map page open time: ", time() - start)
+
     # Scan USB
     def on_add_songs_from_usb(self):
+        start = time()
         auto_detect_music_in_usb()
         updateTrackDatabaseFromFolderToJsonFile(
             # track_folder=os.path.join(
@@ -466,10 +492,13 @@ class MainWindow(QMainWindow):
         library_songs = convert_from_track_list_to_list_dict(
             trackDB.getTrackList())
         self.media_player.trackDB = trackDB
+        print("[TEST] on add songs from usb time: ", time() - start)
         self.on_library_open()
 
     # Bluetooth
+
     def on_open_bluetooth_page(self):
+        start = time()
         # Bluetooth settings page display change
         if (self.bluetooth.get_paired_device() != None):
             # print("[DEBUG] current bluetooth device: ",
@@ -481,8 +510,10 @@ class MainWindow(QMainWindow):
             self.ui.btn_settings_bluetooth_scan_devices.setText("Scan devices")
             self.ui.btn_settings_bluetooth_scan_devices.setDisabled(False)
         self.ui.Pages_Widget.setCurrentWidget(self.ui.page_settings_bluetooth)
+        print("[TEST] Bluetooth page open time: ", time() - start)
 
     def on_scan_bluetooth_devices(self):
+        start = time()
         # TODO: Scan bluetooth devices
         bluetooth_devices = None
         if self.bluetooth.get_paired_device() is None:
@@ -492,8 +523,10 @@ class MainWindow(QMainWindow):
         if bluetooth_devices is not None:
             display_list_item(self.ui.listWidget_settings_bluetooth_devices, [BluetoothDevice(
                 device, on_connect_device=self.on_connect_device) for device in bluetooth_devices])
+        print("[TEST] Scan bluetooth devices time: ", time() - start)
 
     def on_connect_device(self, device_info):
+        start = time()
         # TODO: Connect to device
         self.bluetooth.connect_device(device_info["name"], device_info["mac"])
         if (self.bluetooth.get_paired_device() != None):
@@ -508,8 +541,10 @@ class MainWindow(QMainWindow):
             self.ui.btn_settings_bluetooth_scan_devices.setDisabled(False)
             self.ui.listWidget_settings_bluetooth_devices.clear()
         # self.on_scan_bluetooth_devices()
+        print("[TEST] Connect device time: ", time() - start)
 
     def on_disconnect_device(self):
+        start = time()
         device = self.bluetooth.get_paired_device()
         if device is None:
             return None
@@ -526,6 +561,7 @@ class MainWindow(QMainWindow):
                         "Scan devices")
                     self.ui.btn_settings_bluetooth_scan_devices.setDisabled(
                         False)
+            print("[TEST] Disconnect device time: ", time() - start)
             return 0
     # END: Bluetooth
 
@@ -692,6 +728,7 @@ class MainWindow(QMainWindow):
 
     def on_library_open(self):
         # TODO: Display all the songs once the library is opened
+        start = time()
         self.ui.Pages_Widget.setCurrentWidget(self.ui.page_library)
         display_list_item(
             self.ui.listWidget_library_songs,
@@ -705,6 +742,7 @@ class MainWindow(QMainWindow):
                 self.media_player.trackDB.getTrackList()
             ) for song in library_songs]
         )
+        print("[TEST] Library page open time: ", time() - start)
 
     def on_play_song(self, index: int, playback: "list[Track]" = []):
         self.media_player.playBack = playback
@@ -853,8 +891,10 @@ class MainWindow(QMainWindow):
 
     # Playlist
     def on_create_playlist(self):
+        start = time()
         self.create_playlist_dialog(
             self.ui.Pages_Widget, self.ui.Pages_Widget, self.ui.listWidget_playlists)
+        print("[TEST] Create playlist dialog time: ", time() - start)
 
     def on_playlist_song_play(self):
         # TODO : Play the song of the playlist
@@ -863,7 +903,7 @@ class MainWindow(QMainWindow):
 
     def on_playlist_play(self, playlist_name: str):
         # TODO : Play the playlist
-
+        start = time()
         curr_playlist = None
         for playlist in self.media_player.playlistList:
             if playlist.getPlaylistName() == playlist_name:
@@ -875,6 +915,7 @@ class MainWindow(QMainWindow):
             # print(curr_playlist.printPlaylistInfo())
             if len(curr_playlist.getTrackList()) != 0:
                 self.on_play_song(0, curr_playlist.getTrackList())
+        print("[TEST] Play playlist time: ", time() - start)
 
     def create_playlist_dialog(self, parent: QtWidgets.QWidget, page_widget: QtWidgets.QStackedWidget, playlist_list_widget: QtWidgets.QListWidget):
         dialog = QtWidgets.QInputDialog(parent)
@@ -1023,6 +1064,7 @@ class MainWindow(QMainWindow):
             page_widget: QtWidgets.QStackedWidget,
             playlist_name: str
     ):
+        start = time()
         # TODO: Display the playlist songs here also
         num_page = page_widget.count()
         for i in range(num_page):
@@ -1059,6 +1101,7 @@ class MainWindow(QMainWindow):
                     ) for song in track_list]
                 )
                 break
+        print("Change playlist page:", time() - start)
 
     def remove_playlist_page(
             self,
@@ -1067,6 +1110,7 @@ class MainWindow(QMainWindow):
             playlist_list_widget: QtWidgets.QListWidget,
             playlist_label: QtWidgets.QListWidgetItem
     ):
+        start = time()
         num_page = page_widget.count()
         for i in range(num_page):
             w = page_widget.widget(i)
@@ -1154,6 +1198,7 @@ class MainWindow(QMainWindow):
         if flag == 'surprise':
             self.ui.comboBox_settings_emotion_playlist_map_surprise.setCurrentText(
                 'None')
+        print("[TEST] Remove playlist page:", time() - start)
 
     # End : Playlist
 
@@ -1198,29 +1243,40 @@ class MainWindow(QMainWindow):
         self.ui.slider_player_navigator_progress_bar.setRange(0, duration)
 
     def on_set_position(self):
+        start = time()
         current_val = self.ui.slider_player_navigator_progress_bar.value()
         self.media_player.player.setPosition(current_val)
+        print("[TEST] Set player position:", time() - start)
 
     def on_set_volume(self, volume):
+        start = time()
         self.media_player.player.setVolume(volume)
+        print("[TEST] Set player volume:", time() - start)
 
     # Navigator
     def on_play_pause(self):
+        start = time()
         self.media_player.togglePlayPause()
+        print("[TEST] Toggle play pause:", time() - start)
 
     def on_next_song(self):
+        start = time()
         if self.media_player.repeatMode != 2:
             index = self.media_player.next()
             if index < len(self.media_player.playBack):
                 self.on_play_song(index, self.media_player.playBack)
+        print("[TEST] Next song:", time() - start)
 
     def on_previous_song(self):
+        start = time()
         if self.media_player.repeatMode != 2:
             index = self.media_player.prev()
             if index < len(self.media_player.playBack):
                 self.on_play_song(index, self.media_player.playBack)
+        print("[TEST] Previous song:", time() - start)
 
     def on_repeat_mode(self):
+        start = time()
         self.media_player.changeRepeatMode()
 
         # Change icons
@@ -1232,8 +1288,10 @@ class MainWindow(QMainWindow):
                 self.repeat_one_icon.icon)
         else:
             self.ui.btn_player_navigator_repeat.setIcon(self.repeat_icon.icon)
+        print("[TEST] Change repeat mode:", time() - start)
 
     def on_shuffle_mode(self):
+        start = time()
         self.media_player.toggleShuffleMode()
         # Change icons
         if self.media_player.isShuffle:
@@ -1242,6 +1300,7 @@ class MainWindow(QMainWindow):
         else:
             self.ui.btn_player_navigator_shuffle.setIcon(
                 self.shuffle_icon.icon)
+        print("[TEST] Change shuffle mode:", time() - start)
     # End : Player
 
     # END : HANDLERS #######################################################
