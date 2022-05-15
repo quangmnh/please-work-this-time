@@ -210,7 +210,7 @@ class MusicPlayer:
         self.repeatMode = (self.repeatMode + 1) % 3
 
     def playSongAt(self, index):
-        print(self.playBack[index].getTrackURL())
+        # print(self.playBack[index].getTrackURL())
         self.curr_playing = index
         media_content = QMediaContent(
             QUrl.fromLocalFile(self.playBack[index].getTrackURL()))
