@@ -756,6 +756,7 @@ class MainWindow(QMainWindow):
         )
 
     def on_remove_song(self, index: int, _type: str = "", playlistName: str = ""):
+        start = time()
         global library_songs
 
         if _type == "library_songs":
@@ -798,6 +799,7 @@ class MainWindow(QMainWindow):
                     self.media_player.getPlaybackList()
                 ) for song in library_songs]
             )
+            print("[TEST] Library song delete time: ", time() - start)
 
         else:
             # Assign to playlist
@@ -826,6 +828,7 @@ class MainWindow(QMainWindow):
                 self.ui.Pages_Widget,
                 playlistName
             )
+            print("[TEST] Playlist song delete time: ", time() - start)
 
     def add_to_playlist_dialog(self, trackIndex):
         # print("Current trackIndex: ", trackIndex)
@@ -859,7 +862,7 @@ class MainWindow(QMainWindow):
         # TODO: Add song to playlist
         # print('Current playlist: ',
         #   self.media_player.playlistList[playlistIndex].getPlaylistName())
-
+        start = time()
         with open(json_dir, encoding='utf-8') as f:
             data = json.load(f)
 
@@ -886,7 +889,7 @@ class MainWindow(QMainWindow):
             self.ui.Pages_Widget,
             playlistPage.getPlaylistName()
         )
-
+        print("[TEST] Add to playlist time: ", time() - start)
     # End : Library
 
     # Playlist
@@ -1101,7 +1104,7 @@ class MainWindow(QMainWindow):
                     ) for song in track_list]
                 )
                 break
-        print("Change playlist page:", time() - start)
+        print("[TEST] Change playlist page:", time() - start)
 
     def remove_playlist_page(
             self,
